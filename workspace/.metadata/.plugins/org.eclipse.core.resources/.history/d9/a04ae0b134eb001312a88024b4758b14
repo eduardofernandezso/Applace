@@ -1,0 +1,127 @@
+package com.retni.applace;
+
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+
+
+public class MainActivity extends ActionBarActivity {
+	
+	private TextView tvLocation = null;
+	
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		tvLocation = (TextView) this.findViewById(R.id.tvlocation);
+		configGPS();
+
+		if (savedInstanceState == null) {
+			getSupportFragmentManager().beginTransaction()
+					.add(R.id.container, new PlaceholderFragment()).commit();
+		}
+		
+	}
+
+	private void updateScreen(Location location){
+		tvLocation.setText("Latitude=" + String.valueOf(location.getLatitude()) + "\n" + 
+							"Longitude=" + String.valueOf(location.getLongitude()));
+	}
+	
+	private void configGPS(){
+		LocationManager mLocationManager;
+		LocationListener mLocationListener;
+		
+		mLocationManager = (LocationManager)
+					getSystemService(Context.LOCATION_SERVICE);
+		
+		mLocationListener = new MyLocationListener();
+		
+		mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000, 10,mLocationListener);
+	}
+	
+	private class MyLocationListener implements LocationListener{
+
+		@Override
+		public void onLocationChanged(Location location) {
+			// TODO Auto-generated method stub
+		
+			Log.d("HelloGPSActivity", "Latitude=" + String.valueOf(location.getLatitude()));
+			Log.d("HelloGPSActivity", "Longitude=" + String.valueOf(location.getLongitude()));
+			
+			updateScreen(location);
+		}
+
+		@Override
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onProviderEnabled(String provider) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onProviderDisabled(String provider) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	/**
+	 * A placeholder fragment containing a simple view.
+	 */
+	public static class PlaceholderFragment extends Fragment {
+
+		public PlaceholderFragment() {
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.fragment_main, container,
+					false);
+			return rootView;
+		}
+	}
+
+}
