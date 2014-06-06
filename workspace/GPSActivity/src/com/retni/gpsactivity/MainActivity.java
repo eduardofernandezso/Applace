@@ -6,7 +6,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.widget.Button;
+//import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 //import android.support.v7.app.ActionBarActivity;
@@ -18,13 +18,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 //import android.os.Build;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.MapController;
+import org.osmdroid.views.overlay.SimpleLocationOverlay;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
 
 public class MainActivity extends Activity {
 	
-	
 	TextView ubicacion; 
-	//double u1=0;
-	//double u2=0;
+	private MapView mapView;
+	private MapController mapController;
+	double lat=0;
+	double lon=0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,32 +39,47 @@ public class MainActivity extends Activity {
 		
 		ubicacion = (TextView)findViewById(R.id.textView1);
 		
-		//ubicacion.setText("hola");
+		mapView = (MapView) findViewById(R.id.mapView);
+		mapView.setTileSource(TileSourceFactory.MAPNIK);
+		mapView.setMultiTouchControls(true);
+		mapView.setBuiltInZoomControls(true);
+		
+		mapController = (MapController) mapView.getController();
+		mapController.setZoom(12);
+		
 		LocationManager milocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		LocationListener milocListener = new MiLocationListener();
 		milocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 1000*2, 10, milocListener);
 		
-		//ubicacion.setText(u1+","+u2);
+		GeoPoint myLocation = new GeoPoint(lat,lon);
+		
+		SimpleLocationOverlay myLocationOverlay = new SimpleLocationOverlay(this);
+		mapView.getOverlays().add(myLocationOverlay);
+		mapController.setCenter(myLocation);
+		myLocationOverlay.setLocation(myLocation);	
 	}
 
 	public class MiLocationListener implements LocationListener
 	{
+		@Override
 		public void onLocationChanged(Location loc){
-			loc.getLatitude();
-			loc.getLongitude();
-			String coordenadas = "Mis coordenadas son: " + "Latitud = " + loc.getLatitude() + "Longitud = " + loc.getLongitude();
+			lat = loc.getLatitude();
+			lon = loc.getLongitude();
+			String coordenadas = "Mis coordenadas son: " + "Latitud = " + lat + " Longitud = " + lon;
 			ubicacion.setText(coordenadas);
-			Toast.makeText( getApplicationContext(),coordenadas,Toast.LENGTH_LONG).show();
 		}
 		
+		@Override
 		public void onProviderDisabled(String provider){
 			Toast.makeText( getApplicationContext(),"Gps Desactivado",Toast.LENGTH_SHORT ).show();
 		}
 		
+		@Override
 		public void onProviderEnabled(String provider){
 			Toast.makeText( getApplicationContext(),"Gps Activo",Toast.LENGTH_SHORT ).show();
 		}
 		
+		@Override
 		public void onStatusChanged(String provider, int status, Bundle extras){
 			
 		}
@@ -100,5 +121,4 @@ public class MainActivity extends Activity {
 			return rootView;
 		}
 	}
-
 }
