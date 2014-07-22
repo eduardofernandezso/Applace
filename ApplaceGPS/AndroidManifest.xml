@@ -27,6 +27,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.retni.applacegps.Logueado">
+        </activity>
+        <activity
+            android:name="com.retni.applacegps.iniciarSesion_correo">
+        </activity>
         <service android:name="com.backendless.AndroidService"/>
     </application>
 

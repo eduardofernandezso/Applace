@@ -1,5 +1,6 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frame_ini"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="top"
@@ -9,4 +10,4 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.retni.applacegps.MainActivity$PlaceholderFragment" >
 
-</RelativeLayout>
+</FrameLayout>
