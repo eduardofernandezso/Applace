@@ -51,7 +51,7 @@ public class MainActivity extends Activity {
 		LocationListener milocListener = new MiLocationListener();
 		milocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 1000*2, 10, milocListener);
 		
-		GeoPoint myLocation = new GeoPoint(-33.488585, -70.618362);
+		GeoPoint myLocation = new GeoPoint(lat, lon);
 		
 		SimpleLocationOverlay myLocationOverlay = new SimpleLocationOverlay(this);
 		mapView.getOverlays().add(myLocationOverlay);

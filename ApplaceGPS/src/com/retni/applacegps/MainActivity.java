@@ -6,11 +6,13 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
+import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
+import com.backendless.async.callback.BackendlessCallback;
 
 //import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
@@ -30,6 +32,27 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		//Conección con el backend as a service: Backendless********************************************************************
+		String appVersion = "v1";
+	    Backendless.initApp( this, "3AB5974E-DCB2-C5AC-FFDD-CA6406ECDE00", "9B0B5CCF-3515-56D1-FF13-D801331FC300", appVersion );
+	   
+	    /* Ejemplo Backendless
+	    final BackendlessUser user = new BackendlessUser();
+	    
+	    user.setEmail( "michael@backendless.com" );
+	    user.setPassword( "my_super_password" );
+	   
+	    Backendless.UserService.register( user, new BackendlessCallback<BackendlessUser>() 
+	    {
+	        @Override
+	        public void handleResponse( BackendlessUser backendlessUser )
+	        {
+	          Log.i( "Registration", backendlessUser.getEmail() + " successfully registered" );
+	        }
+	    } );
+	    */
+	    
 		LocationManager milocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		LocationListener milocListener = new MiLocationListener();
 		milocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 1000*2, 10, milocListener);
