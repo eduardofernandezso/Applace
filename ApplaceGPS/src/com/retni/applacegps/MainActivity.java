@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 	
@@ -30,14 +31,19 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
+		switch(item.getItemId())
+	    {
+	        case R.id.action_settings:
+	            Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();;
+	            break;
+	        case R.id.action_search:
+	            Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show();
+	            break;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	 
+	    return true;
 	}
 	
 	private void launch_home() {//identificamos y cargamos el fragmento
