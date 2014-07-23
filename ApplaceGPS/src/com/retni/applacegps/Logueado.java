@@ -15,11 +15,11 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.widget.Toast;
 import com.backendless.Backendless;
 
-public class Logueado extends FragmentActivity{
+public class Logueado extends ActionBarActivity{
 	//TextView ubicacion;
 	private MapView mapView;
 	private IMapController mapController;

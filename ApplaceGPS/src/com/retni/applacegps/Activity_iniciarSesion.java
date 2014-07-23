@@ -6,9 +6,9 @@ verifica para luego darle acceso directo al mapa que se encuentra en Logueado.ja
 package com.retni.applacegps;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 
-public class Activity_iniciarSesion extends FragmentActivity {
+public class Activity_iniciarSesion extends ActionBarActivity {
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

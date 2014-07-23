@@ -7,9 +7,9 @@ que si es un Arrendador, se le muestra la página principal de sus pripiedades.
 package com.retni.applacegps;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 
-public class Activity_registro extends FragmentActivity {
+public class Activity_registro extends ActionBarActivity {
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
