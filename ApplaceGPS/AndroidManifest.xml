@@ -31,7 +31,10 @@
             android:name="com.retni.applacegps.Logueado">
         </activity>
         <activity
-            android:name="com.retni.applacegps.iniciarSesion_correo">
+            android:name="com.retni.applacegps.Activity_iniciarSesion">
+        </activity>
+        <activity
+            android:name="com.retni.applacegps.Activity_registro">
         </activity>
         <service android:name="com.backendless.AndroidService"/>
     </application>

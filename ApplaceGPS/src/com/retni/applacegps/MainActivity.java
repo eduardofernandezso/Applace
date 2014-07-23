@@ -1,9 +1,13 @@
+/**************************************************************************************************************
+Actividad inicial que carga el fragmento con las opciones de registro o inicio de sesión. Si se detecta que ya 
+hay algún usuario logueado anteriormente, se carga el mapa, es decir, la clase Logueado.java
+**************************************************************************************************************/
+
 package com.retni.applacegps;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class MainActivity extends FragmentActivity {
 	

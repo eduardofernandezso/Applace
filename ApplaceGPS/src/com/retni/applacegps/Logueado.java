@@ -1,3 +1,8 @@
+/**************************************************************************************************************
+ACtividad principal que se utilizara para mostrar el mapa en la aplicación. Acá se trabajará la mayoría del 
+tiempo.
+**************************************************************************************************************/
+
 package com.retni.applacegps;
 
 import org.osmdroid.api.IMapController;
