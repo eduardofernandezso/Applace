@@ -60,25 +60,6 @@
             android:hint="Apellido"
             android:inputType="textPersonName" />
 
-        <RadioGroup
-            android:id="@+id/radioGroup1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-
-            <RadioButton
-                android:id="@+id/radio0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="Deseo buscar alojamiento" />
-
-            <RadioButton
-                android:id="@+id/radio1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Deseo arrendar mi propiedad" />
-        </RadioGroup>
-
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
