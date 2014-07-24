@@ -22,7 +22,7 @@ public class Fragment_inicio extends Fragment{
 	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+        setRetainInstance(true);                  
     }
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
