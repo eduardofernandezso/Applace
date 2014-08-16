@@ -1,27 +1,50 @@
 package com.retni.applacegps;
 
-import org.osmdroid.api.IMapController;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+import org.osmdroid.ResourceProxy;
+import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.SimpleLocationOverlay;
+import org.osmdroid.views.overlay.ItemizedIconOverlay;
+import org.osmdroid.views.overlay.MinimapOverlay;
+import org.osmdroid.views.overlay.MyLocationOverlay;
+import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.ScaleBarOverlay;
+import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener;
+
+
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 public class Fragment_mapa extends Fragment{
 	
-	private MapView mapView;
-	private IMapController mapController;
-	double lat=0;
-	double lon=0;
+	private MapView myOpenMapView;
+	private MapController myMapController;
+	
+	ArrayList<OverlayItem> anotherOverlayItemArray;
+	
+	MyLocationOverlay myLocationOverlay = null;
+	
+	
+
 	
 	public Fragment_mapa(){
 	
@@ -29,7 +52,7 @@ public class Fragment_mapa extends Fragment{
 	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);                  
+        setRetainInstance(true); 
     }
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,47 +61,76 @@ public class Fragment_mapa extends Fragment{
 		
 		return v;
 	}
+
 	
 	@Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);    
-  	    
-  		LocationManager milocManager = (LocationManager)getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-  		LocationListener milocListener = new MiLocationListener();
-  		milocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 1000*2, 10, milocListener);
-  		
-  		//ubicacion = (TextView)findViewById(R.id.ubicacion);
-  		
-  		mapView = (MapView) getActivity().findViewById(R.id.mapView);
-  		mapView.setTileSource(TileSourceFactory.MAPNIK);
-  		mapView.setMultiTouchControls(true);
-  		mapView.setBuiltInZoomControls(true);
-  		mapController = mapView.getController();	
-  		mapController.setZoom(16);
-  			
-  		Location valor = getMyLocation();
-  		if(valor==null){
-  			Toast.makeText( getActivity().getApplicationContext(),"No se puede acceder",Toast.LENGTH_SHORT ).show();
-  		}
-  		else{
-  			milocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 1000*2, 10, milocListener);
-  			//ubicacion.setText("Latitud: "+valor.getLatitude()+" y Longitud: "+valor.getLongitude());
-  			do{	
-  				GeoPoint myLocation = new GeoPoint(getMyLocation());
-  					
-  				SimpleLocationOverlay myLocationOverlay = new SimpleLocationOverlay(getActivity().getApplicationContext());
-  				mapView.getOverlays().add(myLocationOverlay);
-  		 
-  				mapController.setCenter(myLocation);
-  				myLocationOverlay.setLocation(myLocation);
-  				lat=valor.getLatitude();
-  				lon=valor.getLongitude();
-  				
-  			}
-  			while(lat!=valor.getLatitude() || lon!=valor.getLongitude());
-  		}		      
+        
+        myOpenMapView = (MapView) getActivity().findViewById(R.id.mapView);
+        myOpenMapView.setBuiltInZoomControls(true);
+        myMapController = myOpenMapView.getController();
+        myMapController.setZoom(14);
+        GeoPoint startPoint = new GeoPoint(getMyLocation());
+        myMapController.setCenter(startPoint);
+        
+        //--- Create Another Overlay for multi marker
+        anotherOverlayItemArray = new ArrayList<OverlayItem>();
+        anotherOverlayItemArray.add(new OverlayItem(
+        		"Universidad Tecnica Federico Santa Maria", "USM", new GeoPoint(-33.49066,-70.61899)));
+        anotherOverlayItemArray.add(new OverlayItem(
+        		"Acá como", "Carrito de los churrascos", new GeoPoint(-33.50868, -70.64477)));
+        ItemizedIconOverlay<OverlayItem> anotherItemizedIconOverlay 
+        	= new ItemizedIconOverlay<OverlayItem>(
+        			getActivity(), anotherOverlayItemArray, myOnItemGestureListener);
+        myOpenMapView.getOverlays().add(anotherItemizedIconOverlay);
+        //---
+        
+        //Add Scale Bar
+        ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(getActivity());
+        myOpenMapView.getOverlays().add(myScaleBarOverlay);
+        
+        //Add MyLocationOverlay
+        myLocationOverlay = new MyLocationOverlay(getActivity(), myOpenMapView);
+        myOpenMapView.getOverlays().add(myLocationOverlay);
+        myOpenMapView.postInvalidate();
+
+        
+        MinimapOverlay miniMapOverlay = new MinimapOverlay(getActivity(), myOpenMapView.getTileRequestCompleteHandler());
+        miniMapOverlay.setZoomDifference(5);
+        miniMapOverlay.setHeight(200);
+        miniMapOverlay.setWidth(200);
+        myOpenMapView.getOverlays().add(miniMapOverlay);
+        
+
+        
 	}
 	
+	OnItemGestureListener<OverlayItem> myOnItemGestureListener
+    = new OnItemGestureListener<OverlayItem>(){
+
+		@Override
+		public boolean onItemLongPress(int arg0, OverlayItem arg1) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean onItemSingleTapUp(int index, OverlayItem item) {
+			Toast.makeText(getActivity(), 
+					item.mDescription + "\n"
+					+ item.mTitle + "\n"
+					+ item.mGeoPoint.getLatitudeE6() + " : " + item.mGeoPoint.getLongitudeE6(), 
+					Toast.LENGTH_LONG).show();
+			return true;
+		}
+    	
+    };
+	
+
+
+    
+    
 	Location getMyLocation(){
 		LocationManager locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 			return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -88,9 +140,6 @@ public class Fragment_mapa extends Fragment{
 	{
 		@Override
 		public void onLocationChanged(Location loc){
-			//String coordenadas = "Mis coordenadas son: " + "Latitud = " + lat + " Longitud = " + lon;
-			//ubicacion.setText(coordenadas);
-			//Toast.makeText( getActivity().getApplicationContext(),"Cambio ubicacion",Toast.LENGTH_SHORT ).show();
 		}
 		
 		@Override
@@ -107,5 +156,23 @@ public class Fragment_mapa extends Fragment{
 		public void onStatusChanged(String provider, int status, Bundle extras){
 			
 		}
+	}	
+	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		myLocationOverlay.enableMyLocation();
+		myLocationOverlay.enableCompass();
+		
 	}
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		myLocationOverlay.disableMyLocation();
+		myLocationOverlay.disableCompass();
+	}
+	
 }
