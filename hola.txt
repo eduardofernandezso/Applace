@@ -1,0 +1,11 @@
+NETWORK: git log --oneline --decorate --graph
+NUEVA RAMA: git checkout -b name-branch
+SALTAR A RAMA: git checkout name-branch
+CORREGIR COMMIT: git commit --amend
+STATUS RAMA: git status
+MOstrar Branch: git branch
+MERGEAR RAMA(Insertar en master): git checkout master && git merge --no-ff name-branch
+
+osmosis –read-pbf file=chile-latest.osm.pbf –bounding-box left=-76.11 bottom=-56.80 right=-65.74 top=-18.73 –write-xml coruna.osm
+
+osmosis –read-pbf file=chile-latest.osm.pbf –bounding-box left=-71.636 bottom=-32.667 right=-70.400 top=-34.398 –write-xml coruna.osm
