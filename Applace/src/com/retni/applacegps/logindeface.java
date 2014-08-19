@@ -18,7 +18,6 @@ import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
-//import com.parse.logindeface.R;
 import com.parse.ParseUser;
 
 public class logindeface extends Activity {
@@ -31,9 +30,7 @@ public class logindeface extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.face1);
-
-		Parse.initialize(this, "YOUR_PARSE_APPLICATION_ID",
-				"YOUR_PARSE_CLIENT_KEY");
+		Parse.initialize(this, "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");
 
 		// Set your Facebook App Id in strings.xml
 		ParseFacebookUtils.initialize(getString(R.string.app_id));

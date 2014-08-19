@@ -6,10 +6,12 @@ que si es un Arrendador, se le muestra la página principal de sus pripiedades.
 
 package com.retni.applacegps;
 
-import com.backendless.Backendless;
-import com.backendless.BackendlessUser;
-import com.backendless.async.callback.AsyncCallback;
-import com.backendless.exceptions.BackendlessFault;
+
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -25,52 +27,22 @@ public class Activity_registro extends ActionBarActivity {
 	
 	EditText mail,pass,nom,ap;
 	Button registrar;
-	String Fname,Fmail;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_registro);
-		Fname = getIntent().getExtras().getString("n");
-		Fmail = getIntent().getExtras().getString("m");
 		
-  		String appVersion = "v1";
-  	    Backendless.initApp( this, "0A10A8FF-1F4C-0FB5-FFB6-0DC451109500", "9B122EE8-E46B-63D2-FFEA-023DD8271E00", appVersion );
+  	    Parse.initialize(this, "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");
+  	                                
+  	    mail = (EditText)findViewById(R.id.reg_correo);
+		pass = (EditText)findViewById(R.id.reg_pass);
+		nom = (EditText)findViewById(R.id.reg_nombre);
+		ap = (EditText)findViewById(R.id.reg_apellido);
 		
-  	    if(Fname==null){
-			mail = (EditText)findViewById(R.id.reg_correo);
-			pass = (EditText)findViewById(R.id.reg_pass);
-			nom = (EditText)findViewById(R.id.reg_nombre);
-			ap = (EditText)findViewById(R.id.reg_apellido);
-			
-			registrar = (Button)findViewById(R.id.regis);
-			
-			
-	  	   
-			registrar.setOnClickListener(listener);
-		}
-		else{
-			final BackendlessUser user = new BackendlessUser();
-			
-			user.setEmail(Fmail);
-			user.setPassword("0");		  	    
-			user.setProperty( "name", Fname );
-			
-			Backendless.UserService.register( user, new AsyncCallback<BackendlessUser>(){
-				public void handleResponse( BackendlessUser registeredUser ){
-					Toast.makeText( getApplicationContext(),"Correcto!",Toast.LENGTH_SHORT ).show();
-					
-					Intent intent = new Intent(Activity_registro.this, Activity_iniciarSesion.class );
-					intent.putExtra("p","0");
-					intent.putExtra("n",Fname);
-					intent.putExtra("m",Fmail);
-					startActivity(intent);
-				}
-				public void handleFault( BackendlessFault fault ){
-					Toast.makeText( getApplicationContext(),"Fallo!"+fault.getCode(),Toast.LENGTH_SHORT ).show();
-				}
-			});  
-			
-		}
+		registrar = (Button)findViewById(R.id.regis);
+
+
+		registrar.setOnClickListener(listener);
 	}
 	
 	@Override
@@ -105,23 +77,25 @@ public class Activity_registro extends ActionBarActivity {
 			// TODO Auto-generated method stub
 			int id = v.getId();
 			if (id == R.id.regis) {
-				final BackendlessUser user = new BackendlessUser();
 				
+				ParseUser user = new ParseUser();
+				user.setUsername(nom.getText().toString()+" "+ap.getText().toString());
+				user.setPassword(pass.getText().toString());
 				user.setEmail(mail.getText().toString());
-				user.setPassword(pass.getText().toString());		  	    
-				user.setProperty( "name", nom.getText().toString()+" "+ap.getText().toString() );
-				
-				Backendless.UserService.register( user, new AsyncCallback<BackendlessUser>(){
-					public void handleResponse( BackendlessUser registeredUser ){
-						Toast.makeText( getApplicationContext(),"Correcto!",Toast.LENGTH_SHORT ).show();
-						
-						Intent intent = new Intent(Activity_registro.this, Activity_iniciarSesion.class );
+				 
+				user.signUpInBackground(new SignUpCallback() {
+				  public void done(ParseException e) {
+				    if (e == null) {
+				      // Hooray! Let them use the app now.
+				    	Intent intent = new Intent(Activity_registro.this, Activity_iniciarSesion.class );
 						startActivity(intent);
-					}
-					public void handleFault( BackendlessFault fault ){
-						Toast.makeText( getApplicationContext(),"Fallo!"+fault.getCode(),Toast.LENGTH_SHORT ).show();
-					}
-				});  
+				    } else {
+				      // Sign up didn't succeed. Look at the ParseException
+				      // to figure out what went wrong
+				    	Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+				    }
+				  }
+				});
 			}
 		}
 	};

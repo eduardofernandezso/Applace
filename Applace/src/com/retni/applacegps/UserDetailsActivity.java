@@ -41,9 +41,6 @@ public class UserDetailsActivity extends Activity {
 		userProfilePictureView = (ProfilePictureView) findViewById(R.id.userProfilePicture);
 		userNameView = (TextView) findViewById(R.id.userName);
 		userEmailView = (TextView) findViewById(R.id.Email);
-		//userGenderView = (TextView) findViewById(R.id.userGender);
-		//userDateOfBirthView = (TextView) findViewById(R.id.userDateOfBirth);
-		//userRelationshipView = (TextView) findViewById(R.id.userRelationship);
 
 		logoutButton = (Button) findViewById(R.id.logoutButton);
 		logoutButton.setOnClickListener(new View.OnClickListener() {
@@ -101,22 +98,7 @@ public class UserDetailsActivity extends Activity {
 								if (user.getProperty("email") != null) {
 									userProfile.put("email", (String) user
 											.getProperty("email"));
-								}/*
-								if (user.getProperty("gender") != null) {
-									userProfile.put("gender",
-											(String) user.getProperty("gender"));
 								}
-								if (user.getBirthday() != null) {
-									userProfile.put("birthday",
-											user.getBirthday());
-								}
-								if (user.getProperty("relationship_status") != null) {
-									userProfile
-											.put("relationship_status",
-													(String) user
-															.getProperty("relationship_status"));
-								}*/
-
 								// Save the user profile info in a user property
 								ParseUser currentUser = ParseUser
 										.getCurrentUser();
@@ -173,24 +155,7 @@ public class UserDetailsActivity extends Activity {
 					userEmailView.setText(userProfile.getString("email"));
 				} else {
 					userEmailView.setText("");
-				}/*
-				if (userProfile.getString("gender") != null) {
-					userGenderView.setText(userProfile.getString("gender"));
-				} else {
-					userGenderView.setText("");
 				}
-				if (userProfile.getString("birthday") != null) {
-					userDateOfBirthView.setText(userProfile
-							.getString("birthday"));
-				} else {
-					userDateOfBirthView.setText("");
-				}
-				if (userProfile.getString("relationship_status") != null) {
-					userRelationshipView.setText(userProfile
-							.getString("relationship_status"));
-				} else {
-					userRelationshipView.setText("");
-				}*/
 			} catch (JSONException e) {
 				Log.d(logindeface.TAG,
 						"Error parsing saved user data.");
@@ -211,14 +176,14 @@ public class UserDetailsActivity extends Activity {
 		Intent intent = new Intent(this, MainActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		//intent.putExtra("nom", value);
 		startActivity(intent);
 	}
 	private void onShare() {
-		Intent intent = new Intent(UserDetailsActivity.this, Activity_registro.class);
+		Intent intent = new Intent(UserDetailsActivity.this, Activity_iniciarSesion.class);
 		
-		intent.putExtra("n", Fnombre);
-		intent.putExtra("m", Fmail);
+		
+		//intent.putExtra("n", Fnombre);
+		//intent.putExtra("m", Fmail);
 		
 		startActivity(intent);
 	}

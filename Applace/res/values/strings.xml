@@ -15,7 +15,7 @@
      <string name="app_id">679460882134389</string>
 	<string name="login">Log In</string>
 	<string name="logout">Log Out</string>
-	<string name="login_intro">Mira tu perfil de Facebook, haciendo click en el botón de abajo!</string>
+	<string name="login_intro">Ingresa a Applace, haciendo click en el botón de abajo!</string>
 	<string name="location">Ubicación</string>
 	<string name="gender">Sexo</string>
 	<string name="date_of_birth">Cumpleaños</string>

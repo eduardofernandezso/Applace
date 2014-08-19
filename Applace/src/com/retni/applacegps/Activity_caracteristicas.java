@@ -3,6 +3,8 @@ package com.retni.applacegps;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.parse.Parse;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -237,6 +239,7 @@ public class Activity_caracteristicas extends ActionBarActivity{
 		aloj.setTitulo(bk_titulo);
 		aloj.setTv(bk_tv);
 	 
+		
 		// save object asynchronously
 		Backendless.Persistence.save( aloj, new AsyncCallback<Alojamiento>() {
 		    public void handleResponse( Alojamiento response ){

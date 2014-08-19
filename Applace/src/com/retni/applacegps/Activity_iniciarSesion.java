@@ -5,10 +5,11 @@ verifica para luego darle acceso directo al mapa que se encuentra en Logueado.ja
 
 package com.retni.applacegps;
 
-import com.backendless.Backendless;
-import com.backendless.BackendlessUser;
-import com.backendless.async.callback.AsyncCallback;
-import com.backendless.exceptions.BackendlessFault;
+
+import com.parse.LogInCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,20 +26,19 @@ public class Activity_iniciarSesion extends ActionBarActivity {
 	EditText email;
 	EditText pass;
 	Button iniciar;
-	String flag;
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ini_sesion);
 		
-		//Conexión backendless
-		String appVersion = "v1";
-  	    Backendless.initApp( this, "0A10A8FF-1F4C-0FB5-FFB6-0DC451109500", "9B122EE8-E46B-63D2-FFEA-023DD8271E00", appVersion );
 		
-		email = (EditText)findViewById(R.id.ini_correo);
-		pass = (EditText)findViewById(R.id.ini_pass);
-		iniciar = (Button)findViewById(R.id.iniSesion);
+		Parse.initialize(this, "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");
+
+  		  email = (EditText)findViewById(R.id.ini_correo);
+  		  pass = (EditText)findViewById(R.id.ini_pass);
+  		  iniciar = (Button)findViewById(R.id.iniSesion);
 		
-		iniciar.setOnClickListener(listener);		
+  		  iniciar.setOnClickListener(listener);
 	}
 	
 	private OnClickListener listener = new OnClickListener(){//Mismo listener para multiples botones
@@ -47,25 +47,27 @@ public class Activity_iniciarSesion extends ActionBarActivity {
 			// TODO Auto-generated method stub
 			int id = v.getId();
 			if (id == R.id.iniSesion) {
-				Backendless.UserService.login( email.getText().toString(), pass.getText().toString(), new AsyncCallback<BackendlessUser>(){
-					public void handleResponse( BackendlessUser registeredUser ){
-						
-						String nombre = (String) registeredUser.getProperty("name");
-						Toast.makeText( getApplicationContext(),"Bienvenido a Applace, "+nombre,Toast.LENGTH_SHORT ).show();
-						
-						Intent intent = new Intent(Activity_iniciarSesion.this, Logueado.class);
-						intent.putExtra("mailUser", email.getText().toString());
-						intent.putExtra("nameUser", nombre);
-						intent.putExtra("passUser", pass.getText().toString());
-						startActivity(intent);
-					}
-					public void handleFault( BackendlessFault fault ){
-						Toast.makeText( getApplicationContext(),"Usuario o contraseña incorrecta, porfavor intente nuevamente"
-								,Toast.LENGTH_SHORT ).show();
-						email.setText("");
-						pass.setText("");
-					}
-				});	
+				
+				ParseUser.logInInBackground(email.getText().toString(), pass.getText().toString(), new LogInCallback() {
+					  public void done(ParseUser user, ParseException e) {
+					    if (user != null) {
+					      // Hooray! The user is logged in.
+					    	String nombre = (String) user.getUsername();
+							Toast.makeText( getApplicationContext(),"Bienvenido a Applace, "+nombre,Toast.LENGTH_SHORT ).show();
+							
+							Intent intent = new Intent(Activity_iniciarSesion.this, Logueado.class);
+							intent.putExtra("mailUser", email.getText().toString());
+							intent.putExtra("nameUser", nombre);
+							intent.putExtra("passUser", pass.getText().toString());
+							startActivity(intent);
+					    } else {
+					      // Signup failed. Look at the ParseException to see what happened.
+					    	Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+					    	email.setText("");
+							pass.setText("");
+					    }
+					  }
+					});
 			} 
 		}
 	};
