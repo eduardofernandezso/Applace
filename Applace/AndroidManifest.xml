@@ -67,6 +67,9 @@
         <activity
             android:name="com.retni.applacegps.compartirface">
         </activity>
+        <activity
+            android:name="com.retni.applacegps.Activity_verAlojamiento">
+        </activity>
     </application>
 
 </manifest>
