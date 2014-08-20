@@ -101,12 +101,13 @@ public class Logueado extends ActionBarActivity{
                     int position, long id) {
      
                 Fragment fragment = null;
+                Intent intent = null;
      
                 switch (position) {
                     case 0:
                     	//Propiedades de la cuenta de usuario
                         //fragment = new Fragment_inicio();
-                    	Intent intent = new Intent(Logueado.this, Activity_perfil.class );
+                    	intent = new Intent(Logueado.this, Activity_perfil.class );
 						startActivity(intent);
                         break;
                     case 1:
@@ -118,7 +119,8 @@ public class Logueado extends ActionBarActivity{
                         fragment = new Fragment_tipoAloj();
                         break;
                     case 3:
-                    	fragment = new Fragment_inicio();
+                    	intent = new Intent(Logueado.this, Activity_verAlojamiento.class );
+						startActivity(intent);
                     	break;
                 }
                 
