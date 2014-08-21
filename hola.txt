@@ -1,4 +1,4 @@
-NETWORK: git log --oneline --decorate --graph
+NETWORK: git log --oneline --graph --decorate 
 NUEVA RAMA: git checkout -b name-branch
 SALTAR A RAMA: git checkout name-branch
 CORREGIR COMMIT: git commit --amend
@@ -9,3 +9,16 @@ MERGEAR RAMA(Insertar en master): git checkout master && git merge --no-ff name-
 osmosis –read-pbf file=chile-latest.osm.pbf –bounding-box left=-76.11 bottom=-56.80 right=-65.74 top=-18.73 –write-xml coruna.osm
 
 osmosis –read-pbf file=chile-latest.osm.pbf –bounding-box left=-71.636 bottom=-32.667 right=-70.400 top=-34.398 –write-xml coruna.osm
+
+
+
+git log --oneline --graph --decorate 
+SALTAR A RAMA: git checkout name-branch
+git rebase master
+ir al archivo que tira el conflicto y repararlo
+git add .
+git rebase --continue
+git log --oneline --graph --decorate
+
+
+Git push origin rama -f
