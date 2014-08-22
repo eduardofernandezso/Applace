@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/reg_user"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/tile" >
@@ -7,48 +8,43 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/ini_link"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:layout_weight="1"
             android:text="Inicia Sesión" />
 
-        <TextView
-            android:id="@+id/pais"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+        <EditText
+            android:id="@+id/reg_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:ems="10"
+            android:hint="Nombre de Usuario" />
 
         <EditText
             android:id="@+id/reg_correo"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="20dp"
-        	android:layout_marginRight="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:ems="10"
             android:hint="Correo electrónico"
-            android:inputType="textEmailAddress" >
-
-            <requestFocus />
-        </EditText>
+            android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/reg_pass"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-           	android:layout_marginLeft="20dp"
-        	android:layout_marginRight="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:ems="10"
             android:hint="Contraseña"
             android:inputType="textPassword" />
@@ -56,10 +52,9 @@
         <EditText
             android:id="@+id/reg_nombre"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="20dp"
-        	android:layout_marginRight="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:ems="10"
             android:hint="Nombre"
             android:inputType="textPersonName" />
@@ -67,26 +62,20 @@
         <EditText
             android:id="@+id/reg_apellido"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="20dp"
-        	android:layout_marginRight="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:ems="10"
             android:hint="Apellido"
             android:inputType="textPersonName" />
 
-        <TextView
-            android:id="@+id/pregunta_aloj"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
         <Button
             android:id="@+id/regis"
-            android:layout_width="250dp"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_weight="1"
-            android:layout_gravity="center"
+            android:layout_marginLeft="80dp"
+            android:layout_marginRight="80dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/registro" />
     </LinearLayout>
 

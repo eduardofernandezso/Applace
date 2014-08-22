@@ -2,6 +2,9 @@ package com.retni.applacegps;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
+import com.parse.Parse;
+import com.parse.ParseUser;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -22,16 +25,14 @@ public class Activity_perfil extends ActionBarActivity{
 		
 		nombre = (TextView) findViewById(R.id.perf_nom);
         
-        //Conexión backendless
-        String appVersion = "v1";
-	    Backendless.initApp( this, "0A10A8FF-1F4C-0FB5-FFB6-0DC451109500", "9B122EE8-E46B-63D2-FFEA-023DD8271E00", appVersion );
-	
-	    BackendlessUser user = new BackendlessUser();
-	    user = Backendless.UserService.CurrentUser();
+		Parse.initialize(this, "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");
+        ParseUser user = new ParseUser();
+        user = ParseUser.getCurrentUser();
+
 	    
 	    if(user!=null){
 	    	mailUser = user.getEmail();
-		    nameUser = (String) user.getProperty("name");
+		    nameUser = (String) user.getString("NombreCompleto");
 	    }	    
 	    
 	    nombre.setText(nameUser);
