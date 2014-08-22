@@ -47,4 +47,4 @@ package com.retni.applacegps;
 	    }
 	 
 }
-	
+
