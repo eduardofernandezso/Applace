@@ -59,8 +59,14 @@ public class Fragment_mapa extends Fragment{
         myOpenMapView.setBuiltInZoomControls(true);
         myMapController = myOpenMapView.getController();
         myMapController.setZoom(14);
-        GeoPoint startPoint = new GeoPoint(getMyLocation());
-        myMapController.setCenter(startPoint);
+        Location loc = getMyLocation();
+        if (loc == null){
+        	Toast.makeText( getActivity().getApplicationContext(),"Gps Desactivado",Toast.LENGTH_SHORT ).show();
+        }
+        else {
+        	GeoPoint startPoint = new GeoPoint(getMyLocation());
+            myMapController.setCenter(startPoint);
+        }        
         
         //--- Create Another Overlay for multi marker
         anotherOverlayItemArray = new ArrayList<OverlayItem>();

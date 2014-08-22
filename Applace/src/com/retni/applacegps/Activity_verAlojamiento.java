@@ -19,7 +19,7 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_veralojamiento);
 		
-		fotos = new int[] { R.drawable.img00, R.drawable.img01,
+		fotos = new int[] { R.drawable.img01,
                 R.drawable.img02, R.drawable.img03,
                 R.drawable.img04, R.drawable.img05, R.drawable.img06,
                 R.drawable.img07};
