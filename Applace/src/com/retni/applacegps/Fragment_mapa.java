@@ -163,4 +163,8 @@ public class Fragment_mapa extends Fragment{
 		myLocationOverlay.disableCompass();
 	}
 	
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/edu2
