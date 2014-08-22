@@ -89,9 +89,7 @@ public class logindeface extends Activity {
 	}
 
 	private void showUserDetailsActivity() {
-		//ParseUser user = ParseUser.getCurrentUser();
-		//user.setUsername();
-		Intent intent = new Intent(logindeface.this, Logueado.class);
+		Intent intent = new Intent(logindeface.this, UserDetailsActivity.class);
 		startActivity(intent);
 	}
 }
