@@ -54,7 +54,7 @@ public class Fragment_ubicacion extends Fragment {
         sig.setOnClickListener(listener);
         
         Bundle bundle = getArguments();
-        tipoAlojamiento = bundle.getString("tipoAloj");
+        tipoAlojamiento = (String) bundle.getString("tipoAloj");
         
         pregunta.setText("¿En qué lugar se encuentra tu "+tipoAlojamiento+"?");
         
@@ -118,7 +118,7 @@ public class Fragment_ubicacion extends Fragment {
 		public void onClick(View v) {			
 			switch(v.getId()){			
 				case R.id.sig:		//Lanzamiento de una nueva actividad
-					Toast.makeText(getActivity().getApplicationContext(), "sig", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity().getApplicationContext(), tipoAlojamiento, Toast.LENGTH_SHORT).show();
 					
 					Intent intent = new Intent(getActivity(), Activity_caracteristicas.class );
 					intent.putExtra("lat", lat);

@@ -4,6 +4,8 @@ import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.parse.Parse;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -44,6 +46,9 @@ public class Activity_caracteristicas extends ActionBarActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_caracteristicas);  		
 		
+		Parse.initialize(this, "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");
+		
+		
 		ch_higiene = (CheckBox) findViewById(R.id.ch_higiene);
 		ch_aire_acondicionado = (CheckBox) findViewById(R.id.ch_aire);
 		ch_calefaccion = (CheckBox) findViewById(R.id.ch_calefaccion);
@@ -70,10 +75,11 @@ public class Activity_caracteristicas extends ActionBarActivity{
 		
 		publicar = (Button)findViewById(R.id.but_publicar);
 		
-		Bundle bundle = new Bundle();
-		bk_tipo_aloj = bundle.getString("tipoAloj");
-		bk_dir_latitud = bundle.getDouble("lat");
-		bk_dir_longitud = bundle.getDouble("lon");
+		Intent intent = getIntent();
+		bk_tipo_aloj = intent.getStringExtra("tipo_aloj");
+		bk_dir_latitud = intent.getDoubleExtra("lat", 0);
+		bk_dir_longitud = intent.getDoubleExtra("lon", 0);
+		
 		
 		cap = new String[] {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15", "Más"};
 		cam = new String[] {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15", "Más"};
@@ -100,6 +106,7 @@ public class Activity_caracteristicas extends ActionBarActivity{
 		    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 		        Object item = parent.getItemAtPosition(pos);
 		        bk_capacidad = Integer.parseInt(item.toString());
+		        
 		    }
 		    public void onNothingSelected(AdapterView<?> parent) {
 		    }
@@ -109,6 +116,7 @@ public class Activity_caracteristicas extends ActionBarActivity{
 		    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 		        Object item = parent.getItemAtPosition(pos);
 		        bk_num_camas = Integer.parseInt(item.toString());
+		        
 		    }
 		    public void onNothingSelected(AdapterView<?> parent) {
 		    }
@@ -118,6 +126,7 @@ public class Activity_caracteristicas extends ActionBarActivity{
 		    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 		        Object item = parent.getItemAtPosition(pos);
 		        bk_num_banos = Integer.parseInt(item.toString());
+		        
 		    }
 		    public void onNothingSelected(AdapterView<?> parent) {
 		    }
@@ -127,6 +136,7 @@ public class Activity_caracteristicas extends ActionBarActivity{
 		    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 		        Object item = parent.getItemAtPosition(pos);
 		        bk_num_piezas = Integer.parseInt(item.toString());
+		        
 		    }
 		    public void onNothingSelected(AdapterView<?> parent) {
 		    }
@@ -162,55 +172,114 @@ public class Activity_caracteristicas extends ActionBarActivity{
 	}
 	
 	public void saveNewAlojamiento(){
-		String appVersion = "v1";
-  	    Backendless.initApp( this, "0A10A8FF-1F4C-0FB5-FFB6-0DC451109500", "9B122EE8-E46B-63D2-FFEA-023DD8271E00", appVersion );
+		//String appVersion = "v1";
+  	   // Backendless.initApp( this, "0A10A8FF-1F4C-0FB5-FFB6-0DC451109500", "9B122EE8-E46B-63D2-FFEA-023DD8271E00", appVersion );
   	   
 		
+
 		bk_precio = Integer.parseInt(car_precio.getText().toString());
 		bk_titulo = car_titulo.getText().toString();
 		bk_descripcion = car_descrip.getText().toString();
 		bk_fotografia = car_foto.getText().toString();
 		
+		ParseObject alo = new ParseObject("Alojamiento");
+		ParseUser user = ParseUser.getCurrentUser();
+		String username = user.getUsername();
+		alo.put("User",username);
+		alo.put("dir_longitud",bk_dir_longitud);
+		alo.put("dir_latitud",bk_dir_latitud);
+		alo.put("tipo_aloj",bk_tipo_aloj);
+		alo.put("precio",bk_precio);
+		alo.put("titulo",bk_titulo);
+		alo.put("descripcion",bk_descripcion);
+		//alo.put("fotografia",bk_fotografia);
+		alo.put("capacidad", bk_capacidad);
+		alo.put("numeroCamas", bk_num_camas);
+		alo.put("numeroBanos",bk_num_banos);
+		alo.put("numeroPiezas",bk_num_piezas);
+
 		if (ch_higiene.isChecked()){
 			bk_higiene = true;
+			alo.put("articulos_higiene", true);
 		}
+		else {alo.put("articulos_higiene", false);}
+
 		if (ch_aire_acondicionado.isChecked()){
 			bk_aire_acondicionado = true;
+			alo.put("aire_acond", true);
 		}
+		else {alo.put("aire_acond", false);}
+
 		if (ch_calefaccion.isChecked()){
 			bk_calefaccion = true;
+			alo.put("calefaccion", true);
 		}
+		else {alo.put("calefaccion", false);}
+
 		if (ch_cocina.isChecked()){
 			bk_cocina = true;
+			alo.put("cocina", true);
 		}
+		else {alo.put("cocina", false);}
+
 		if (ch_internet.isChecked()){
 			bk_internet = true;
+			alo.put("internet", true);
 		}
+		else {alo.put("internet", false);}
+
 		if (ch_piscina.isChecked()){
 			bk_piscina = true;
+			alo.put("piscina", true);
 		}
+		else {alo.put("piscina", false);}
+
 		if (ch_tv.isChecked()){
 			bk_tv = true;
+			alo.put("tv", true);
 		}
+		else {alo.put("tv", false);}
+
 		if (ch_telefono.isChecked()){
 			bk_telefono = true;
+			alo.put("telefono", true);
 		}
+		else {alo.put("telefono", false);}
+
 		if (ch_lavadora.isChecked()){
 			bk_lavadora = true;
+			alo.put("lavadora", true);
 		}
+		else {alo.put("lavadora", false);}
+
 		if (ch_desayuno.isChecked()){
 			bk_desayuno = true;
+			alo.put("desayuno", true);
 		}
+		else {alo.put("desayuno", false);}
+
 		if (ch_estacionamiento.isChecked()){
 			bk_estacionamiento = true;
+			alo.put("estacionamiento", true);
 		}
+		else {alo.put("estacionamiento", false);}
+
 		if (ch_mascota.isChecked()){
 			bk_mascota = true;
+			alo.put("mascota", true);
 		}
+		else {alo.put("mascota", false);}
+
 		if (ch_quincho.isChecked()){
 			bk_quincho = true;
-		}		
-	 
+			alo.put("quincho", true);
+		}
+		else {alo.put("quincho", false);}		
+	 	
+	 	alo.saveInBackground();
+
+	 	/*
+
 		Alojamiento aloj = new Alojamiento();
 		
 		aloj.setTipo_aloj(bk_tipo_aloj);
@@ -249,7 +318,7 @@ public class Activity_caracteristicas extends ActionBarActivity{
 		    public void handleFault( BackendlessFault fault ){
 		    	Toast.makeText( getApplicationContext(),"Fallo!"+fault.getMessage(),Toast.LENGTH_LONG ).show();
 		    }
-		});
+		});*/
 	}
 	
 	private OnClickListener listener = new OnClickListener(){

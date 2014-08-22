@@ -5,6 +5,10 @@ hay algún usuario logueado anteriormente, se carga el mapa, es decir, la clase L
 
 package com.retni.applacegps;
 
+import com.parse.Parse;
+import com.parse.ParseUser;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
@@ -20,8 +24,18 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_main);
 
+        Parse.initialize(this, "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");
         
-        launch_home();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null) {
+        	Intent i = new Intent(MainActivity.this,Logueado.class);
+        	startActivity(i);
+          // do stuff with the user
+        } else {
+          // show the signup or login screen
+        	launch_home();
+        }
+        
 	}
 
 	@Override
