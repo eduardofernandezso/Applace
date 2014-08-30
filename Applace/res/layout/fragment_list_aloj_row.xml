@@ -9,37 +9,37 @@
         android:layout_margin="5dp">
 
         <ImageView
-            android:id="@+id/row_img"
+            android:id="@+id/imageView1"
             android:layout_width="100dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:src="@drawable/img01" />
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="96dp"
-            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_margin="5dp"
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/row_titulo"
+                android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Titulo"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
-                android:id="@+id/row_precio"
+                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="$50.000"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <RatingBar
-                android:id="@+id/row_star"
+                android:id="@+id/ratingBar1"
                 style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:rating="3.5" />
 
         </LinearLayout>

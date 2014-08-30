@@ -172,7 +172,11 @@ public class Activity_caracteristicas extends ActionBarActivity{
 	}
 	
 	public void saveNewAlojamiento(){
+		//String appVersion = "v1";
+  	   // Backendless.initApp( this, "0A10A8FF-1F4C-0FB5-FFB6-0DC451109500", "9B122EE8-E46B-63D2-FFEA-023DD8271E00", appVersion );
+  	   
 		
+
 		bk_precio = Integer.parseInt(car_precio.getText().toString());
 		bk_titulo = car_titulo.getText().toString();
 		bk_descripcion = car_descrip.getText().toString();
@@ -273,6 +277,48 @@ public class Activity_caracteristicas extends ActionBarActivity{
 		else {alo.put("quincho", false);}		
 	 	
 	 	alo.saveInBackground();
+
+	 	/*
+
+		Alojamiento aloj = new Alojamiento();
+		
+		aloj.setTipo_aloj(bk_tipo_aloj);
+		aloj.setAire_acond(bk_aire_acondicionado);
+		aloj.setBanos(bk_num_banos);
+		aloj.setCalefaccion(bk_calefaccion);
+		aloj.setCamas(bk_num_camas);
+		aloj.setCapacidad(bk_capacidad);
+		aloj.setCocina(bk_cocina);
+		aloj.setDesayuno(bk_desayuno);
+		aloj.setDescripciona(bk_descripcion);
+		//aloj.setDir_escrita(bk_dir_escrita);
+		aloj.setEstacionamiento(bk_estacionamiento);
+		//aloj.setFotografia(bk_fotografia);
+		aloj.setHigiene(bk_higiene);
+		aloj.setInternet(bk_internet);
+		aloj.setLatitud(bk_dir_latitud);
+		aloj.setLongitud(bk_dir_longitud);
+		aloj.setLavadora(bk_lavadora);
+		aloj.setMascota(bk_mascota);
+		aloj.setPiezas(bk_num_piezas);
+		aloj.setPiscina(bk_piscina);
+		aloj.setPrecio(bk_precio);
+		aloj.setQuincho(bk_quincho);
+		aloj.setTelefono(bk_telefono);
+		aloj.setTitulo(bk_titulo);
+		aloj.setTv(bk_tv);
+	 
+		
+		// save object asynchronously
+		Backendless.Persistence.save( aloj, new AsyncCallback<Alojamiento>() {
+		    public void handleResponse( Alojamiento response ){
+		    	Toast.makeText( getApplicationContext(),"Correcto!",Toast.LENGTH_SHORT ).show();
+		    }
+		 
+		    public void handleFault( BackendlessFault fault ){
+		    	Toast.makeText( getApplicationContext(),"Fallo!"+fault.getMessage(),Toast.LENGTH_LONG ).show();
+		    }
+		});*/
 	}
 	
 	private OnClickListener listener = new OnClickListener(){
