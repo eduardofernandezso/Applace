@@ -1,11 +1,13 @@
 package com.retni.applacegps;
 
+import java.util.Vector;
 
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.View;
 
 public class Activity_verAlojamiento extends ActionBarActivity{
 	
@@ -22,8 +24,11 @@ public class Activity_verAlojamiento extends ActionBarActivity{
                 R.drawable.img04, R.drawable.img05, R.drawable.img06,
                 R.drawable.img07};
 		
+		//Locate the ViewPager in viewpager_main.xml
         viewPager = (ViewPager) findViewById(R.id.pager_fotos);
+        // Pass results to ViewPagerAdapter Class
         adapter = new ViewPagerAdapter(Activity_verAlojamiento.this, fotos);
+        // Binds the Adapter to the ViewPager
         viewPager.setAdapter(adapter);      
 	}
 	
