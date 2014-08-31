@@ -48,7 +48,11 @@ public class Activity_iniciarSesion extends ActionBarActivity {
 			int id = v.getId();
 			if (id == R.id.iniSesion) {
 				
-				ParseUser.logInInBackground(email.getText().toString(), pass.getText().toString(), new LogInCallback() {
+				if(pass.getText().toString().matches("") || email.getText().toString().matches("")){
+					Toast.makeText( getApplicationContext(),"Por favor llene todos los campos",Toast.LENGTH_SHORT ).show();
+				}
+				else{
+					ParseUser.logInInBackground(email.getText().toString(), pass.getText().toString(), new LogInCallback() {
 					  public void done(ParseUser user, ParseException e) {
 					    if (user != null) {
 					      // Hooray! The user is logged in.
@@ -68,6 +72,7 @@ public class Activity_iniciarSesion extends ActionBarActivity {
 					    }
 					  }
 					});
+				}				
 			} 
 		}
 	};
