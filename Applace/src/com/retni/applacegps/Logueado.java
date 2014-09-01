@@ -7,8 +7,9 @@ package com.retni.applacegps;
 
 import com.parse.Parse;
 import com.parse.ParseUser;
-
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -124,9 +125,23 @@ public class Logueado extends ActionBarActivity{
 						startActivity(intent);
                     	break;
                     case 5:
-                    	ParseUser.logOut();
-                    	intent = new Intent(Logueado.this, MainActivity.class );
-						startActivity(intent);
+                    	AlertDialog.Builder dialog = new AlertDialog.Builder(Logueado.this);  
+            	        dialog.setTitle("Cerrar Sesión");		
+            	        dialog.setIcon(R.drawable.ic_launcher);	
+            	        
+            	        View v = getLayoutInflater().inflate( R.layout.dialog, null );
+            			      
+            	        dialog.setView(v);
+            	        dialog.setNegativeButton("Cancelar", null);  
+            	        dialog.setPositiveButton("Cerrar Sesión", new DialogInterface.OnClickListener() {  
+            	            public void onClick(DialogInterface dialogo1, int id) {
+            	            	ParseUser.logOut();
+                            	Intent i = new Intent(Logueado.this, MainActivity.class );
+        						startActivity(i);
+            	            }  
+            	        });  
+            	        
+            	        dialog.show();
                     	break;
                 }
                 
