@@ -6,7 +6,6 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.MinimapOverlay;
 import org.osmdroid.views.overlay.MyLocationOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
@@ -25,14 +24,9 @@ import android.widget.Toast;
 public class Fragment_mapa extends Fragment{
 	
 	private MapView myOpenMapView;
-	private MapController myMapController;
-	
-	ArrayList<OverlayItem> anotherOverlayItemArray;
-	
+	private MapController myMapController;	
+	ArrayList<OverlayItem> anotherOverlayItemArray;	
 	MyLocationOverlay myLocationOverlay = null;
-	
-	
-
 	
 	public Fragment_mapa(){
 	
@@ -49,7 +43,6 @@ public class Fragment_mapa extends Fragment{
 		
 		return v;
 	}
-
 	
 	@Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -59,6 +52,8 @@ public class Fragment_mapa extends Fragment{
         myOpenMapView.setBuiltInZoomControls(true);
         myMapController = myOpenMapView.getController();
         myMapController.setZoom(14);
+        myOpenMapView.setMultiTouchControls(true);
+        
         Location loc = getMyLocation();
         if (loc == null){
         	Toast.makeText( getActivity().getApplicationContext(),"Gps Desactivado",Toast.LENGTH_SHORT ).show();
@@ -87,17 +82,7 @@ public class Fragment_mapa extends Fragment{
         //Add MyLocationOverlay
         myLocationOverlay = new MyLocationOverlay(getActivity(), myOpenMapView);
         myOpenMapView.getOverlays().add(myLocationOverlay);
-        myOpenMapView.postInvalidate();
-
-        
-        MinimapOverlay miniMapOverlay = new MinimapOverlay(getActivity(), myOpenMapView.getTileRequestCompleteHandler());
-        miniMapOverlay.setZoomDifference(5);
-        miniMapOverlay.setHeight(200);
-        miniMapOverlay.setWidth(200);
-        myOpenMapView.getOverlays().add(miniMapOverlay);
-        
-
-        
+        myOpenMapView.postInvalidate(); 
 	}
 	
 	OnItemGestureListener<OverlayItem> myOnItemGestureListener
@@ -121,10 +106,6 @@ public class Fragment_mapa extends Fragment{
     	
     };
 	
-
-
-    
-    
 	Location getMyLocation(){
 		LocationManager locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 			return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -157,8 +138,7 @@ public class Fragment_mapa extends Fragment{
 		// TODO Auto-generated method stub
 		super.onResume();
 		myLocationOverlay.enableMyLocation();
-		myLocationOverlay.enableCompass();
-		
+		myLocationOverlay.enableCompass();		
 	}
 
 	@Override
@@ -167,6 +147,5 @@ public class Fragment_mapa extends Fragment{
 		super.onPause();
 		myLocationOverlay.disableMyLocation();
 		myLocationOverlay.disableCompass();
-	}
-	
+	}	
 }

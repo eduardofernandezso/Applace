@@ -1,13 +1,9 @@
 package com.retni.applacegps;
 
 import java.util.List;
-
-import com.parse.ParseFile;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,16 +76,12 @@ public class Cursor_Adapter extends BaseAdapter{
 	    	precio.setText("$"+precios.get(position).toString());
 	    }
 	    
-	    
         convertView.setOnClickListener(new OnClickListener(){		
 			public void onClick(View v) {			
 				Intent intent=new Intent(context,Activity_verAlojamiento.class);
-				//intent.putExtra("nombre", cursor.getString(cursor.getColumnIndex(from[0])));
 				context.startActivity(intent);
 			}		
-		});
-        
+		});        
         return convertView;
-    }
-    
+    }    
 }

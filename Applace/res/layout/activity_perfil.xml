@@ -11,16 +11,51 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:background="@drawable/ab_stacked_solid_applacegps" >
-        </FrameLayout>
+            android:layout_weight="0.01"
+            android:background="@drawable/ab_background_textured_applacegps" >
 
-        <TextView
-            android:id="@+id/perf_nom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Nombre"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/perf_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Large Text"
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                    <TextView
+                        android:id="@+id/perf_mail2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Medium Text"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/perf_foto"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/fondo_verde" />
+
+            </LinearLayout>
+
+        </FrameLayout>
 
     </LinearLayout>
 
