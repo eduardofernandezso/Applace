@@ -5,13 +5,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-
 import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -45,6 +42,7 @@ public class Activity_perfil extends ActionBarActivity{
 	ImageView perf_foto;
 	TextView nombre, mail;
 	private String name = "";
+	int navdid=R.drawable.img03;
 	
 	private static int TAKE_PICTURE = 1;
 	private static int SELECT_PICTURE = 2;
@@ -58,7 +56,10 @@ public class Activity_perfil extends ActionBarActivity{
 		
         perf_foto = (ImageView) findViewById(R.id.perf_foto);
 		nombre = (TextView) findViewById(R.id.perf_name);
-		mail = (TextView) findViewById(R.id.perf_mail2);
+		mail = (TextView) findViewById(R.id.perf_mail2);	
+		
+		
+		//perf_up.setVisibility(0);
         
 		Parse.initialize(this, "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");
         ParseUser user = new ParseUser();
@@ -75,10 +76,8 @@ public class Activity_perfil extends ActionBarActivity{
 			    	Bitmap bmp = null;
 			        public void done(byte[] data, com.parse.ParseException e) {
 			            if (e == null){
-			                bmp = BitmapFactory.decodeByteArray(data, 0, data.length);	
-			                foto = bmp;			                
-			                
-			        	    perf_foto.setImageBitmap(circle(foto));
+			                bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+			        	    setImage(perf_foto, bmp);
 			            }
 			            else{
 			            	Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -88,16 +87,35 @@ public class Activity_perfil extends ActionBarActivity{
 		    }
 		    else{
 		    	Drawable myDrawable = getResources().getDrawable(R.drawable.fondo_verde);
-		    	Bitmap myLogo = ((BitmapDrawable) myDrawable).getBitmap();
+		    	Bitmap fo = ((BitmapDrawable) myDrawable).getBitmap();
 		    	
-		    	perf_foto.setImageBitmap(circle(myLogo));
+		    	setImage(perf_foto, fo);
 		    }
 	    }	    
 	    nombre.setText(nameUser);
 	    mail.setText(mailUser);
-	    
 	    perf_foto.setOnClickListener(listener);
 	}
+	
+	public void loadBitmap(Bitmap b) {
+		   //foto = BitmapFactory.decodeStream(getResources().openRawResource(id));
+		   perf_foto.setImageBitmap(circle(b));
+	}
+	
+	public void unloadBitmap() {
+		   if (perf_foto != null)
+			   perf_foto.setImageBitmap(null);
+		   if (foto!= null) {
+			   foto.recycle();
+		   }
+		   foto = null;
+		}
+	
+	public void setImage(ImageView i, Bitmap sourceid) {
+		   unloadBitmap();
+		   perf_foto = i;
+		   loadBitmap(sourceid);
+		}
 	
 	private OnClickListener listener = new OnClickListener(){		//Mismo listener para multiples botones
 		@Override
@@ -142,7 +160,7 @@ public class Activity_perfil extends ActionBarActivity{
 	public void save_image(Bitmap bit){        
 	    ByteArrayOutputStream stream = new ByteArrayOutputStream();
 	    bit.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-	    byte[] data1 = stream.toByteArray();
+	    byte[] data1 = stream.toByteArray();	    
 		
 		ParseFile file = new ParseFile(userNAME+"_perfil.jpg", data1);
 		
@@ -150,6 +168,11 @@ public class Activity_perfil extends ActionBarActivity{
 		jobApplication = ParseUser.getCurrentUser();
 		jobApplication.put("Foto", file);
 		jobApplication.saveInBackground();
+	
+		setImage(perf_foto, bit);
+		
+		finish();
+		startActivity(getIntent());
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {    	
@@ -157,11 +180,11 @@ public class Activity_perfil extends ActionBarActivity{
     		if (data != null) {
     			if (data.hasExtra("data")) { 
     				save_image((Bitmap) data.getParcelableExtra("data"));
-    				perf_foto.setImageBitmap(circle((Bitmap) data.getParcelableExtra("data")));
+    				//perf_foto.setImageBitmap((Bitmap) data.getParcelableExtra("data"));
     			} 			
     		} else {
     			save_image(BitmapFactory.decodeFile(name));
-    			perf_foto.setImageBitmap(circle(BitmapFactory.decodeFile(name)));
+    			//perf_foto.setImageBitmap(BitmapFactory.decodeFile(name));
     			new MediaScannerConnectionClient() {
     				private MediaScannerConnection msc = null; {
     					msc = new MediaScannerConnection(getApplicationContext(), this); msc.connect();
@@ -180,9 +203,9 @@ public class Activity_perfil extends ActionBarActivity{
     		try {
     			is = getContentResolver().openInputStream(selectedImage);
     	    	BufferedInputStream bis = new BufferedInputStream(is);
-    	    	Bitmap bitmap = BitmapFactory.decodeStream(bis);
-    	    	save_image(bitmap);
-    	    	perf_foto.setImageBitmap(circle(bitmap));						
+    	    	foto = BitmapFactory.decodeStream(bis);
+    	    	save_image(foto);
+    	    	//perf_foto.setImageBitmap(bitmap);						
     		} catch (FileNotFoundException e) {}
     	}
     }
