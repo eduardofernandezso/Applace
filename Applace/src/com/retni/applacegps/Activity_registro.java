@@ -100,6 +100,7 @@ public class Activity_registro extends ActionBarActivity {
 											
 											Intent intent = new Intent(Activity_registro.this, Logueado.class );
 											startActivity(intent);
+											finish();
 									    }
 									}
 								});					    	
