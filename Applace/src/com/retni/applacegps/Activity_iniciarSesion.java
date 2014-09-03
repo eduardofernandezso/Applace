@@ -60,8 +60,6 @@ public class Activity_iniciarSesion extends ActionBarActivity {
 							intent.putExtra("nameUser", nombre);
 							intent.putExtra("passUser", pass.getText().toString());
 							startActivity(intent);
-							
-							finish();
 					    } else {
 					      // Signup failed. Look at the ParseException to see what happened.
 					    	Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();

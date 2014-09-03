@@ -1,6 +1,7 @@
 package com.retni.applacegps;
 
 import java.util.List;
+
 import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -128,6 +129,6 @@ public class Fragment_listaAloj extends Fragment{
 		}		
 		     
 		list_aloj = (ListView) getActivity().findViewById(R.id.list_aloj);
-        list_aloj.setAdapter(new Cursor_Adapter(getActivity(), titulos, precios, fotos));        
+        list_aloj.setAdapter(new Cursor_Adapter(getActivity(), titulos, precios, fotos));
 	}
 }
