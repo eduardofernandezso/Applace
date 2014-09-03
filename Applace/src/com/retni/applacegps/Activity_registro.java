@@ -80,6 +80,7 @@ public class Activity_registro extends ActionBarActivity {
 			int id = v.getId();
 			if (id == R.id.regis) {
 				
+/*
 				ParseUser user = new ParseUser();
 				user.setUsername(username.getText().toString());
 				user.setPassword(pass.getText().toString());
@@ -113,6 +114,45 @@ public class Activity_registro extends ActionBarActivity {
 				    }
 				  }
 				});
+*/
+				if(nom.getText().toString().matches("") || pass.getText().toString().matches("") || ap.getText().toString().matches("") || mail.getText().toString().matches("")){
+					Toast.makeText( getApplicationContext(),"Por favor llene todos los campos",Toast.LENGTH_SHORT ).show();
+				}
+				else{
+					ParseUser user = new ParseUser();
+					user.setUsername(username.getText().toString());
+					user.setPassword(pass.getText().toString());
+					user.setEmail(mail.getText().toString());
+					user.put("NombreCompleto",nom.getText().toString()+" "+ap.getText().toString());
+					 
+					user.signUpInBackground(new SignUpCallback() {
+						public void done(ParseException e) {
+						    if (e == null) {					    	
+						    	// Hooray! Let them use the app now.
+						    	ParseUser.logInInBackground(username.getText().toString(), pass.getText().toString(), new LogInCallback() {
+						    		public void done(ParseUser user, ParseException e) {
+									    if (user != null) {
+									    	// Hooray! The user is logged in.
+									    	String nombre = (String) user.getUsername();
+											Toast.makeText( getApplicationContext(),"Bienvenido a Applace, "+nombre,Toast.LENGTH_SHORT ).show();
+											
+											Intent intent = new Intent(Activity_registro.this, Logueado.class );
+											startActivity(intent);
+											finish();
+									    }
+									}
+								});					    	
+						    } else {					    	
+						    	// Sign up didn't succeed. Look at the ParseException
+						    	// to figure out what went wrong
+						    	Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+						    	mail.setText("");
+						    	username.setText("");
+						    	pass.setText("");
+						    }
+						 }
+					});
+				}				
 			}
 		}
 	};
