@@ -67,6 +67,7 @@ public class Fragment_ubicacion extends Fragment {
         Bundle tipoSelected = new Bundle();
         tipoSelected.putInt("ubicacion", i);
         fragment.setArguments(tipoSelected);
+
         
         FragmentManager fm = getActivity().getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();

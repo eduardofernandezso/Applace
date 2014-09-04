@@ -3,7 +3,6 @@ package com.retni.applacegps;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
@@ -12,12 +11,10 @@ import org.osmdroid.views.overlay.MyLocationOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener;
-
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -36,6 +33,7 @@ public class Fragment_mapa extends Fragment{
 	ArrayList<OverlayItem> anotherOverlayItemArray;	
 	MyLocationOverlay myLocationOverlay = null;
 	List<ParseObject> alojamientos;
+
 	
 	public Fragment_mapa(){
 	
@@ -64,6 +62,7 @@ public class Fragment_mapa extends Fragment{
         	valor = bundle.getInt("ubicacion");
         }        
                 
+
         myOpenMapView = (MapView) getActivity().findViewById(R.id.mapView);
         myOpenMapView.setBuiltInZoomControls(true);
         myMapController = myOpenMapView.getController();
@@ -135,6 +134,7 @@ public class Fragment_mapa extends Fragment{
         myOpenMapView.getOverlays().add(anotherItemizedIconOverlay);
 	}
 	
+
 	OnItemGestureListener<OverlayItem> myOnItemGestureListener
     = new OnItemGestureListener<OverlayItem>(){
 
@@ -197,5 +197,6 @@ public class Fragment_mapa extends Fragment{
 		super.onPause();
 		myLocationOverlay.disableMyLocation();
 		myLocationOverlay.disableCompass();
-	}
+
+	}	
 }
