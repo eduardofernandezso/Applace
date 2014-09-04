@@ -54,7 +54,7 @@ public class Logueado extends ActionBarActivity{
 		    nameUser = (String) user.getUsername();
 	    }	    
 		
-		opcionesMenu = new String[] {nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Opción 3","Salir"};
+		opcionesMenu = new String[] {nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Opción 3", "Ruta", "Salir"};
         drawerLayout = (DrawerLayout) findViewById(R.id.container);
         drawerList = (ListView) findViewById(R.id.left_drawer);
  
@@ -124,6 +124,10 @@ public class Logueado extends ActionBarActivity{
 						startActivity(intent);
                     	break;
                     case 5:
+                    	//Pregunta por ruta
+                    	fragment = new Fragment_mapaRuta();
+                    	break;
+                    case 6:
                     	ParseUser.logOut();
                     	intent = new Intent(Logueado.this, MainActivity.class );
 						startActivity(intent);
