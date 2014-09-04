@@ -2,8 +2,11 @@ package com.retni.applacegps;
 
 
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.List;
 
+=======
+>>>>>>> origin/victor
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
@@ -12,12 +15,10 @@ import org.osmdroid.views.overlay.MyLocationOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener;
-
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -36,6 +37,7 @@ public class Fragment_mapa extends Fragment{
 	ArrayList<OverlayItem> anotherOverlayItemArray;	
 	MyLocationOverlay myLocationOverlay = null;
 	List<ParseObject> alojamientos;
+
 	
 	public Fragment_mapa(){
 	
@@ -56,7 +58,7 @@ public class Fragment_mapa extends Fragment{
 	@Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);    
-        
+
         //Se verifica si el fragmento es cargado para Fragment_ubicacion
         Bundle bundle = getArguments();
         int valor = 0;

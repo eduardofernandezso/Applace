@@ -57,7 +57,6 @@ public class Fragment_ubicacion extends Fragment {
         tipoAlojamiento = (String) bundle.getString("tipoAloj");
         
         pregunta.setText("¿En qué lugar se encuentra tu "+tipoAlojamiento+"?");
-        
         getActivity().getActionBar().setTitle("ubicacion");
         
         Fragment_mapa fragment = new Fragment_mapa();  

@@ -53,6 +53,8 @@ public class Activity_iniciarSesion extends ActionBarActivity {
 							
 							Intent intent = new Intent(Activity_iniciarSesion.this, Logueado.class);
 							startActivity(intent);
+							
+							finish();
 					    } else {
 					    	Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 					    	email.setText("");

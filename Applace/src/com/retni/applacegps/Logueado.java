@@ -222,5 +222,5 @@ public class Logueado extends ActionBarActivity{
 	public void onConfigurationChanged(Configuration newConfig) {
 	    super.onConfigurationChanged(newConfig);
 	    drawerToggle.onConfigurationChanged(newConfig);
-	}		
+    }
 }
