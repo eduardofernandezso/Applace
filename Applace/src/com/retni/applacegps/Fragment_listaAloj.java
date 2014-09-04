@@ -58,9 +58,10 @@ public class Fragment_listaAloj extends Fragment{
 			alojamientos = query.find();
 		} catch (ParseException e) {
 
-		}
+		}		
 		
-		int size_aloj = alojamientos.size();
+		int size_aloj=0;
+		size_aloj = alojamientos.size();
 		
 		ParseObject aloj = null;
 		for(int i=0;i<size_aloj; i++){
@@ -68,7 +69,7 @@ public class Fragment_listaAloj extends Fragment{
 			titulos.add(aloj.getString("titulo"));
 			precios.add(aloj.getInt("precio"));
 			
-			ParseFile img = aloj.getParseFile("foto");
+			ParseFile img = aloj.getParseFile("foto");			
 		    img.getDataInBackground(new GetDataCallback() {
 		    	Bitmap bmp = null;
 		        public void done(byte[] data, com.parse.ParseException e) {
