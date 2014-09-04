@@ -2,7 +2,6 @@ package com.retni.applacegps;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -10,7 +9,6 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -60,9 +58,10 @@ public class Fragment_listaAloj extends Fragment{
 			alojamientos = query.find();
 		} catch (ParseException e) {
 
-		}
+		}		
 		
-		int size_aloj = alojamientos.size();
+		int size_aloj=0;
+		size_aloj = alojamientos.size();
 		
 		ParseObject aloj = null;
 		for(int i=0;i<size_aloj; i++){
@@ -70,7 +69,7 @@ public class Fragment_listaAloj extends Fragment{
 			titulos.add(aloj.getString("titulo"));
 			precios.add(aloj.getInt("precio"));
 			
-			ParseFile img = aloj.getParseFile("foto");
+			ParseFile img = aloj.getParseFile("foto");			
 		    img.getDataInBackground(new GetDataCallback() {
 		    	Bitmap bmp = null;
 		        public void done(byte[] data, com.parse.ParseException e) {
@@ -86,6 +85,6 @@ public class Fragment_listaAloj extends Fragment{
 		}		
 		     
 		list_aloj = (ListView) getActivity().findViewById(R.id.list_aloj);
-        list_aloj.setAdapter(new Cursor_Adapter(getActivity(), titulos, precios, fotos));
+        list_aloj.setAdapter(new Cursor_Adapter(getActivity(), titulos, precios, fotos));        
 	}
 }

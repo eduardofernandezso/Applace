@@ -1,13 +1,9 @@
 package com.retni.applacegps;
 
 import java.util.List;
-
-import com.parse.ParseFile;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +20,8 @@ public class Cursor_Adapter extends BaseAdapter{
     List<Integer> precios;
     List<Bitmap> fotos;
     
-    private static LayoutInflater inflater = null;
+    @SuppressWarnings("unused")
+	private static LayoutInflater inflater = null;
 
     public Cursor_Adapter(Context context, List<String> titulos, List<Integer> precios, List<Bitmap> fotos) {
         // TODO Auto-generated constructor stub
@@ -66,30 +63,24 @@ public class Cursor_Adapter extends BaseAdapter{
 	    final TextView titulo = (TextView)convertView.findViewById(R.id.row_titulo);
 	    final TextView precio = (TextView)convertView.findViewById(R.id.row_precio);
 	    final ImageView img = (ImageView)convertView.findViewById(R.id.row_img);
-	    final RatingBar star = (RatingBar)convertView.findViewById(R.id.row_star);
+	    //final RatingBar star = (RatingBar)convertView.findViewById(R.id.row_star);	    
 	    
-	    if(fotos.size()!=0){
-	    	
+	    if(fotos.isEmpty() != true ){	    	
 	    	img.setImageBitmap(fotos.get(position));
-	    	img.invalidate();
 	    }
 	    if(titulos.size()!=0){
 	    	titulo.setText(titulos.get(position));
 	    }
 	    if(precios.size()!=0){
 	    	precio.setText("$"+precios.get(position).toString());
-	    }
-	    
+	    }	    
 	    
         convertView.setOnClickListener(new OnClickListener(){		
 			public void onClick(View v) {			
 				Intent intent=new Intent(context,Activity_verAlojamiento.class);
-				//intent.putExtra("nombre", cursor.getString(cursor.getColumnIndex(from[0])));
 				context.startActivity(intent);
 			}		
-		});
-        
+		});        
         return convertView;
-    }
-    
+    }    
 }
