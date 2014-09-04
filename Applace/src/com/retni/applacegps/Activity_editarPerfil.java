@@ -47,6 +47,7 @@ public class Activity_editarPerfil extends ActionBarActivity{
         about.setOnClickListener(listener);
 	}
 	
+
 	private OnClickListener listener = new OnClickListener(){	
 		@Override
 		public void onClick(View v) {			

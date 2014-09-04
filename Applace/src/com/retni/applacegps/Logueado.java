@@ -56,6 +56,7 @@ public class Logueado extends ActionBarActivity{
 	    }
 		
 		opcionesMenu = new String[] {nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Salir"};
+
         drawerLayout = (DrawerLayout) findViewById(R.id.container);
         drawerList = (ListView) findViewById(R.id.left_drawer);
  
@@ -121,6 +122,7 @@ public class Logueado extends ActionBarActivity{
                     	fragment = new Fragment_listaAloj();
                     	break;                    
                     case 4:
+
                     	AlertDialog.Builder dialog = new AlertDialog.Builder(Logueado.this);  
             	        dialog.setTitle("Cerrar Sesión");		
             	        dialog.setIcon(R.drawable.ic_launcher);	
@@ -223,4 +225,6 @@ public class Logueado extends ActionBarActivity{
 	    super.onConfigurationChanged(newConfig);
 	    drawerToggle.onConfigurationChanged(newConfig);
 	}		
+
+>>>>>>> origin/nacha
 }

@@ -17,7 +17,6 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -63,7 +62,7 @@ public class Fragment_mapa extends Fragment{
         if(bundle != null){
         	valor = bundle.getInt("ubicacion");
         }        
-                
+
         myOpenMapView = (MapView) getActivity().findViewById(R.id.mapView);
         myOpenMapView.setBuiltInZoomControls(true);
         myMapController = myOpenMapView.getController();
@@ -115,6 +114,7 @@ public class Fragment_mapa extends Fragment{
 			} 
         }
 		
+
         //Add Scale Bar
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(getActivity());
         myOpenMapView.getOverlays().add(myScaleBarOverlay);
@@ -135,6 +135,7 @@ public class Fragment_mapa extends Fragment{
         myOpenMapView.getOverlays().add(anotherItemizedIconOverlay);
 	}
 	
+
 	OnItemGestureListener<OverlayItem> myOnItemGestureListener
     = new OnItemGestureListener<OverlayItem>(){
 
@@ -198,4 +199,5 @@ public class Fragment_mapa extends Fragment{
 		myLocationOverlay.disableMyLocation();
 		myLocationOverlay.disableCompass();
 	}
+
 }
