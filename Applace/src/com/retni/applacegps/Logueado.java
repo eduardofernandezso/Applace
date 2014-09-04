@@ -32,7 +32,7 @@ import android.widget.Toast;
 @SuppressLint("InlinedApi")
 public class Logueado extends ActionBarActivity{
 	
-    private DrawerLayout drawerLayout;
+	private DrawerLayout drawerLayout;
     private ListView drawerList;
     private String[] opcionesMenu;
     
@@ -52,10 +52,10 @@ public class Logueado extends ActionBarActivity{
 	    
 	    if(user!=null){
 	    	mailUser = user.getEmail();
-		    nameUser = (String) user.getUsername();
-	    }	    
+		    nameUser = (String) user.getString("NombreCompleto");
+	    }
 		
-		opcionesMenu = new String[] {nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Opción 3","Salir"};
+		opcionesMenu = new String[] {nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Salir"};
         drawerLayout = (DrawerLayout) findViewById(R.id.container);
         drawerList = (ListView) findViewById(R.id.left_drawer);
  
@@ -119,12 +119,8 @@ public class Logueado extends ActionBarActivity{
                     case 3:
                     	//Lista de alojamientos
                     	fragment = new Fragment_listaAloj();
-                    	break;
+                    	break;                    
                     case 4:
-                    	intent = new Intent(Logueado.this, Activity_verAlojamiento.class );
-						startActivity(intent);
-                    	break;
-                    case 5:
                     	AlertDialog.Builder dialog = new AlertDialog.Builder(Logueado.this);  
             	        dialog.setTitle("Cerrar Sesión");		
             	        dialog.setIcon(R.drawable.ic_launcher);	
@@ -226,5 +222,5 @@ public class Logueado extends ActionBarActivity{
 	public void onConfigurationChanged(Configuration newConfig) {
 	    super.onConfigurationChanged(newConfig);
 	    drawerToggle.onConfigurationChanged(newConfig);
-	}	
+	}		
 }

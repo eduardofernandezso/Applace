@@ -6,13 +6,11 @@ que si es un Arrendador, se le muestra la página principal de sus pripiedades.
 
 package com.retni.applacegps;
 
-
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -23,11 +21,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class Activity_registro extends ActionBarActivity {
 	
-	EditText mail,pass,nom,ap,username;
+	EditText mail,pass,nom,ap;
+	String username;
 	Button registrar;
+	TextView link;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,12 +40,14 @@ public class Activity_registro extends ActionBarActivity {
 		pass = (EditText)findViewById(R.id.reg_pass);
 		nom = (EditText)findViewById(R.id.reg_nombre);
 		ap = (EditText)findViewById(R.id.reg_apellido);
-		username = (EditText)findViewById(R.id.reg_username);
+		//username = (EditText)findViewById(R.id.reg_username);
+		link = (TextView) findViewById(R.id.ini_link);
 		
 		registrar = (Button)findViewById(R.id.regis);
 
 
 		registrar.setOnClickListener(listener);
+		link.setOnClickListener(listener);
 	}
 	
 	@Override
@@ -79,60 +82,23 @@ public class Activity_registro extends ActionBarActivity {
 			// TODO Auto-generated method stub
 			int id = v.getId();
 			if (id == R.id.regis) {
-				
-/*
-				ParseUser user = new ParseUser();
-				user.setUsername(username.getText().toString());
-				user.setPassword(pass.getText().toString());
-				user.setEmail(mail.getText().toString());
-				user.put("NombreCompleto",nom.getText().toString()+" "+ap.getText().toString());
-				 
-				user.signUpInBackground(new SignUpCallback() {
-				  public void done(ParseException e) {
-				    if (e == null) {
-				      // Hooray! Let them use the app now.
-				    	ParseUser.logInInBackground(username.getText().toString(), pass.getText().toString(), new LogInCallback() {
-							  public void done(ParseUser user, ParseException e) {
-							    if (user != null) {
-							      // Hooray! The user is logged in.
-							    	String nombre = (String) user.getUsername();
-									Toast.makeText( getApplicationContext(),"Bienvenido a Applace, "+nombre,Toast.LENGTH_SHORT ).show();
-									
-									Intent intent = new Intent(Activity_registro.this, Logueado.class );
-									startActivity(intent);
-							    }
-							  }
-						});
-				    	
-				    } else {
-				      // Sign up didn't succeed. Look at the ParseException
-				      // to figure out what went wrong
-				    	Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-				    	mail.setText("");
-				    	username.setText("");
-				    	pass.setText("");
-				    }
-				  }
-				});
-*/
+				username = mail.getText().toString();
 				if(nom.getText().toString().matches("") || pass.getText().toString().matches("") || ap.getText().toString().matches("") || mail.getText().toString().matches("")){
 					Toast.makeText( getApplicationContext(),"Por favor llene todos los campos",Toast.LENGTH_SHORT ).show();
-				}
+				}				
 				else{
 					ParseUser user = new ParseUser();
-					user.setUsername(username.getText().toString());
+					user.setUsername(username);
 					user.setPassword(pass.getText().toString());
 					user.setEmail(mail.getText().toString());
 					user.put("NombreCompleto",nom.getText().toString()+" "+ap.getText().toString());
 					 
 					user.signUpInBackground(new SignUpCallback() {
 						public void done(ParseException e) {
-						    if (e == null) {					    	
-						    	// Hooray! Let them use the app now.
-						    	ParseUser.logInInBackground(username.getText().toString(), pass.getText().toString(), new LogInCallback() {
+						    if (e == null) {
+						    	ParseUser.logInInBackground(username, pass.getText().toString(), new LogInCallback() {
 						    		public void done(ParseUser user, ParseException e) {
 									    if (user != null) {
-									    	// Hooray! The user is logged in.
 									    	String nombre = (String) user.getUsername();
 											Toast.makeText( getApplicationContext(),"Bienvenido a Applace, "+nombre,Toast.LENGTH_SHORT ).show();
 											
@@ -141,17 +107,18 @@ public class Activity_registro extends ActionBarActivity {
 									    }
 									}
 								});					    	
-						    } else {					    	
-						    	// Sign up didn't succeed. Look at the ParseException
-						    	// to figure out what went wrong
+						    } else {
 						    	Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 						    	mail.setText("");
-						    	username.setText("");
 						    	pass.setText("");
 						    }
 						 }
 					});
 				}				
+			}
+			else if(id == R.id.ini_link){
+				Intent intent = new Intent(Activity_registro.this, Activity_iniciarSesion.class );
+				startActivity(intent);
 			}
 		}
 	};

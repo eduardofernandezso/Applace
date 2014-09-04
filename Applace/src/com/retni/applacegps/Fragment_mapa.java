@@ -2,6 +2,8 @@ package com.retni.applacegps;
 
 
 import java.util.ArrayList;
+import java.util.List;
+
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
@@ -10,6 +12,12 @@ import org.osmdroid.views.overlay.MyLocationOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener;
+
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -27,6 +35,7 @@ public class Fragment_mapa extends Fragment{
 	private MapController myMapController;	
 	ArrayList<OverlayItem> anotherOverlayItemArray;	
 	MyLocationOverlay myLocationOverlay = null;
+	List<ParseObject> alojamientos;
 	
 	public Fragment_mapa(){
 	
@@ -48,6 +57,13 @@ public class Fragment_mapa extends Fragment{
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);    
         
+        //Se verifica si el fragmento es cargado para Fragment_ubicacion
+        Bundle bundle = getArguments();
+        int valor = 0;
+        if(bundle != null){
+        	valor = bundle.getInt("ubicacion");
+        }        
+                
         myOpenMapView = (MapView) getActivity().findViewById(R.id.mapView);
         myOpenMapView.setBuiltInZoomControls(true);
         myMapController = myOpenMapView.getController();
@@ -61,20 +77,44 @@ public class Fragment_mapa extends Fragment{
         else {
         	GeoPoint startPoint = new GeoPoint(getMyLocation());
             myMapController.setCenter(startPoint);
-        }        
+        }
         
-        //--- Create Another Overlay for multi marker
-        anotherOverlayItemArray = new ArrayList<OverlayItem>();
-        anotherOverlayItemArray.add(new OverlayItem(
-        		"Universidad Tecnica Federico Santa Maria", "USM", new GeoPoint(-33.49066,-70.61899)));
-        anotherOverlayItemArray.add(new OverlayItem(
-        		"Acá como", "Carrito de los churrascos", new GeoPoint(-33.50868, -70.64477)));
-        ItemizedIconOverlay<OverlayItem> anotherItemizedIconOverlay 
-        	= new ItemizedIconOverlay<OverlayItem>(
-        			getActivity(), anotherOverlayItemArray, myOnItemGestureListener);
-        myOpenMapView.getOverlays().add(anotherItemizedIconOverlay);
-        //---
-        
+        if(valor != 1){
+        	       
+	        Parse.initialize(getActivity(), "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");        
+	        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Alojamiento");
+	
+			try {
+				alojamientos = query.find();
+			} catch (ParseException e) {
+				Toast.makeText( getActivity().getApplicationContext(),"Error.",Toast.LENGTH_SHORT ).show();
+			}
+			
+			int size_aloj = 0;
+			size_aloj = alojamientos.size();
+			
+			if (size_aloj == 0){
+				Toast.makeText( getActivity().getApplicationContext(),"No hay datos para cargar.",Toast.LENGTH_SHORT ).show();
+			}
+			else{
+				String titulo;
+				int precio;
+				double latit, longi;
+				ParseObject aloj = null;
+				for(int i=0 ; i < size_aloj ; i++){
+					aloj = alojamientos.get(i);
+					titulo = aloj.getString("titulo");
+					precio = aloj.getInt("precio");
+					latit = aloj.getDouble("dir_latitud");
+					longi = aloj.getDouble("dir_longitud");
+					
+					GeoPoint punto = new GeoPoint(latit, longi);
+					
+					agregar_punto(titulo, precio, punto);
+				}
+			} 
+        }
+		
         //Add Scale Bar
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(getActivity());
         myOpenMapView.getOverlays().add(myScaleBarOverlay);
@@ -83,6 +123,16 @@ public class Fragment_mapa extends Fragment{
         myLocationOverlay = new MyLocationOverlay(getActivity(), myOpenMapView);
         myOpenMapView.getOverlays().add(myLocationOverlay);
         myOpenMapView.postInvalidate(); 
+	}
+	
+	public void agregar_punto(String tit, int pre, GeoPoint p){	
+		
+        anotherOverlayItemArray = new ArrayList<OverlayItem>();
+        anotherOverlayItemArray.add(new OverlayItem(tit, ""+pre, new GeoPoint(p)));
+        ItemizedIconOverlay<OverlayItem> anotherItemizedIconOverlay 
+        	= new ItemizedIconOverlay<OverlayItem>(
+        			getActivity(), anotherOverlayItemArray, myOnItemGestureListener);
+        myOpenMapView.getOverlays().add(anotherItemizedIconOverlay);
 	}
 	
 	OnItemGestureListener<OverlayItem> myOnItemGestureListener
@@ -147,5 +197,5 @@ public class Fragment_mapa extends Fragment{
 		super.onPause();
 		myLocationOverlay.disableMyLocation();
 		myLocationOverlay.disableCompass();
-	}	
+	}
 }
