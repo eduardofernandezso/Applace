@@ -42,6 +42,9 @@
             android:name="com.retni.applacegps.Activity_iniciarSesion">
         </activity>
         <activity
+            android:name="com.retni.applacegps.Activity_filtro">
+        </activity>
+        <activity
             android:name="com.retni.applacegps.Activity_registro">
         </activity>
         <activity

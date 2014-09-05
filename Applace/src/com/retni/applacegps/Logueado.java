@@ -60,7 +60,6 @@ public class Logueado extends ActionBarActivity{
 		if(flag!=-1){
 			lax = (ArrayList<Double>) getIntent().getSerializableExtra("latis");
 			lox = (ArrayList<Double>) getIntent().getSerializableExtra("longis");
-			
 			Toast.makeText(this, "Filtrados: " + lax.size(), Toast.LENGTH_SHORT).show();
 		}
 
@@ -73,7 +72,6 @@ public class Logueado extends ActionBarActivity{
 	    	mailUser = user.getEmail();
 		    nameUser = (String) user.getString("NombreCompleto");
 	    }
-		
 		opcionesMenu = new String[] {"Mi perfil, "+ nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Buscar Alojamiento", "Ruta", "Cerrar Sesión"};
         drawerLayout = (DrawerLayout) findViewById(R.id.container);
         drawerList = (ListView) findViewById(R.id.left_drawer);

@@ -57,7 +57,6 @@ public class Fragment_listaAloj extends Fragment{
         msje = (TextView) getActivity().findViewById(R.id.list_mensaje);
         
         list_bar.setVisibility(View.VISIBLE);
-        
         Parse.initialize(getActivity(), "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");
         ParseUser user = new ParseUser();
         user = ParseUser.getCurrentUser();
