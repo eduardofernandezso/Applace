@@ -11,6 +11,8 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.parse.SignUpCallback;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,6 +35,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -47,6 +50,9 @@ public class Activity_perfil extends ActionBarActivity{
 	ProgressBar perf_bar;
 	private String name = "";
 	byte[] data1;
+	EditText nombreNew;
+	String nameNew= "Yo";
+	
 	
 	private static int TAKE_PICTURE = 1;
 	private static int SELECT_PICTURE = 2;
@@ -99,6 +105,8 @@ public class Activity_perfil extends ActionBarActivity{
 	    }	    
 	    nombre.setText(nameUser);
 	    mail.setText(mailUser);
+	    nombre.setOnClickListener(listener);
+	    mail.setOnClickListener(listener);
 	    perf_foto.setOnClickListener(listener);
 	}
 	
@@ -125,9 +133,10 @@ public class Activity_perfil extends ActionBarActivity{
 		@Override
 		public void onClick(View v) {
 			int id = v.getId();
+			AlertDialog.Builder dialog;
 			switch(id){
 				case R.id.perf_foto:
-					AlertDialog.Builder dialog = new AlertDialog.Builder(Activity_perfil.this);  
+					dialog = new AlertDialog.Builder(Activity_perfil.this);  
         	        dialog.setTitle("Editar foto de perfil");		
         	        dialog.setIcon(R.drawable.ic_launcher);	
         	        
@@ -154,6 +163,48 @@ public class Activity_perfil extends ActionBarActivity{
         	            }  
         	        });          	        
         	        dialog.show();					
+					break;
+					
+				case R.id.perf_name:
+					dialog = new AlertDialog.Builder(Activity_perfil.this);  
+        	        dialog.setTitle("Editar nombre");		
+        	        dialog.setIcon(R.drawable.ic_launcher);	
+        	        
+        	        View vis = getLayoutInflater().inflate( R.layout.dialog_editarperfil, null );
+        	        nombreNew = (EditText) vis.findViewById(R.id.dialogedit_new);
+        			      
+        	        dialog.setView(vis);
+        	        dialog.setNegativeButton("Cancelar", null);  
+        	        dialog.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {  
+        	            public void onClick(DialogInterface dialogo1, int id) {
+        	            	nameNew = nombreNew.getText().toString();
+        	            	if(nameNew == "Yo"){
+        	            		Toast.makeText( getApplicationContext(),"Ingrese un nombre válido!",Toast.LENGTH_SHORT ).show();
+        	            	} 
+        	            	else{	        	            	
+	        	            	ParseUser user = new ParseUser();
+	        	                user = ParseUser.getCurrentUser();        	        	    
+	        	        	    if(user!=null){
+	        	        		    user.put("NombreCompleto", nameNew);
+	        	        		    user.saveInBackground(new SaveCallback() {
+	        							public void done(ParseException e) {
+	        							    if (e == null) {
+	        							    	perf_bar.setVisibility(View.INVISIBLE);
+	        									Toast.makeText( getApplicationContext(),"Finalizado",Toast.LENGTH_SHORT ).show();
+	        									nombre.setText(nameNew);
+	        							    } else{
+	        							    	Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+	        							    }
+	        							}
+	        	        		    });
+	        	        	    }
+        	            	}
+        	            }  
+        	        });          	        
+        	        dialog.show();
+					break;
+					
+				case R.id.perf_mail2:
 					break;
 			}
 		}

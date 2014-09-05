@@ -5,6 +5,8 @@ tiempo.
 
 package com.retni.applacegps;
 
+import java.util.ArrayList;
+
 import com.parse.Parse;
 import com.parse.ParseUser;
 import android.annotation.SuppressLint;
@@ -42,9 +44,25 @@ public class Logueado extends ActionBarActivity{
     
     String passUser, mailUser, nameUser = "Mi Cuenta";
 			
+	@SuppressWarnings("unchecked")
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		ArrayList<Double> lax = new ArrayList<Double>();
+		@SuppressWarnings("unused")
+		ArrayList<Double> lox = new ArrayList<Double>();
+		
+		int flag;
+		Intent in = getIntent();
+		flag = in.getIntExtra("flag",-1);
+			
+		if(flag!=-1){
+			lax = (ArrayList<Double>) getIntent().getSerializableExtra("latis");
+			lox = (ArrayList<Double>) getIntent().getSerializableExtra("longis");
+			Toast.makeText(this, "Filtrados: " + lax.size(), Toast.LENGTH_SHORT).show();
+		}
+
 		
 		Parse.initialize(this, "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");
         ParseUser user = new ParseUser();
@@ -55,7 +73,7 @@ public class Logueado extends ActionBarActivity{
 		    nameUser = (String) user.getString("NombreCompleto");
 	    }
 		
-		opcionesMenu = new String[] {nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Salir"};
+		opcionesMenu = new String[] {nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Busar Alojamiento","Salir"};
         drawerLayout = (DrawerLayout) findViewById(R.id.container);
         drawerList = (ListView) findViewById(R.id.left_drawer);
  
@@ -121,6 +139,10 @@ public class Logueado extends ActionBarActivity{
                     	fragment = new Fragment_listaAloj();
                     	break;                    
                     case 4:
+                    	Intent i = new Intent(Logueado.this, Activity_filtro.class );
+						startActivity(i);
+                    	break;
+                    case 5:
                     	AlertDialog.Builder dialog = new AlertDialog.Builder(Logueado.this);  
             	        dialog.setTitle("Cerrar Sesión");		
             	        dialog.setIcon(R.drawable.ic_launcher);	
@@ -139,6 +161,7 @@ public class Logueado extends ActionBarActivity{
             	        
             	        dialog.show();
                     	break;
+                    
                 }
                 
                 if (fragment != null){
