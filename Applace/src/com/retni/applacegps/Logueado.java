@@ -1,5 +1,5 @@
 /**************************************************************************************************************
-ACtividad principal que se utilizara para mostrar el mapa en la aplicación. Acá se trabajará la mayoría del 
+Actividad principal que se utilizara para mostrar el mapa en la aplicación. Acá se trabajará la mayoría del 
 tiempo.
 **************************************************************************************************************/
 
