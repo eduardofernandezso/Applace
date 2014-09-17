@@ -11,7 +11,6 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.01"
             android:background="@drawable/ab_background_textured_applacegps" >
 
             <TextView
@@ -22,9 +21,7 @@
                 android:layout_margin="20dp"
                 android:gravity="center"
                 android:text="¿Qué tipo de alojamiento deseas publicar?"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold" />
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
         </FrameLayout>
 
@@ -48,11 +45,8 @@
             android:id="@+id/sig"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:background="@drawable/ab_background_textured_applacegps"
-            android:text="Siguiente"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold" />
+            android:text="Siguiente" />
 
     </LinearLayout>
 

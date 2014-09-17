@@ -21,15 +21,6 @@
             android:text="Inicia Sesión" />
 
         <EditText
-            android:id="@+id/reg_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:ems="10"
-            android:hint="Nombre de Usuario" />
-
-        <EditText
             android:id="@+id/reg_correo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -14,49 +14,53 @@
         android:orientation="vertical" >
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <TextView
                 android:id="@+id/olvid_link"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
                 android:text="¿Te has olvidado?" />
-
-            <TextView
-                android:id="@+id/ini_link"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.53" />
 
             <TextView
                 android:id="@+id/reg_link"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="fill"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="30dp"
+                android:layout_weight="0.23"
                 android:text="Regístrate" />
+
         </LinearLayout>
 
         <TextView
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <EditText
             android:id="@+id/ini_correo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginLeft="30dp"
-        	android:layout_marginRight="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_weight="1"
             android:ems="10"
-            android:hint="Nombre de Usuario"
+            android:hint="Correo Electrónico"
             android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/ini_pass"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginLeft="30dp"
-        	android:layout_marginRight="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_weight="1"
             android:ems="10"
             android:hint="Contraseña"
             android:inputType="textPassword" >
@@ -67,16 +71,17 @@
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/iniSesion"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginLeft="60dp"
-        	android:layout_marginRight="60dp"
+            android:layout_marginRight="60dp"
+            android:layout_weight="1"
             android:background="@drawable/inisesion" />
-
     </LinearLayout>
 
 </FrameLayout>

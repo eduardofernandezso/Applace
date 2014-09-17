@@ -17,19 +17,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Fragment_listaAloj extends Fragment{
 	
 	ListView list_aloj;
+	TextView msje;
 	
 	List<String> titulos = new ArrayList<String>();
 	List<Integer> precios = new ArrayList<Integer>();
 	List<Bitmap> fotos = new ArrayList<Bitmap>();
-	List<String> rating = new ArrayList<String>();
+	List<Float> rating = new ArrayList<Float>();
+	List<Integer> count_rating = new ArrayList<Integer>();
+	List<String> id_aloj = new ArrayList<String>();
 	
 	List<ParseObject> alojamientos;
 	List<ParseObject> alojamientos2;
+	
+	ProgressBar list_bar;
 	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,12 +53,17 @@ public class Fragment_listaAloj extends Fragment{
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);   
         
+        list_bar = (ProgressBar) getActivity().findViewById(R.id.list_bar);
+        msje = (TextView) getActivity().findViewById(R.id.list_mensaje);
+        
+        list_bar.setVisibility(View.VISIBLE);
+        
         Parse.initialize(getActivity(), "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");
         ParseUser user = new ParseUser();
         user = ParseUser.getCurrentUser();
         
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Alojamiento");
-		query.whereEqualTo("User", user.getUsername());
+		query.whereEqualTo("User", user.getEmail());
 		query.orderByDescending("_created_at");
 
 		try {
@@ -63,28 +75,41 @@ public class Fragment_listaAloj extends Fragment{
 		int size_aloj=0;
 		size_aloj = alojamientos.size();
 		
-		ParseObject aloj = null;
-		for(int i=0;i<size_aloj; i++){
-			aloj = alojamientos.get(i);
-			titulos.add(aloj.getString("titulo"));
-			precios.add(aloj.getInt("precio"));
-			
-			ParseFile img = aloj.getParseFile("foto");			
-		    img.getDataInBackground(new GetDataCallback() {
-		    	Bitmap bmp = null;
-		        public void done(byte[] data, com.parse.ParseException e) {
-		            if (e == null){
-		                bmp = BitmapFactory.decodeByteArray(data, 0, data.length);	
-		                fotos.add(bmp);
-		            }
-		            else{
-		            	Toast.makeText(getActivity().getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-		            }
-		        }
-		    }); 
-		}		
-		     
-		list_aloj = (ListView) getActivity().findViewById(R.id.list_aloj);
-        list_aloj.setAdapter(new Cursor_Adapter(getActivity(), titulos, precios, fotos));        
+		if (size_aloj == 0){
+			msje.setVisibility(View.VISIBLE);
+		} else{		
+			ParseObject aloj = null;
+			for(int i=0;i<size_aloj; i++){
+				aloj = alojamientos.get(i);
+				titulos.add(aloj.getString("titulo"));
+				precios.add(aloj.getInt("precio"));
+				rating.add((float) aloj.getDouble("calificacion"));
+				count_rating.add(aloj.getInt("count_calificacion"));
+				id_aloj.add(aloj.getObjectId());
+				
+				ParseFile img = aloj.getParseFile("foto");	
+				if(img != null){
+				    img.getDataInBackground(new GetDataCallback() {
+				    	Bitmap bmp = null;
+				        public void done(byte[] data, com.parse.ParseException e) {
+				            if (e == null){
+				                bmp = BitmapFactory.decodeByteArray(data, 0, data.length);	
+				                fotos.add(bmp);
+				            }
+				            else{
+				            	Toast.makeText(getActivity().getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+				            }
+				        }
+				    }); 
+				} else{
+					Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+				}
+			}		
+			     
+			list_aloj = (ListView) getActivity().findViewById(R.id.list_aloj);
+	        list_aloj.setAdapter(new Cursor_Adapter(getActivity(), titulos, precios, fotos, rating, count_rating, id_aloj));  
+	        
+	        list_bar.setVisibility(View.INVISIBLE);        
+		}
 	}
 }
