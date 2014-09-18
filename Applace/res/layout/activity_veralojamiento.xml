@@ -9,110 +9,155 @@
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/row_titulo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Departamento en Santiago"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@drawable/ab_background_textured_applacegps" >
 
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="2dp"
-            android:text="Disponible"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#093999"
-            android:textStyle="bold|italic" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" >
-
-            <RatingBar
-                android:id="@+id/row_star"
-                style="?android:attr/ratingBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="5dp"
-                android:rating="3.5" />
-
-            <TextView
-                android:id="@+id/row_precio"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="68" />
-        </LinearLayout>
-
-        <ScrollView
-            android:id="@+id/scrollView1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_margin="10dp"
                 android:orientation="vertical" >
 
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/pager_fotos"
-                    android:layout_width="fill_parent"
-                    android:layout_height="190dp" >
-                </android.support.v4.view.ViewPager>
-                
-                <Button
-                    android:id="@+id/dialog_salir"
+                <TextView
+                    android:id="@+id/vis_tit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Button" />
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Departamento en Santiago"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/vis_estado"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Large Text"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:layout_gravity="center"
+                    android:layout_margin="2dp"
+                    android:text="Disponible"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#093999"
+                    android:textStyle="bold|italic" />
 
-                <Button
-                    android:id="@+id/dialog_cancelar"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Button" />
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:orientation="vertical" >
 
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Large Text"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
 
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Large Text"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                        <RatingBar
+                            android:id="@+id/vis_rating"
+                            style="?android:attr/ratingBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:rating="3.5" />
 
-                <Button
-                    android:id="@+id/button3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Button" />
+                        <TextView
+                            android:id="@+id/vis_count_rating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="68"
+                            android:textColor="#FFFFFF" />
 
-                <Button
-                    android:id="@+id/button4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Button" />
-
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
-        </ScrollView>
+        </FrameLayout>
+        
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp" >
+
+            <ScrollView
+                android:id="@+id/scrollView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/vis_precio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="$10.000"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textStyle="bold" />
+
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/pager_fotos"
+                        android:layout_width="fill_parent"
+                        android:layout_height="190dp" >
+                    </android.support.v4.view.ViewPager>
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:text="Desccripión"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/vis_descrip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:text="Arriendo departamento en Vina del Mar en unexcelente edificio frente al mar, en exclusiva ubicación, a pasos de la playa, del nuevo paseo al borde costero y del centro comercial Marina Arauco.Departamento se encuentra completamente amoblado y equipado"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                    
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:text="Características"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" 
+                        android:layout_gravity="center" >
+                        
+                        <TextView
+                            android:id="@+id/textView6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Capacidad:" />
+                        
+                        <TextView
+                            android:id="@+id/textView6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="4 personas" />
+                        
+                    </LinearLayout>
+                    
+                </LinearLayout>
+            </ScrollView>
+
+        </FrameLayout>
 
     </LinearLayout>
 
