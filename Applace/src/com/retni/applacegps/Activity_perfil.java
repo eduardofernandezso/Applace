@@ -216,9 +216,13 @@ public class Activity_perfil extends ActionBarActivity{
         	        
         	        View vis = getLayoutInflater().inflate( R.layout.dialog_editarperfil, null );
         	        nombreNew = (EditText) vis.findViewById(R.id.dialogedit_new);
+<<<<<<< HEAD
         	        nombreNew.setHint(nombre.getText());
         			x = (TextView) vis.findViewById(R.id.dialogedit_text);
         			x.setText("Ingrese nuevo Nombre: ");
+=======
+        			      
+>>>>>>> origin/pauliny
         	        dialog.setView(vis);
         	        dialog.setNegativeButton("Cancelar", null);  
         	        dialog.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {  

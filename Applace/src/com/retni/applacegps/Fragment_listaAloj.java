@@ -52,7 +52,6 @@ public class Fragment_listaAloj extends Fragment{
 	@Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);   
-        
         list_bar = (ProgressBar) getActivity().findViewById(R.id.list_bar);
         msje = (TextView) getActivity().findViewById(R.id.list_mensaje);
         
@@ -106,8 +105,7 @@ public class Fragment_listaAloj extends Fragment{
 			}		
 			     
 			list_aloj = (ListView) getActivity().findViewById(R.id.list_aloj);
-	        list_aloj.setAdapter(new Cursor_Adapter(getActivity(), titulos, precios, fotos, rating, count_rating, id_aloj));  
-	        
+	        list_aloj.setAdapter(new Cursor_Adapter(getActivity(), titulos, precios, fotos, rating, count_rating, id_aloj));        
 	        list_bar.setVisibility(View.INVISIBLE);        
 		}
 	}

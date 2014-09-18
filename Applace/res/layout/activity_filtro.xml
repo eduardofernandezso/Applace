@@ -17,6 +17,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:background="@drawable/ab_background_textured_applacegps" >
+
             <TextView
                 android:id="@+id/pregunta_aloj"
                 android:layout_width="wrap_content"
