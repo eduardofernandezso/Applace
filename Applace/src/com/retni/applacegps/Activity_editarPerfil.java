@@ -47,10 +47,11 @@ public class Activity_editarPerfil extends ActionBarActivity{
 	}
 	
 	private OnClickListener listener = new OnClickListener(){
+
 		@Override
 		public void onClick(View v) {			
 			switch(v.getId()){			
-				case R.id.nom:		
+				case R.id.nom:		//Lanzamiento de una nueva actividad
 					Toast.makeText(getApplicationContext(), "nombre", Toast.LENGTH_SHORT).show();
 					break;
 				case R.id.pass:	

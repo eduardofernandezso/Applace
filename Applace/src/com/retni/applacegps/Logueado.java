@@ -72,7 +72,7 @@ public class Logueado extends ActionBarActivity{
 	    	mailUser = user.getEmail();
 		    nameUser = (String) user.getString("NombreCompleto");
 	    }
-		
+	    
 		opcionesMenu = new String[] {"Mi perfil, "+ nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Buscar Alojamiento", "Ruta", "Cerrar Sesión"};
         drawerLayout = (DrawerLayout) findViewById(R.id.container);
         drawerList = (ListView) findViewById(R.id.left_drawer);
@@ -109,6 +109,7 @@ public class Logueado extends ActionBarActivity{
         
         
         Fragment fragment = new Fragment_mapa();
+
         /*
         Bundle j = new Bundle();
         j.putSerializable("las",lax);

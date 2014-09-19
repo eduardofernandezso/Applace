@@ -5,6 +5,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Date;
+
 import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -85,7 +87,7 @@ public class Activity_perfil extends ActionBarActivity{
 		TVpass = (TextView) findViewById(R.id.perf_pass);
 		
 		perf_bar = (ProgressBar) findViewById(R.id.perf_bar);
-		
+
 		Parse.initialize(this, "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");
         ParseUser user = new ParseUser();
         user = ParseUser.getCurrentUser();
@@ -211,9 +213,11 @@ public class Activity_perfil extends ActionBarActivity{
         	        
         	        View vis = getLayoutInflater().inflate( R.layout.dialog_editarperfil, null );
         	        nombreNew = (EditText) vis.findViewById(R.id.dialogedit_new);
+
         	        nombreNew.setHint(nombre.getText());
         			x = (TextView) vis.findViewById(R.id.dialogedit_text);
         			x.setText("Ingrese nuevo Nombre: ");
+
         	        dialog.setView(vis);
         	        dialog.setNegativeButton("Cancelar", null);  
         	        dialog.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {  
@@ -488,7 +492,7 @@ public class Activity_perfil extends ActionBarActivity{
         	        });          	        
         	        dialog.show();
 					break;
-					
+
 				case R.id.perf_pass:
 					dialog = new AlertDialog.Builder(Activity_perfil.this);  
         	        dialog.setTitle("Editar Contraseña");		

@@ -85,7 +85,7 @@ public class Fragment_ubicacion extends Fragment {
         pregunta.setText("¿En qué lugar se encuentra tu "+tipoAlojamiento+"?");
         
         getActivity().getActionBar().setTitle("Ubicacion");
-        
+
         Fragment_mapa fragment = new Fragment_mapa();       
         
         FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -93,7 +93,7 @@ public class Fragment_ubicacion extends Fragment {
 
         ft.add(R.id.frame_mapa, fragment);
         ft.commit(); 
-        
+
         myOpenMapView = (MapView) getActivity().findViewById(R.id.mapView);
         myOpenMapView.setBuiltInZoomControls(true);
         myMapController = (MapController) myOpenMapView.getController();
@@ -143,7 +143,7 @@ public class Fragment_ubicacion extends Fragment {
 			return true;
 		}
     };
-	
+    
 	Location getMyLocation(){
 		LocationManager locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 			return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -219,7 +219,9 @@ public class Fragment_ubicacion extends Fragment {
 	        			getActivity(), anotherOverlayItemArray, myOnItemGestureListener);
 	        myOpenMapView.getOverlays().add(anotherItemizedIconOverlay);
 	        GeoPoint Pointdept = new GeoPoint(lat,lon);
-	        myMapController.setCenter(Pointdept);			
+
+	        myMapController.setCenter(Pointdept);
+			
 		}
-	};	
+	};
 }

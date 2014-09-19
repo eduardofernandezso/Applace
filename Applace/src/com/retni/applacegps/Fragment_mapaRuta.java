@@ -90,7 +90,7 @@ public class Fragment_mapaRuta extends Fragment{
         	startPoint = new GeoPoint(getMyLocation());
             myMapController.setCenter(startPoint);
         }
-        
+
         //Add Scale Bar
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(getActivity());
         myOpenMapView.getOverlays().add(myScaleBarOverlay);

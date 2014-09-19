@@ -5,10 +5,12 @@ verifica para luego darle acceso directo al mapa que se encuentra en Logueado.ja
 
 package com.retni.applacegps;
 
+
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -39,7 +41,7 @@ public class Activity_iniciarSesion extends ActionBarActivity {
   		  iniciar.setOnClickListener(listener);
 	}
 	
-	private OnClickListener listener = new OnClickListener(){
+	private OnClickListener listener = new OnClickListener(){//Mismo listener para multiples botones
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub

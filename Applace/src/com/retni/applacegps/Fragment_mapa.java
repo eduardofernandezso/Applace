@@ -86,8 +86,7 @@ public class Fragment_mapa extends Fragment{
 			
 			agregar_punto("titulo", "id", punto);
         	}
-        }*/        
-        
+        }*/
         myOpenMapView = (MapView) getActivity().findViewById(R.id.mapView);
         myOpenMapView.setBuiltInZoomControls(true);
         myMapController = (MapController) myOpenMapView.getController();
@@ -140,7 +139,7 @@ public class Fragment_mapa extends Fragment{
 				}
 			} 
         }        
-        
+
         //Add Scale Bar
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(getActivity());
         myOpenMapView.getOverlays().add(myScaleBarOverlay);
@@ -157,6 +156,7 @@ public class Fragment_mapa extends Fragment{
         miniMapOverlay.setWidth(200);
         myOpenMapView.getOverlays().add(miniMapOverlay);
         */
+
 	}
 	
 	public void agregar_punto(String tit, String id, GeoPoint p){	

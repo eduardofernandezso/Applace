@@ -33,6 +33,7 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_veralojamiento);
 		
+		
 		fotos = new int[] { R.drawable.img01,
                 R.drawable.img02, R.drawable.img03,
                 R.drawable.img04, R.drawable.img05, R.drawable.img06,
@@ -95,7 +96,6 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 			viewPager = (ViewPager) findViewById(R.id.pager_fotos);
 	        adapter = new ViewPagerAdapter(Activity_verAlojamiento.this, fotos);
 	        viewPager.setAdapter(adapter);
-			
 		}			
 		else {
 			
