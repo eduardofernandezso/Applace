@@ -30,7 +30,6 @@ public class MainActivity extends ActionBarActivity {
         if (currentUser != null) {
         	Intent i = new Intent(MainActivity.this,Logueado.class);
         	startActivity(i);
-        	finish();
           // do stuff with the user
         } else {
           // show the signup or login screen

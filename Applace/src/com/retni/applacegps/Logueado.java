@@ -6,7 +6,6 @@ tiempo.
 package com.retni.applacegps;
 
 import java.util.ArrayList;
-
 import com.parse.Parse;
 import com.parse.ParseUser;
 import android.annotation.SuppressLint;
@@ -60,6 +59,7 @@ public class Logueado extends ActionBarActivity{
 		if(flag!=-1){
 			lax = (ArrayList<Double>) getIntent().getSerializableExtra("latis");
 			lox = (ArrayList<Double>) getIntent().getSerializableExtra("longis");
+			
 			Toast.makeText(this, "Filtrados: " + lax.size(), Toast.LENGTH_SHORT).show();
 		}
 
@@ -73,7 +73,7 @@ public class Logueado extends ActionBarActivity{
 		    nameUser = (String) user.getString("NombreCompleto");
 	    }
 		
-		opcionesMenu = new String[] {nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Busar Alojamiento","Salir"};
+		opcionesMenu = new String[] {"Mi perfil, "+ nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Buscar Alojamiento", "Ruta", "Cerrar Sesión"};
         drawerLayout = (DrawerLayout) findViewById(R.id.container);
         drawerList = (ListView) findViewById(R.id.left_drawer);
  
@@ -107,7 +107,15 @@ public class Logueado extends ActionBarActivity{
         FragmentManager fm = Logueado.this.getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         
+        
         Fragment fragment = new Fragment_mapa();
+        /*
+        Bundle j = new Bundle();
+        j.putSerializable("las",lax);
+        j.putSerializable("los", lox);
+        j.putInt("flag", 0);
+        fragment.setArguments(j);*/
+        
         ft.replace(R.id.content_frame, fragment);
         ft.commit(); 
         
@@ -143,6 +151,10 @@ public class Logueado extends ActionBarActivity{
 						startActivity(i);
                     	break;
                     case 5:
+                    	//Pregunta por ruta
+                    	fragment = new Fragment_mapaRuta();
+                    	break;
+                    case 6:
                     	AlertDialog.Builder dialog = new AlertDialog.Builder(Logueado.this);  
             	        dialog.setTitle("Cerrar Sesión");		
             	        dialog.setIcon(R.drawable.ic_launcher);	

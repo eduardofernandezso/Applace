@@ -27,15 +27,16 @@ public class Activity_iniciarSesion extends ActionBarActivity {
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.ini_sesion);		
+		setContentView(R.layout.ini_sesion);
+		
 		
 		Parse.initialize(this, "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");
 
-		email = (EditText)findViewById(R.id.ini_correo);
-		pass = (EditText)findViewById(R.id.ini_pass);
-		iniciar = (Button)findViewById(R.id.iniSesion);
-	
-		iniciar.setOnClickListener(listener);
+  		  email = (EditText)findViewById(R.id.ini_correo);
+  		  pass = (EditText)findViewById(R.id.ini_pass);
+  		  iniciar = (Button)findViewById(R.id.iniSesion);
+		
+  		  iniciar.setOnClickListener(listener);
 	}
 	
 	private OnClickListener listener = new OnClickListener(){
@@ -45,21 +46,31 @@ public class Activity_iniciarSesion extends ActionBarActivity {
 			int id = v.getId();
 			if (id == R.id.iniSesion) {
 				
-				ParseUser.logInInBackground(email.getText().toString(), pass.getText().toString(), new LogInCallback() {
+				if(pass.getText().toString().matches("") || email.getText().toString().matches("")){
+					Toast.makeText( getApplicationContext(),"Por favor llene todos los campos",Toast.LENGTH_SHORT ).show();
+				}
+				else{
+					ParseUser.logInInBackground(email.getText().toString(), pass.getText().toString(), new LogInCallback() {
 					  public void done(ParseUser user, ParseException e) {
 					    if (user != null) {
-					    	String nombre = (String) user.getString("NombreCompleto");
+					      // Hooray! The user is logged in.
+					    	String nombre = (String) user.getUsername();
 							Toast.makeText( getApplicationContext(),"Bienvenido a Applace, "+nombre,Toast.LENGTH_SHORT ).show();
 							
 							Intent intent = new Intent(Activity_iniciarSesion.this, Logueado.class);
+							intent.putExtra("mailUser", email.getText().toString());
+							intent.putExtra("nameUser", nombre);
+							intent.putExtra("passUser", pass.getText().toString());
 							startActivity(intent);
 					    } else {
+					      // Signup failed. Look at the ParseException to see what happened.
 					    	Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 					    	email.setText("");
 							pass.setText("");
 					    }
 					  }
 					});
+				}				
 			} 
 		}
 	};

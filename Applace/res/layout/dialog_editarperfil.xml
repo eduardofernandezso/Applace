@@ -13,7 +13,7 @@
             android:id="@+id/dialogedit_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ingrese el nuevo nombre:"
+            android:text="Ingrese el nuevo :"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
