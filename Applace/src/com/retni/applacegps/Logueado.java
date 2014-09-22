@@ -102,13 +102,15 @@ public class Logueado extends ActionBarActivity{
         };
      
         drawerLayout.setDrawerListener(drawerToggle);
+        drawerList.setItemChecked(1, true);
         
         // Add FragmentMain as the initial fragment       
         FragmentManager fm = Logueado.this.getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         
         
-        Fragment fragment = new Fragment_mapa();
+        //Fragment fragment = new Fragment_mapa();
+        Fragment fragment = new Fragment_googlemaps();
 
         /*
         Bundle j = new Bundle();
@@ -137,7 +139,7 @@ public class Logueado extends ActionBarActivity{
                         break;
                     case 1:
                     	//Carga el mapa
-                        fragment = new Fragment_mapa();                    	
+                        fragment = new Fragment_googlemaps();                    	
                         break;
                     case 2:
                     	//Publica un anuncio
@@ -183,6 +185,7 @@ public class Logueado extends ActionBarActivity{
              
                         fragmentManager.beginTransaction()
                             .replace(R.id.content_frame, fragment)
+                            .addToBackStack(null)
                             .commit();
                 	
                 }               

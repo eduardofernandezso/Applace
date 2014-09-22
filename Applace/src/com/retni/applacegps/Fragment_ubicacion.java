@@ -76,9 +76,9 @@ public class Fragment_ubicacion extends Fragment {
         centergps = (Button) getActivity().findViewById(R.id.centergps1);
         direccion = (EditText) getActivity().findViewById(R.id.direccion);
         
-        sig.setOnClickListener(listener);
+       /* sig.setOnClickListener(listener);
         centergps.setOnClickListener(listener_gps);
-        
+        */
         Bundle bundle = getArguments();
         tipoAlojamiento = (String) bundle.getString("tipoAloj");
         
@@ -86,7 +86,7 @@ public class Fragment_ubicacion extends Fragment {
         
         getActivity().getActionBar().setTitle("Ubicacion");
 
-        Fragment_mapa fragment = new Fragment_mapa();       
+        Fragment fragment = new Fragment_googlemaps();       
         
         FragmentManager fm = getActivity().getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
@@ -94,6 +94,7 @@ public class Fragment_ubicacion extends Fragment {
         ft.add(R.id.frame_mapa, fragment);
         ft.commit(); 
 
+        /*
         myOpenMapView = (MapView) getActivity().findViewById(R.id.mapView);
         myOpenMapView.setBuiltInZoomControls(true);
         myMapController = (MapController) myOpenMapView.getController();
@@ -107,11 +108,11 @@ public class Fragment_ubicacion extends Fragment {
             myMapController.setCenter(startPoint);
         }
 
-        /*
+        
         LocationManager milocManager = (LocationManager)getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
   		LocationListener milocListener = new MiLocationListener();
   		milocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 1000*2, 10, milocListener);
-  		*/
+  		
 
   		Location valor = getMyLocation();
   		
@@ -139,11 +140,12 @@ public class Fragment_ubicacion extends Fragment {
 					item.mDescription + "\n"
 					+ item.mTitle + "\n"
 					+ item.mGeoPoint.getLatitudeE6() + " : " + item.mGeoPoint.getLongitudeE6(), 
-					Toast.LENGTH_LONG).show();*/
+					Toast.LENGTH_LONG).show();
 			return true;
 		}
-    };
-    
+    };*/
+	}
+    /*
 	Location getMyLocation(){
 		LocationManager locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 			return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -189,7 +191,7 @@ public class Fragment_ubicacion extends Fragment {
 		}
 	};
 	
-/*********************  sacando la direccion del gps	******************************/
+
 
 	private OnClickListener listener_gps = new OnClickListener(){
 		@Override
@@ -207,7 +209,7 @@ public class Fragment_ubicacion extends Fragment {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}    
-			
+			/*
 			//Toast.makeText(getActivity(), String.valueOf(lat) + " " + String.valueOf(lon), Toast.LENGTH_SHORT).show();
 			Toast.makeText(getActivity(), "Centrando en la posición ingresada de tu alojamiento", Toast.LENGTH_SHORT).show();
 			
@@ -221,7 +223,8 @@ public class Fragment_ubicacion extends Fragment {
 	        GeoPoint Pointdept = new GeoPoint(lat,lon);
 
 	        myMapController.setCenter(Pointdept);
+	        
 			
 		}
-	};
+	};*/
 }
