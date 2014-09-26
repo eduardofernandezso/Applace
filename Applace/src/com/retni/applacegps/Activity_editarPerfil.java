@@ -2,7 +2,6 @@ package com.retni.applacegps;
 
 import com.parse.Parse;
 import com.parse.ParseUser;
-
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -47,20 +46,21 @@ public class Activity_editarPerfil extends ActionBarActivity{
         about.setOnClickListener(listener);
 	}
 	
-	private OnClickListener listener = new OnClickListener(){		//Mismo listener para multiples botones
+	private OnClickListener listener = new OnClickListener(){
+
 		@Override
 		public void onClick(View v) {			
 			switch(v.getId()){			
 				case R.id.nom:		//Lanzamiento de una nueva actividad
 					Toast.makeText(getApplicationContext(), "nombre", Toast.LENGTH_SHORT).show();
 					break;
-				case R.id.pass:		//Lanzamiento de una nueva actividad
+				case R.id.pass:	
 					Toast.makeText(getApplicationContext(), "pass", Toast.LENGTH_SHORT).show();
 					break;
-				case R.id.mail:		//Lanzamiento de una nueva actividad
+				case R.id.mail:	
 					Toast.makeText(getApplicationContext(), "mail", Toast.LENGTH_SHORT).show();
 					break;
-				case R.id.about:		//Lanzamiento de una nueva actividad
+				case R.id.about:
 					Toast.makeText(getApplicationContext(), "about", Toast.LENGTH_SHORT).show();
 					break;					
 			}

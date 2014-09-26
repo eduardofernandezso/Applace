@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
@@ -19,7 +18,6 @@ import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.PathOverlay;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.location.Address;
@@ -37,7 +35,6 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.location.Geocoder;
-
 
 @SuppressWarnings({ "deprecation", "unused" })
 public class Fragment_mapaRuta extends Fragment{
@@ -92,10 +89,8 @@ public class Fragment_mapaRuta extends Fragment{
         else {
         	startPoint = new GeoPoint(getMyLocation());
             myMapController.setCenter(startPoint);
-        }        
-        
+        }
 
-        
         //Add Scale Bar
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(getActivity());
         myOpenMapView.getOverlays().add(myScaleBarOverlay);
@@ -111,8 +106,6 @@ public class Fragment_mapaRuta extends Fragment{
         miniMapOverlay.setHeight(200);
         miniMapOverlay.setWidth(200);
         myOpenMapView.getOverlays().add(miniMapOverlay);*/
-        
-        
 	}
 	
 	OnItemGestureListener<OverlayItem> myOnItemGestureListener
