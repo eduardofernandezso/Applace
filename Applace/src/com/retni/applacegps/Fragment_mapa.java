@@ -1,28 +1,23 @@
 package com.retni.applacegps;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.MinimapOverlay;
-
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
-
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-
 import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
@@ -39,7 +34,6 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
-
 
 public class Fragment_mapa extends Fragment{
 	
@@ -93,8 +87,6 @@ public class Fragment_mapa extends Fragment{
 			agregar_punto("titulo", "id", punto);
         	}
         }*/
-        
-        
         myOpenMapView = (MapView) getActivity().findViewById(R.id.mapView);
         myOpenMapView.setBuiltInZoomControls(true);
         myMapController = (MapController) myOpenMapView.getController();
@@ -147,12 +139,7 @@ public class Fragment_mapa extends Fragment{
 				}
 			} 
         }        
-        
-        
-        
-        
 
-        
         //Add Scale Bar
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(getActivity());
         myOpenMapView.getOverlays().add(myScaleBarOverlay);
@@ -170,7 +157,6 @@ public class Fragment_mapa extends Fragment{
         myOpenMapView.getOverlays().add(miniMapOverlay);
         */
 
-        
 	}
 	
 	public void agregar_punto(String tit, String id, GeoPoint p){	
@@ -222,11 +208,6 @@ public class Fragment_mapa extends Fragment{
 	};
     
     /*click en mapa*/
-
-    
-
-    
-    /*click en mapa*/
     
 	Location getMyLocation(){
 		LocationManager locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
@@ -271,5 +252,4 @@ public class Fragment_mapa extends Fragment{
 		myLocationOverlay.disableMyLocation();
 	//	myLocationOverlay.disableCompass();
 	}
-	
 }
