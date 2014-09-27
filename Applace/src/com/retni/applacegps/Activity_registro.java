@@ -40,7 +40,6 @@ public class Activity_registro extends ActionBarActivity {
 		pass = (EditText)findViewById(R.id.reg_pass);
 		nom = (EditText)findViewById(R.id.reg_nombre);
 		ap = (EditText)findViewById(R.id.reg_apellido);
-		//username = (EditText)findViewById(R.id.reg_username);
 		link = (TextView) findViewById(R.id.ini_link);
 		
 		registrar = (Button)findViewById(R.id.regis);
@@ -99,7 +98,7 @@ public class Activity_registro extends ActionBarActivity {
 						    	ParseUser.logInInBackground(username, pass.getText().toString(), new LogInCallback() {
 						    		public void done(ParseUser user, ParseException e) {
 									    if (user != null) {
-									    	String nombre = (String) user.getUsername();
+									    	String nombre = user.getString("NombreCompleto");
 											Toast.makeText( getApplicationContext(),"Bienvenido a Applace, "+nombre,Toast.LENGTH_SHORT ).show();
 											
 											Intent intent = new Intent(Activity_registro.this, Logueado.class );

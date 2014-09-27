@@ -1,14 +1,17 @@
 package com.retni.applacegps;
 
-import com.backendless.Backendless;
-import com.backendless.async.callback.AsyncCallback;
-import com.backendless.exceptions.BackendlessFault;
+import java.io.ByteArrayOutputStream;
 import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
-
+import com.parse.SaveCallback;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -20,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -40,6 +44,8 @@ public class Activity_caracteristicas extends ActionBarActivity{
 	EditText car_foto, car_titulo, car_descrip, car_precio;
 	Spinner sp_capacidad, sp_camas, sp_banos, sp_piezas;
 	
+	ProgressBar caract_bar;
+	
 	String[] cap, cam, ban, hab;
 	
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +54,7 @@ public class Activity_caracteristicas extends ActionBarActivity{
 		
 		Parse.initialize(this, "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");
 		
+		caract_bar = (ProgressBar) findViewById(R.id.caract_bar);
 		
 		ch_higiene = (CheckBox) findViewById(R.id.ch_higiene);
 		ch_aire_acondicionado = (CheckBox) findViewById(R.id.ch_aire);
@@ -81,10 +88,10 @@ public class Activity_caracteristicas extends ActionBarActivity{
 		bk_dir_longitud = intent.getDoubleExtra("lon", 0);
 		
 		
-		cap = new String[] {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15", "Más"};
-		cam = new String[] {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15", "Más"};
-		ban = new String[] {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15", "Más"};
-		hab = new String[] {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15", "Más"};
+		cap = new String[] {"1","2","3","4","5","6","7","8","9","10", "Más"};
+		cam = new String[] {"1","2","3","4","5","6","7","8","9","10", "Más"};
+		ban = new String[] {"1","2","3","4","5", "Más"};
+		hab = new String[] {"1","2","3","4","5","6","7","8","9","10", "Más"};
 		
 		sp_capacidad.setAdapter(new ArrayAdapter<String>(
                 getSupportActionBar().getThemedContext(),
@@ -173,14 +180,18 @@ public class Activity_caracteristicas extends ActionBarActivity{
 	
 	public void saveNewAlojamiento(){
 		
+		caract_bar.setVisibility(View.VISIBLE);
+		Toast.makeText( getApplicationContext(),"Ingresando alojamiento",Toast.LENGTH_LONG ).show();
+		
 		bk_precio = Integer.parseInt(car_precio.getText().toString());
 		bk_titulo = car_titulo.getText().toString();
 		bk_descripcion = car_descrip.getText().toString();
 		bk_fotografia = car_foto.getText().toString();
 		
 		ParseObject alo = new ParseObject("Alojamiento");
-		ParseUser user = ParseUser.getCurrentUser();
+		ParseUser user = ParseUser.getCurrentUser();		
 		String username = user.getUsername();
+		
 		alo.put("User",username);
 		alo.put("dir_longitud",bk_dir_longitud);
 		alo.put("dir_latitud",bk_dir_latitud);
@@ -188,7 +199,6 @@ public class Activity_caracteristicas extends ActionBarActivity{
 		alo.put("precio",bk_precio);
 		alo.put("titulo",bk_titulo);
 		alo.put("descripcion",bk_descripcion);
-		//alo.put("fotografia",bk_fotografia);
 		alo.put("capacidad", bk_capacidad);
 		alo.put("numeroCamas", bk_num_camas);
 		alo.put("numeroBanos",bk_num_banos);
@@ -270,9 +280,32 @@ public class Activity_caracteristicas extends ActionBarActivity{
 			bk_quincho = true;
 			alo.put("quincho", true);
 		}
-		else {alo.put("quincho", false);}		
+		else {alo.put("quincho", false);}	
+		
+		//Valores por defecto
+		alo.put("estado", true);
+		alo.put("calificacion", 0);
+		
+		Drawable myDrawable = getResources().getDrawable(R.drawable.img_defecto);
+    	Bitmap bit = ((BitmapDrawable) myDrawable).getBitmap();
+		
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+	    bit.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+	    byte[] data1 = stream.toByteArray();
+		ParseFile file = new ParseFile(username+"_perfil.jpg", data1);
+		
+		alo.put("foto", file);
 	 	
-	 	alo.saveInBackground();
+	 	alo.saveInBackground(new SaveCallback() {
+			public void done(ParseException e) {
+			    if (e == null) {	
+			    	caract_bar.setVisibility(View.INVISIBLE);
+					Toast.makeText( getApplicationContext(),"Alojamiento ingresado con éxito!",Toast.LENGTH_SHORT ).show();
+			    } else{
+			    	Toast.makeText(getApplicationContext(), "Error al ingresar el alojamiento, por favor intente nuevamente.", Toast.LENGTH_SHORT).show();
+			    }
+			}
+	    });
 	}
 	
 	private OnClickListener listener = new OnClickListener(){

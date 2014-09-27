@@ -1,3 +1,5 @@
+/*esta activity muestra la pantalla de carga del inicio*/
+
 package com.retni.applacegps;
 
 	 
