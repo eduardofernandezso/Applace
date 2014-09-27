@@ -6,7 +6,6 @@ tiempo.
 package com.retni.applacegps;
 
 import java.util.ArrayList;
-
 import com.parse.Parse;
 import com.parse.ParseUser;
 import android.annotation.SuppressLint;
@@ -73,7 +72,7 @@ public class Logueado extends ActionBarActivity{
 	    	mailUser = user.getEmail();
 		    nameUser = (String) user.getString("NombreCompleto");
 	    }
-		
+	    
 		opcionesMenu = new String[] {"Mi perfil, "+ nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Buscar Alojamiento", "Ruta", "Cerrar Sesión"};
         drawerLayout = (DrawerLayout) findViewById(R.id.container);
         drawerList = (ListView) findViewById(R.id.left_drawer);
@@ -103,13 +102,22 @@ public class Logueado extends ActionBarActivity{
         };
      
         drawerLayout.setDrawerListener(drawerToggle);
+        drawerList.setItemChecked(1, true);
         
         // Add FragmentMain as the initial fragment       
         FragmentManager fm = Logueado.this.getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         
         
-        Fragment fragment = new Fragment_mapa();
+        //Fragment fragment = new Fragment_mapa();
+        Fragment fragment = new Fragment_googlemaps();
+
+        /*
+        Bundle j = new Bundle();
+        j.putSerializable("las",lax);
+        j.putSerializable("los", lox);
+        j.putInt("flag", 0);
+        fragment.setArguments(j);*/
         
         ft.replace(R.id.content_frame, fragment);
         ft.commit(); 
@@ -131,7 +139,7 @@ public class Logueado extends ActionBarActivity{
                         break;
                     case 1:
                     	//Carga el mapa
-                        fragment = new Fragment_mapa();                    	
+                        fragment = new Fragment_googlemaps();                    	
                         break;
                     case 2:
                     	//Publica un anuncio
@@ -178,6 +186,7 @@ public class Logueado extends ActionBarActivity{
              
                         fragmentManager.beginTransaction()
                             .replace(R.id.content_frame, fragment)
+                            .addToBackStack(null)
                             .commit();
                 	
                 }               

@@ -2,14 +2,12 @@ package com.retni.applacegps;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -98,18 +96,10 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 			viewPager = (ViewPager) findViewById(R.id.pager_fotos);
 	        adapter = new ViewPagerAdapter(Activity_verAlojamiento.this, fotos);
 	        viewPager.setAdapter(adapter);
-			
-		}
-			
-			
+		}			
 		else {
 			
 		}
-		
-		
-		
-        
-        
 	}
 	
 	@Override

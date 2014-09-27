@@ -13,8 +13,6 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-import com.parse.SignUpCallback;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -89,8 +87,7 @@ public class Activity_perfil extends ActionBarActivity{
 		TVpass = (TextView) findViewById(R.id.perf_pass);
 		
 		perf_bar = (ProgressBar) findViewById(R.id.perf_bar);
-		
-        
+
 		Parse.initialize(this, "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");
         ParseUser user = new ParseUser();
         user = ParseUser.getCurrentUser();
@@ -159,19 +156,19 @@ public class Activity_perfil extends ActionBarActivity{
 	}
 	
 	public void unloadBitmap() {
-		   if (perf_foto != null)
-			   perf_foto.setImageBitmap(null);
-		   if (foto!= null) {
-			   foto.recycle();
-		   }
-		   foto = null;
-		}
+	   if (perf_foto != null)
+		   perf_foto.setImageBitmap(null);
+	   if (foto!= null) {
+		   foto.recycle();
+	   }
+	   foto = null;
+	}
 	
 	public void setImage(ImageView i, Bitmap sourceid) {
-		   unloadBitmap();
-		   perf_foto = i;
-		   loadBitmap(sourceid);
-		}
+	   unloadBitmap();
+	   perf_foto = i;
+	   loadBitmap(sourceid);
+	}
 	
 	private OnClickListener listener = new OnClickListener(){	
 		@Override
@@ -216,9 +213,11 @@ public class Activity_perfil extends ActionBarActivity{
         	        
         	        View vis = getLayoutInflater().inflate( R.layout.dialog_editarperfil, null );
         	        nombreNew = (EditText) vis.findViewById(R.id.dialogedit_new);
+
         	        nombreNew.setHint(nombre.getText());
         			x = (TextView) vis.findViewById(R.id.dialogedit_text);
         			x.setText("Ingrese nuevo Nombre: ");
+
         	        dialog.setView(vis);
         	        dialog.setNegativeButton("Cancelar", null);  
         	        dialog.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {  
@@ -293,6 +292,7 @@ public class Activity_perfil extends ActionBarActivity{
         	        });          	        
         	        dialog.show();
 					break;
+
 				case R.id.perf_tel:
 					dialog = new AlertDialog.Builder(Activity_perfil.this);  
         	        dialog.setTitle("Editar Telefono");		
@@ -342,6 +342,7 @@ public class Activity_perfil extends ActionBarActivity{
         	        });          	        
         	        dialog.show();
 					break;
+
 				case R.id.perf_desc:
 					dialog = new AlertDialog.Builder(Activity_perfil.this);  
         	        dialog.setTitle("Editar Descripcion");		
@@ -391,6 +392,7 @@ public class Activity_perfil extends ActionBarActivity{
         	        });          	        
         	        dialog.show();
 					break;
+
 				case R.id.perf_sex:
 					dialog = new AlertDialog.Builder(Activity_perfil.this);  
         	        dialog.setTitle("Editar Sexo");		
@@ -440,6 +442,7 @@ public class Activity_perfil extends ActionBarActivity{
         	        });          	        
         	        dialog.show();
 					break;
+
 				case R.id.perf_born:
 					dialog = new AlertDialog.Builder(Activity_perfil.this);  
         	        dialog.setTitle("Editar Fecha Nacimiento");		
@@ -489,6 +492,7 @@ public class Activity_perfil extends ActionBarActivity{
         	        });          	        
         	        dialog.show();
 					break;
+
 				case R.id.perf_pass:
 					dialog = new AlertDialog.Builder(Activity_perfil.this);  
         	        dialog.setTitle("Editar Contraseña");		
