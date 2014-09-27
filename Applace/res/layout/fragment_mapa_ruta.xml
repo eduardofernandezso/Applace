@@ -5,6 +5,28 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+<<<<<<< HEAD
+=======
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@drawable/ab_background_textured_applacegps" >
+
+        <TextView
+            android:id="@+id/preg_ubicacion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:gravity="center"
+            android:text="¿A que lugar desea ir?"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+    </FrameLayout>
+
+>>>>>>> origin/pauliny
     <RelativeLayout
         android:id="@+id/layout_ruta"
         android:layout_width="match_parent"
@@ -18,6 +40,7 @@
             android:layout_alignParentRight="true"
             android:ems="10" />
 
+<<<<<<< HEAD
         <Button
             android:id="@+id/createRouteButton"
             android:layout_width="wrap_content"
@@ -27,21 +50,50 @@
             android:layout_below="@+id/endPoint"
             android:text="Button" />
 
+=======
+>>>>>>> origin/pauliny
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/mapLayout"
         android:layout_width="match_parent"
+<<<<<<< HEAD
         android:layout_height="326dp" >
+=======
+        android:layout_height="260dp" >
+>>>>>>> origin/pauliny
 
         <org.osmdroid.views.MapView
             android:id="@+id/mapView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+<<<<<<< HEAD
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true" >
+=======
+            android:layout_alignParentLeft="true" >
+
+>>>>>>> origin/pauliny
         </org.osmdroid.views.MapView>
 
     </RelativeLayout>
 
+<<<<<<< HEAD
+=======
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <Button
+            android:id="@+id/createRouteButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@drawable/ab_background_textured_applacegps"
+            android:text="Generar Ruta"
+            android:textColor="@color/blanco" />
+
+    </FrameLayout>
+
+>>>>>>> origin/pauliny
 </LinearLayout>

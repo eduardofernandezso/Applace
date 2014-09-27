@@ -16,9 +16,9 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.MinimapOverlay;
 import org.osmdroid.views.overlay.MyLocationOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.PathOverlay;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.location.Address;
@@ -26,6 +26,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,7 @@ import android.widget.Toast;
 import android.location.Geocoder;
 
 
+@SuppressWarnings({ "deprecation", "unused" })
 public class Fragment_mapaRuta extends Fragment{
 	private MapView myOpenMapView;
 	private MapController myMapController;
@@ -73,34 +75,23 @@ public class Fragment_mapaRuta extends Fragment{
         rutaLayout = (RelativeLayout)getActivity().findViewById(R.id.layout_ruta);
         endRoute = (EditText)getActivity().findViewById(R.id.endPoint);
         createRouteButton = (Button)getActivity().findViewById(R.id.createRouteButton);
-        
-        //Boton que crea la ruta.
+
         createRouteButton.setOnClickListener(listener_ruta);
         
         myOpenMapView.setBuiltInZoomControls(true);
-        myMapController = myOpenMapView.getController();
+        myMapController = (MapController) myOpenMapView.getController();
         myMapController.setZoom(14);
         Location loc = getMyLocation();
+        myOpenMapView.setMultiTouchControls(true);
+
         if (loc == null){
         	Toast.makeText( getActivity().getApplicationContext(),"Gps Desactivado",Toast.LENGTH_SHORT ).show();
         }
         else {
         	startPoint = new GeoPoint(getMyLocation());
             myMapController.setCenter(startPoint);
-        }        
-        
-        //--- Create Another Overlay for multi marker
-        anotherOverlayItemArray = new ArrayList<OverlayItem>();
-        anotherOverlayItemArray.add(new OverlayItem(
-        		"Universidad Tecnica Federico Santa Maria", "USM", new GeoPoint(-33.49066,-70.61899)));
-        anotherOverlayItemArray.add(new OverlayItem(
-        		"Acá como", "Carrito de los churrascos", new GeoPoint(-33.50868, -70.64477)));
-        ItemizedIconOverlay<OverlayItem> anotherItemizedIconOverlay 
-        	= new ItemizedIconOverlay<OverlayItem>(
-        			getActivity(), anotherOverlayItemArray, myOnItemGestureListener);
-        myOpenMapView.getOverlays().add(anotherItemizedIconOverlay);
-        //---
-        
+        }
+
         //Add Scale Bar
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(getActivity());
         myOpenMapView.getOverlays().add(myScaleBarOverlay);
@@ -110,14 +101,6 @@ public class Fragment_mapaRuta extends Fragment{
         myOpenMapView.getOverlays().add(myLocationOverlay);
         myOpenMapView.postInvalidate();
 
-        
-        MinimapOverlay miniMapOverlay = new MinimapOverlay(getActivity(), myOpenMapView.getTileRequestCompleteHandler());
-        miniMapOverlay.setZoomDifference(5);
-        miniMapOverlay.setHeight(200);
-        miniMapOverlay.setWidth(200);
-        myOpenMapView.getOverlays().add(miniMapOverlay);
-        
-        
 	}
 	
 	OnItemGestureListener<OverlayItem> myOnItemGestureListener
@@ -131,11 +114,11 @@ public class Fragment_mapaRuta extends Fragment{
 
 		@Override
 		public boolean onItemSingleTapUp(int index, OverlayItem item) {
-			Toast.makeText(getActivity(), 
+			/*Toast.makeText(getActivity(), 
 					item.mDescription + "\n"
 					+ item.mTitle + "\n"
 					+ item.mGeoPoint.getLatitudeE6() + " : " + item.mGeoPoint.getLongitudeE6(), 
-					Toast.LENGTH_LONG).show();
+					Toast.LENGTH_LONG).show();*/
 			return true;
 		}
     	
@@ -191,8 +174,8 @@ public class Fragment_mapaRuta extends Fragment{
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			String endAt = endRoute.getText().toString();
-			startPoint = new GeoPoint(getMyLocation());
-			
+			GeoPoint start = new GeoPoint(getMyLocation());
+			//Toast.makeText(myOpenMapView.getContext(), startPoint.toString(), Toast.LENGTH_SHORT).show();
 			//Parseo de String destino a GeoPoint.
 			Geocoder geoCoder = new Geocoder(myOpenMapView.getContext(), Locale.getDefault());     
 	        List<Address> address;
@@ -205,18 +188,26 @@ public class Fragment_mapaRuta extends Fragment{
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}    
+			}
+			
+			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+			
+			StrictMode.setThreadPolicy(policy);
+			
 			//Construcción de la ruta.
 	        RoadManager roadManager = new OSRMRoadManager();
 	        ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
-	        waypoints.add(startPoint);
+	        waypoints.add(start);
 	        GeoPoint endPoint = new GeoPoint(latitude, longitude);
             waypoints.add(endPoint);
             
-            //Overlay de la ruta
             Road road = roadManager.getRoad(waypoints);
+            /*if (road.mStatus != Road.STATUS_OK){
+                Toast.makeText(myOpenMapView.getContext(), "Error when loading the road - status="+road.mStatus, Toast.LENGTH_SHORT).show();
+                return;
+            }*/
             Polyline roadOverlay = RoadManager.buildRoadOverlay(road, myOpenMapView.getContext());
-            roadOverlay.setColor(Color.BLUE);
+            roadOverlay.setColor(Color.CYAN);
             myOpenMapView.getOverlays().add(roadOverlay);
             myOpenMapView.invalidate();
 		}
