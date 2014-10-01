@@ -18,9 +18,35 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.01"
+            android:layout_height="100dp" 
             android:background="@drawable/ab_background_textured_applacegps" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Título del anuncio:"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/car_titulo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:ems="10"
+                    android:inputType="textMultiLine" />
+
+            </LinearLayout>
+
         </FrameLayout>
 
         <FrameLayout
@@ -130,7 +156,7 @@
 
                     <EditText
                         android:id="@+id/car_foto"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:ems="10"
@@ -156,21 +182,6 @@
                         android:inputType="number" />
 
                     <TextView
-                        android:id="@+id/textView4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Título del anuncio:"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    <EditText
-                        android:id="@+id/car_titulo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="textMultiLine" />
-
-                    <TextView
                         android:id="@+id/textView5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -180,8 +191,9 @@
 
                     <EditText
                         android:id="@+id/car_descrip"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:ems="10"
                         android:inputType="textMultiLine" />
 
@@ -273,8 +285,11 @@
                     <Button
                         android:id="@+id/but_publicar"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Button" />
+			            android:layout_height="wrap_content"
+			            android:background="@drawable/ab_background_textured_applacegps"
+			            android:text="Publicar"
+			            android:textColor="@color/blanco"
+			            android:textStyle="bold" />
                 </LinearLayout>
             </ScrollView>
         </FrameLayout>
