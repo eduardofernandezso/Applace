@@ -86,7 +86,7 @@ public class Activity_caracteristicas extends ActionBarActivity{
 		bk_tipo_aloj = intent.getStringExtra("tipo_aloj");
 		bk_dir_latitud = intent.getDoubleExtra("lat", 0);
 		bk_dir_longitud = intent.getDoubleExtra("lon", 0);
-		
+		bk_dir_escrita = intent.getStringExtra("dir");		
 		
 		cap = new String[] {"1","2","3","4","5","6","7","8","9","10", "Más"};
 		cam = new String[] {"1","2","3","4","5","6","7","8","9","10", "Más"};
@@ -195,6 +195,7 @@ public class Activity_caracteristicas extends ActionBarActivity{
 		alo.put("User",username);
 		alo.put("dir_longitud",bk_dir_longitud);
 		alo.put("dir_latitud",bk_dir_latitud);
+		alo.put("dir_escrita", bk_dir_escrita);
 		alo.put("tipo_aloj",bk_tipo_aloj);
 		alo.put("precio",bk_precio);
 		alo.put("titulo",bk_titulo);
