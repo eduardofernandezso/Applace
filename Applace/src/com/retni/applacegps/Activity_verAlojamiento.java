@@ -15,6 +15,8 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,9 +27,13 @@ public class Activity_verAlojamiento extends ActionBarActivity{
     PagerAdapter adapter;
     String id_aloj = "jaja";
     TextView vis_tit, vis_estado, vis_rating_count, vis_precio, vis_descrip;
+    LinearLayout vis_tv, vis_wifi, vis_telefono, vis_piscina, vis_calefaccion, vis_cocina, vis_estacionamiento;
+    LinearLayout vis_lavadora, vis_papel, vis_quincho, vis_aireacondicionado, vis_desayuno, vis_perro;
     RatingBar vis_rating;
     List<Bitmap> fotitos = new ArrayList<Bitmap>();
     int[] fotos;
+    
+    List<Boolean> services = new ArrayList<Boolean>();
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -45,6 +51,20 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		vis_rating_count = (TextView) findViewById(R.id.vis_count_rating);
 		vis_precio = (TextView) findViewById(R.id.vis_precio);
 		vis_descrip = (TextView) findViewById(R.id.vis_descrip);
+		
+		vis_tv = (LinearLayout) findViewById(R.id.vis_tv);
+		vis_wifi = (LinearLayout) findViewById(R.id.vis_wifi);
+		vis_telefono = (LinearLayout) findViewById(R.id.vis_telefono);
+		vis_piscina = (LinearLayout) findViewById(R.id.vis_piscina);
+		vis_calefaccion = (LinearLayout) findViewById(R.id.vis_calefaccion);
+		vis_cocina = (LinearLayout) findViewById(R.id.vis_cocina);
+		vis_estacionamiento = (LinearLayout) findViewById(R.id.vis_estacionamiento);
+		vis_lavadora = (LinearLayout) findViewById(R.id.vis_lavadora);
+		vis_papel = (LinearLayout) findViewById(R.id.vis_papel);
+		vis_quincho = (LinearLayout) findViewById(R.id.vis_quincho);
+		vis_aireacondicionado = (LinearLayout) findViewById(R.id.vis_aireacondicionado);
+		vis_desayuno = (LinearLayout) findViewById(R.id.vis_desayuno);
+		vis_perro = (LinearLayout) findViewById(R.id.vis_perro);
 		
 		Bundle bundle = getIntent().getExtras();
 		id_aloj=bundle.getString("idAloj");
@@ -75,6 +95,33 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 			vis_rating_count.setText(""+caract.getInt("count_calificacion"));
 			vis_precio.setText("$"+caract.getInt("precio"));
 			vis_descrip.setText(caract.getString("descripcion"));
+			
+			if(caract.getBoolean("articulos_higiene")==false)
+				vis_papel.setVisibility(View.GONE);
+			if(caract.getBoolean("aire_acond")==false)
+				vis_aireacondicionado.setVisibility(View.GONE);
+			if(caract.getBoolean("cocina")==false) 
+				vis_cocina.setVisibility(View.GONE);
+			if(caract.getBoolean("calefaccion")==false)
+				vis_calefaccion.setVisibility(View.GONE);
+			if(caract.getBoolean("desayuno")==false)
+				vis_desayuno.setVisibility(View.GONE);
+			if(caract.getBoolean("estacionamiento")==false)
+				vis_estacionamiento.setVisibility(View.GONE);
+			if(caract.getBoolean("lavadora")==false)
+				vis_lavadora.setVisibility(View.GONE);
+			if(caract.getBoolean("mascota")==false)
+				vis_perro.setVisibility(View.GONE);
+			if(caract.getBoolean("piscina")==false)
+				vis_piscina.setVisibility(View.GONE);
+			if(caract.getBoolean("quincho")==false)
+				vis_quincho.setVisibility(View.GONE);
+			if(caract.getBoolean("tv")==false) 
+				vis_tv.setVisibility(View.GONE);
+			if(caract.getBoolean("internet")==false)
+				vis_wifi.setVisibility(View.GONE);
+			if(caract.getBoolean("telefono")==false)
+				vis_telefono.setVisibility(View.GONE);
 			
 			ParseFile img = caract.getParseFile("foto");	
 			if(img != null){

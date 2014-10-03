@@ -75,7 +75,7 @@ public class Activity_caracteristicas extends ActionBarActivity{
 		sp_banos = (Spinner) findViewById(R.id.sp_banos);
 		sp_piezas = (Spinner) findViewById(R.id.sp_piezas);
 		
-		car_foto = (EditText) findViewById(R.id.car_foto);
+		//car_foto = (EditText) findViewById(R.id.car_foto);
 		car_titulo = (EditText) findViewById(R.id.car_titulo);
 		car_descrip = (EditText) findViewById(R.id.car_descrip);
 		car_precio = (EditText) findViewById(R.id.car_precio);
@@ -186,7 +186,7 @@ public class Activity_caracteristicas extends ActionBarActivity{
 		bk_precio = Integer.parseInt(car_precio.getText().toString());
 		bk_titulo = car_titulo.getText().toString();
 		bk_descripcion = car_descrip.getText().toString();
-		bk_fotografia = car_foto.getText().toString();
+		//bk_fotografia = car_foto.getText().toString();
 		
 		ParseObject alo = new ParseObject("Alojamiento");
 		ParseUser user = ParseUser.getCurrentUser();		
