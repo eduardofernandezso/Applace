@@ -219,6 +219,7 @@ public class Logueado extends ActionBarActivity{
 		menu.findItem(R.id.action_share).setVisible(false);
 		menu.findItem(R.id.action_update).setVisible(false);
 		menu.findItem(R.id.action_camara).setVisible(false);
+		menu.findItem(R.id.action_delete).setVisible(false);
 		
 		boolean menuAbierto = drawerLayout.isDrawerOpen(drawerList);
 		 
@@ -243,7 +244,8 @@ public class Logueado extends ActionBarActivity{
 		switch(item.getItemId())
 	    {
 	        case R.id.action_search:
-	            Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show();
+	        	Intent intent = new Intent(this, Activity_filtro.class );
+				startActivity(intent);
 	            break;
 	        default:
 	            return super.onOptionsItemSelected(item);
