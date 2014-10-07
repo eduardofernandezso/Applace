@@ -262,18 +262,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Mascotas" />
-
-                    <Button
-                        android:id="@+id/but_publicar"
-                        android:layout_width="match_parent"
-			            android:layout_height="wrap_content"
-			            android:background="@drawable/ab_background_textured_applacegps"
-			            android:text="Publicar"
-			            android:textColor="@color/blanco"
-			            android:textStyle="bold" />
                 </LinearLayout>
             </ScrollView>
         </FrameLayout>
+
+        <Button
+            android:id="@+id/but_publicar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ab_background_textured_applacegps"
+            android:text="Publicar"
+            android:textColor="@color/blanco"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

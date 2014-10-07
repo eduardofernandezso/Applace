@@ -3,23 +3,37 @@ package com.retni.applacegps;
 import java.util.ArrayList;
 import java.util.List;
 
+
+import com.parse.DeleteCallback;
 import com.parse.GetDataCallback;
+import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +54,8 @@ public class Activity_verAlojamiento extends ActionBarActivity{
     List<Bitmap> fotitos = new ArrayList<Bitmap>();
     int[] fotos;
     
+    ProgressBar delete_bar;
+    
     List<Boolean> services = new ArrayList<Boolean>();
 	
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +67,8 @@ public class Activity_verAlojamiento extends ActionBarActivity{
                 R.drawable.img02, R.drawable.img03,
                 R.drawable.img04, R.drawable.img05, R.drawable.img06,
                 R.drawable.img07};
+		
+		delete_bar = (ProgressBar) findViewById(R.id.delete_bar);
 		
 		vis_tit = (TextView) findViewById(R.id.vis_tit);
 		vis_estado = (TextView) findViewById(R.id.vis_estado);
@@ -152,49 +170,74 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 			
 		}
 	}
-	
-	@Override
+
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.main, menu);		
+		
+		menu.findItem(R.id.como_funciona).setVisible(false);
+		menu.findItem(R.id.codiciones).setVisible(false);
+		menu.findItem(R.id.politica).setVisible(false);
+		menu.findItem(R.id.ayuda).setVisible(false);
+		
+		menu.findItem(R.id.action_search).setVisible(false);
+		menu.findItem(R.id.action_edit).setVisible(false);
+		menu.findItem(R.id.action_config).setVisible(false);
+		menu.findItem(R.id.action_share).setVisible(false);
+		menu.findItem(R.id.action_update).setVisible(false);
+		menu.findItem(R.id.action_camara).setVisible(false);
+		menu.findItem(R.id.action_delete).setVisible(true);
 		return true;
 	}
-	
-	public void addListenerOnRatingBar() {
-
-		ratingBar = (RatingBar) findViewById(R.id.ratingBar);
-		txtRatingValue = (TextView) findViewById(R.id.txtRatingValue);
-
-		//if rating is changed,
-		//display the current rating value in the result (textview) automatically
-		ratingBar.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
-			public void onRatingChanged(RatingBar ratingBar, float rating,
-					boolean fromUser) {
-
-				txtRatingValue.setText(String.valueOf(rating));
-
-			}
-		});
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId())
+	    {
+	        case R.id.action_delete:
+	        	AlertDialog.Builder dialog = new AlertDialog.Builder(Activity_verAlojamiento.this);  
+    	        dialog.setTitle("Eliminar Alojamiento");		
+    	        dialog.setIcon(R.drawable.ic_launcher);	
+    	        
+    	        View v = getLayoutInflater().inflate( R.layout.dialog, null );
+    	        TextView text = (TextView) v.findViewById(R.id.dialog_text);
+    	        text.setText("¿Desea borrar de forma permanente este anuncio?");
+    			
+    	        dialog.setView(v);
+    	        dialog.setNegativeButton("Cancelar", null);  
+    	        dialog.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {  
+    	            public void onClick(DialogInterface dialogo1, int id) {
+    	            	delete_bar.setVisibility(View.VISIBLE);
+    	            	Toast.makeText( getApplicationContext(),"Eliminando anuncio...",Toast.LENGTH_SHORT ).show();
+    	            	//Acá se elimina el alojamiento de la base de datos
+    	            	ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Alojamiento");
+    	        		query.whereEqualTo("objectId", id_aloj);
+    	        		
+    	        		List<ParseObject> obj = null;
+    	        		try {
+    	        			obj = query.find();
+    	        		} catch (ParseException e) {
+    	        		}
+    	        		if(obj.size()!=0){
+    	        			obj.get(0).deleteInBackground(new DeleteCallback() {
+    	        				public void done(ParseException e) {
+    	        				    if (e == null) {	
+    	        				    	delete_bar.setVisibility(View.INVISIBLE);
+    	        				    	Toast.makeText( getApplicationContext(),"Alojamiento eliminado correctamente!",Toast.LENGTH_SHORT ).show();
+    	        				    	finish();    	        						
+    	        				    } else{
+    	        				    	Toast.makeText(getApplicationContext(), "Error al borrar el alojamiento, por favor intente nuevamente.", Toast.LENGTH_SHORT).show();
+    	        				    }
+    	        				}
+    	        		    });
+    	        		}                    	
+    	            }  
+    	        });  
+    	        
+    	        dialog.show();
+            	break;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	 
+	    return true;
 	}
-
-	public void addListenerOnButton() {
-
-		ratingBar = (RatingBar) findViewById(R.id.ratingBar);
-		btnSubmit = (Button) findViewById(R.id.btnSubmit);
-
-		//if click on me, then display the current rating value.
-		btnSubmit.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				Toast.makeText(Activity_verAlojamiento.this,
-						String.valueOf(ratingBar.getRating()),
-						Toast.LENGTH_SHORT).show();
-
-			}
-
-		});
-
-	}
-	
 }

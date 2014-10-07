@@ -66,5 +66,12 @@
         sgoliver:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_device_access_camera"
         android:title="@string/action_camara" />
+    
+    <item
+        android:id="@+id/action_delete"
+        android:orderInCategory="100"
+        sgoliver:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_content_discard"
+        android:title="@string/action_delete" />
 
 </menu>
