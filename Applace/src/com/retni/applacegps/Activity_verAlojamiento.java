@@ -2,6 +2,7 @@ package com.retni.applacegps;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -16,13 +17,19 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.RatingBar.OnRatingBarChangeListener;
 
 public class Activity_verAlojamiento extends ActionBarActivity{
 	
+	RatingBar ratingBar;
+	TextView txtRatingValue;
+	Button btnSubmit;
 	ViewPager viewPager;
     PagerAdapter adapter;
     String id_aloj = "jaja";
@@ -47,11 +54,8 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		
 		vis_tit = (TextView) findViewById(R.id.vis_tit);
 		vis_estado = (TextView) findViewById(R.id.vis_estado);
-		vis_rating = (RatingBar) findViewById(R.id.vis_rating);
-		vis_rating_count = (TextView) findViewById(R.id.vis_count_rating);
 		vis_precio = (TextView) findViewById(R.id.vis_precio);
 		vis_descrip = (TextView) findViewById(R.id.vis_descrip);
-		
 		vis_tv = (LinearLayout) findViewById(R.id.vis_tv);
 		vis_wifi = (LinearLayout) findViewById(R.id.vis_wifi);
 		vis_telefono = (LinearLayout) findViewById(R.id.vis_telefono);
@@ -92,7 +96,7 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 			}
 			
 			vis_rating.setRating((float) caract.getDouble("calificacion"));
-			vis_rating_count.setText(""+caract.getInt("count_calificacion"));
+			vis_rating_count.setText("1"+caract.getInt("count_calificacion"));
 			vis_precio.setText("$"+caract.getInt("precio"));
 			vis_descrip.setText(caract.getString("descripcion"));
 			
@@ -154,4 +158,43 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
+	public void addListenerOnRatingBar() {
+
+		ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+		txtRatingValue = (TextView) findViewById(R.id.txtRatingValue);
+
+		//if rating is changed,
+		//display the current rating value in the result (textview) automatically
+		ratingBar.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
+			public void onRatingChanged(RatingBar ratingBar, float rating,
+					boolean fromUser) {
+
+				txtRatingValue.setText(String.valueOf(rating));
+
+			}
+		});
+	}
+
+	public void addListenerOnButton() {
+
+		ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+		btnSubmit = (Button) findViewById(R.id.btnSubmit);
+
+		//if click on me, then display the current rating value.
+		btnSubmit.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				Toast.makeText(Activity_verAlojamiento.this,
+						String.valueOf(ratingBar.getRating()),
+						Toast.LENGTH_SHORT).show();
+
+			}
+
+		});
+
+	}
+	
 }

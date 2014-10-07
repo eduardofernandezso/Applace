@@ -150,12 +150,13 @@ public class Logueado extends ActionBarActivity{
                     	fragment = new Fragment_listaAloj();
                     	break;                    
                     case 4:
+
                     	Intent i = new Intent(Logueado.this, Activity_filtro.class );
 						startActivity(i);
-                    	break;
+                       	break;
                     case 5:
                     	//Pregunta por ruta
-                    	fragment = new Fragment_mapaRuta();
+                    	fragment = new Fragment_googlemaps_ruta();
                     	break;
                     case 6:
                     	AlertDialog.Builder dialog = new AlertDialog.Builder(Logueado.this);  
@@ -175,6 +176,7 @@ public class Logueado extends ActionBarActivity{
             	        });  
             	        
             	        dialog.show();
+
                     	break;
                     
                 }
@@ -261,5 +263,5 @@ public class Logueado extends ActionBarActivity{
 	public void onConfigurationChanged(Configuration newConfig) {
 	    super.onConfigurationChanged(newConfig);
 	    drawerToggle.onConfigurationChanged(newConfig);
-	}		
+    }
 }

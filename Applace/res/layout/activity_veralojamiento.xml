@@ -15,9 +15,8 @@
             android:background="@drawable/ab_background_textured_applacegps" >
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:orientation="vertical" >
 
@@ -37,11 +36,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_margin="2dp"
-                    android:text="Disponible"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#093999"
-                    android:textStyle="bold|italic" />
+                    android:layout_margin="2dp" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -50,27 +45,52 @@
                     android:orientation="vertical" >
 
                     <LinearLayout
+                        android:layout_width="401dp"
+                        android:layout_height="wrap_content" >
+
+                        <Button
+                            android:id="@+id/btnSubmit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Submit" />
+
+                        <LinearLayout
+                            android:layout_width="294dp"
+                            android:layout_height="wrap_content" >
+
+                            <RatingBar
+                                android:id="@+id/ratingBar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.55"
+                                android:numStars="5"
+                                android:rating="2.0"
+                                android:stepSize="1.0" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" >
 
-                        <RatingBar
-                            android:id="@+id/vis_rating"
-                            style="?android:attr/ratingBarStyleSmall"
+                        <TextView
+                            android:id="@+id/lblResult"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="5dp"
-                            android:rating="3.5" />
+                            android:text="Result : "
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
 
                         <TextView
-                            android:id="@+id/vis_count_rating"
+                            android:id="@+id/txtRatingValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="68"
-                            android:textColor="#FFFFFF" />
-
+                            android:textAppearance="?android:attr/textAppearanceSmall" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
         </FrameLayout>
         
         <FrameLayout
