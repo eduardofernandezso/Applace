@@ -40,6 +40,12 @@
                 android:layout_height="wrap_content" >
             </ListView>
         </FrameLayout>
+        
+        <Button
+            android:id="@+id/list_down"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ab_background_textured_applacegps"/>        
 
     </LinearLayout>
 
