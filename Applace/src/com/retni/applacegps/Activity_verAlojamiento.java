@@ -3,6 +3,7 @@ package com.retni.applacegps;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import com.parse.DeleteCallback;
 import com.parse.GetDataCallback;
 import com.parse.LogInCallback;
@@ -29,14 +30,20 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.RatingBar.OnRatingBarChangeListener;
 
 public class Activity_verAlojamiento extends ActionBarActivity{
 	
+	RatingBar ratingBar;
+	TextView txtRatingValue;
+	Button btnSubmit;
 	ViewPager viewPager;
     PagerAdapter adapter;
     String id_aloj = "jaja";
@@ -47,6 +54,8 @@ public class Activity_verAlojamiento extends ActionBarActivity{
     List<Bitmap> fotitos = new ArrayList<Bitmap>();
     int[] fotos;
     
+    TextView vis_comentario;
+    String texto = "";
     ProgressBar delete_bar;
     
     List<Boolean> services = new ArrayList<Boolean>();
@@ -54,8 +63,7 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_veralojamiento);
-		
-		
+	
 		fotos = new int[] { R.drawable.img01,
                 R.drawable.img02, R.drawable.img03,
                 R.drawable.img04, R.drawable.img05, R.drawable.img06,
@@ -184,7 +192,6 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		menu.findItem(R.id.action_delete).setVisible(true);
 		return true;
 	}
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId())
