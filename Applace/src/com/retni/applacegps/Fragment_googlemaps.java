@@ -48,9 +48,12 @@ public class Fragment_googlemaps extends Fragment{
 	Boolean estado;
 	double latit, longi;
 	Float ratings;
-    Bitmap foto;
+    Bitmap foto=null;
+    GeoPoint punto = null;
+    Marker marker;
     
-    List<Bitmap> fotos = new ArrayList<Bitmap>();
+    List<Bitmap> fotosi = new ArrayList<Bitmap>();
+    List<ParseFile> fotos = new ArrayList<ParseFile>();
     
     private HashMap<Marker, MyMarker> mMarkersHashMap;
     private ArrayList<MyMarker> mMyMarkersArray = new ArrayList<MyMarker>();
@@ -62,14 +65,14 @@ public class Fragment_googlemaps extends Fragment{
 	public class MyMarker
 	{
 	    private String mLabel;
-	    private Bitmap mIcon;
+	    private ParseFile mIcon;
 	    private Double mLatitude;
 	    private Double mLongitude;
 	    private Boolean mEstado;
 	    private Integer mPrecio, mCount_rating;
 	    private Float mRating;
 
-	    public MyMarker(String label, Bitmap icon, Double latitude, Double longitude, Boolean estado, Integer precio, Float rating, Integer count_rating)
+	    public MyMarker(String label, ParseFile icon, Double latitude, Double longitude, Boolean estado, Integer precio, Float rating, Integer count_rating)
 	    {
 	        this.mLabel = label;
 	        this.mLatitude = latitude;
@@ -91,12 +94,12 @@ public class Fragment_googlemaps extends Fragment{
 	        this.mLabel = mLabel;
 	    }
 
-	    public Bitmap getmIcon()
+	    public ParseFile getmIcon()
 	    {
 	        return mIcon;
 	    }
 
-	    public void setmIcon(Bitmap icon)
+	    public void setmIcon(ParseFile icon)
 	    {
 	        this.mIcon = icon;
 	    }
@@ -156,8 +159,7 @@ public class Fragment_googlemaps extends Fragment{
 	    {
 	        return mRating;
 	    }
-	}
-	
+	}	
 	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -200,6 +202,7 @@ public class Fragment_googlemaps extends Fragment{
   	       
         Parse.initialize(getActivity(), "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");        
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Alojamiento");
+        query.orderByDescending("_created_at");
 
 		try {
 			alojamientos = query.find();
@@ -214,7 +217,9 @@ public class Fragment_googlemaps extends Fragment{
 			Toast.makeText( getActivity().getApplicationContext(),"No hay datos para cargar.",Toast.LENGTH_SHORT ).show();
 		} else{			
 			ParseObject aloj = null;
+			ParseFile img = null;
 			mMarkersHashMap = new HashMap<Marker, MyMarker>();
+			
 			for(int i=0 ; i < size_aloj ; i++){
 				aloj = alojamientos.get(i);
 				titulo = aloj.getString("titulo");
@@ -224,34 +229,19 @@ public class Fragment_googlemaps extends Fragment{
 				estado = aloj.getBoolean("estado");
 				id_aloj = aloj.getObjectId();
 				ratings = (float) aloj.getDouble("calificacion");
-				count_ratings = aloj.getInt("count_calificacion");				
+				count_ratings = aloj.getInt("count_calificacion");		
+				punto = new GeoPoint(latit, longi);
 				
-				ParseFile img = aloj.getParseFile("foto");	
-				if(img != null){
-				    img.getDataInBackground(new GetDataCallback() {
-				    	Bitmap bmp = null;
-				        public void done(byte[] data, com.parse.ParseException e) {
-				            if (e == null){
-				                bmp = BitmapFactory.decodeByteArray(data, 0, data.length);	
-				                Toast.makeText(getActivity().getApplicationContext(), bmp.getByteCount()+"", Toast.LENGTH_SHORT).show();
-				                fotos.add(bmp);
-				                foto=bmp;
-				            }
-				            else{
-				            	Toast.makeText(getActivity().getApplicationContext(), "Error1: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-				            }
-				        }
-				    }); 
-				} else{
-					Toast.makeText(getActivity().getApplicationContext(), "Error2", Toast.LENGTH_SHORT).show();
-				}
-				
-				GeoPoint punto = new GeoPoint(latit, longi);
-				mMyMarkersArray.add(new MyMarker(titulo, foto, punto.getLatitude(), punto.getLongitude(), estado, precio, ratings, count_ratings));
+				if(aloj.getParseFile("foto")!=null)
+					img = aloj.getParseFile("foto");	
+						
+				mMyMarkersArray.add(new MyMarker(titulo, img, punto.getLatitude(), punto.getLongitude(), estado, precio, ratings, count_ratings));				
 			}
-			Toast.makeText(getActivity().getApplicationContext(), fotos.size()+"", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(getActivity().getApplicationContext(), fotos.size()+"", Toast.LENGTH_SHORT).show();
 			plotMarkers(mMyMarkersArray);
-		} 
+		}
+		
+		
 	}
 	
 	private void plotMarkers(ArrayList<MyMarker> markers){
@@ -267,8 +257,10 @@ public class Fragment_googlemaps extends Fragment{
 	            Marker currentMarker = mapa.addMarker(markerOption);
 	            mMarkersHashMap.put(currentMarker, myMarker);
 
-	            mapa.setInfoWindowAdapter(new MarkerInfoWindowAdapter());
-	        }
+	            mapa.setInfoWindowAdapter(new MarkerInfoWindowAdapter());	            
+	            
+	            currentMarker.showInfoWindow();
+	        }	        
 	    }
 	}
 	
@@ -276,33 +268,52 @@ public class Fragment_googlemaps extends Fragment{
 	    public MarkerInfoWindowAdapter(){
 	    	
 	    }
-
+	    
 	    @Override
-	    public View getInfoWindow(Marker marker){
-	    	
-	        return null;
-	    }
-
-	    @Override
-	    public View getInfoContents(Marker marker){
-	    	
+	    public View getInfoContents(Marker marker) {
+	        
 	        View v  = getActivity().getLayoutInflater().inflate(R.layout.fragment_list_aloj_row, null);
 	        MyMarker myMarker = mMarkersHashMap.get(marker);
 	        
 	        final TextView titulo = (TextView)v.findViewById(R.id.row_titulo);
 		    final TextView precio = (TextView)v.findViewById(R.id.row_precio);
-		    final ImageView img = (ImageView)v.findViewById(R.id.row_img);
+		    final ImageView imgh = (ImageView)v.findViewById(R.id.row_img);
 		    final RatingBar star = (RatingBar)v.findViewById(R.id.row_star);	
 		    final TextView count = (TextView)v.findViewById(R.id.row_count);
 	           	
-		    img.setImageBitmap(myMarker.getmIcon());
+		    ParseFile img = null;
+		    if(myMarker.getmIcon()!=null){
+		    	img = myMarker.getmIcon();
+		    	img.getDataInBackground(new GetDataCallback() {
+			    	Bitmap bmp = null;
+			        public void done(byte[] data, com.parse.ParseException e) {
+			            if (e == null){
+			                bmp = BitmapFactory.decodeByteArray(data, 0, data.length);	
+			                imgh.setImageBitmap(bmp);
+			                
+			                
+			            }
+			            else{
+			            	Toast.makeText(getActivity().getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+			            }	
+			        }	
+			        
+			    });
+		    }		    	
+		    	
 	        titulo.setText(myMarker.getmLabel());
 	        precio.setText("$"+myMarker.getmPrecio());
 	        star.setRating(myMarker.getmRating());
-	        count.setText(myMarker.getmCount_rating().toString());      
+	        count.setText(myMarker.getmCount_rating().toString());  	        
 
 	        return v;
 	    }
+
+	    @Override
+	    public View getInfoWindow(Marker marker){
+	    	
+	    	return null;
+	    }	    
 	}
 	
 	public void refresh(){

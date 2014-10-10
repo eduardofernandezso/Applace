@@ -47,6 +47,7 @@ public class MainActivity extends ActionBarActivity {
 		menu.findItem(R.id.action_share).setVisible(false);
 		menu.findItem(R.id.action_update).setVisible(false);
 		menu.findItem(R.id.action_camara).setVisible(false);
+		menu.findItem(R.id.action_delete).setVisible(false);
 		return true;
 	}
 
