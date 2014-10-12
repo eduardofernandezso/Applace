@@ -8,12 +8,16 @@ package com.retni.applacegps;
 import com.parse.Parse;
 import com.parse.ParseUser;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 
@@ -76,5 +80,28 @@ public class MainActivity extends ActionBarActivity {
 			}
 		}
 		ft.commit();
+	}
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) { 
+	  if (keyCode == KeyEvent.KEYCODE_BACK) {AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);  
+      dialog.setTitle("Salir");		
+      dialog.setIcon(R.drawable.ic_launcher);	
+      
+      View v = getLayoutInflater().inflate( R.layout.dialog2, null );
+		      
+      dialog.setView(v);
+      dialog.setNegativeButton("Cancelar", null);  
+      dialog.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {  
+          public void onClick(DialogInterface dialogo1, int id) {
+        	  Intent startMain = new Intent(Intent.ACTION_MAIN);
+        	  startMain.addCategory(Intent.CATEGORY_HOME);
+        	  startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        	  startActivity(startMain);
+          }  
+      });  
+      
+      dialog.show();           	   }
+	//para las demas cosas, se reenvia el evento al listener habitual
+	  return super.onKeyDown(keyCode, event);
 	}
 }

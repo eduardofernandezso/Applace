@@ -7,6 +7,7 @@ import org.osmdroid.util.GeoPoint;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -18,6 +19,8 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -42,6 +45,8 @@ public class Fragment_googlemaps extends Fragment{
 	List<ParseObject> alojamientos;
 	MarkerOptions markerOptions;
     LatLng latLng;
+    
+    String id_alojamiento;
     
     String titulo, id_aloj;
 	Integer precio, count_ratings;
@@ -71,8 +76,9 @@ public class Fragment_googlemaps extends Fragment{
 	    private Boolean mEstado;
 	    private Integer mPrecio, mCount_rating;
 	    private Float mRating;
+	    private String id_aloja;
 
-	    public MyMarker(String label, ParseFile icon, Double latitude, Double longitude, Boolean estado, Integer precio, Float rating, Integer count_rating)
+	    public MyMarker(String label, ParseFile icon, Double latitude, Double longitude, Boolean estado, Integer precio, Float rating, Integer count_rating, String id_aloja)
 	    {
 	        this.mLabel = label;
 	        this.mLatitude = latitude;
@@ -82,6 +88,7 @@ public class Fragment_googlemaps extends Fragment{
 	        this.mPrecio = precio;
 	        this.mCount_rating = count_rating;
 	        this.mRating = rating;
+	        this.id_aloja = id_aloja;
 	    }
 
 	    public String getmLabel()
@@ -159,6 +166,16 @@ public class Fragment_googlemaps extends Fragment{
 	    {
 	        return mRating;
 	    }
+	    
+	    public String getmId()
+	    {
+	        return id_aloja;
+	    }
+
+	    public void setmId(String id_aloja)
+	    {
+	        this.id_aloja = id_aloja;
+	    }
 	}	
 	
 	public void onCreate(Bundle savedInstanceState) {
@@ -235,7 +252,7 @@ public class Fragment_googlemaps extends Fragment{
 				if(aloj.getParseFile("foto")!=null)
 					img = aloj.getParseFile("foto");	
 						
-				mMyMarkersArray.add(new MyMarker(titulo, img, punto.getLatitude(), punto.getLongitude(), estado, precio, ratings, count_ratings));				
+				mMyMarkersArray.add(new MyMarker(titulo, img, punto.getLatitude(), punto.getLongitude(), estado, precio, ratings, count_ratings, id_aloj));				
 			}
 			//Toast.makeText(getActivity().getApplicationContext(), fotos.size()+"", Toast.LENGTH_SHORT).show();
 			plotMarkers(mMyMarkersArray);
@@ -256,13 +273,27 @@ public class Fragment_googlemaps extends Fragment{
 
 	            Marker currentMarker = mapa.addMarker(markerOption);
 	            mMarkersHashMap.put(currentMarker, myMarker);
-
+	            //id_alojamiento = myMarker.getmId();
+	            currentMarker.setTitle(myMarker.getmId());
 	            mapa.setInfoWindowAdapter(new MarkerInfoWindowAdapter());	            
-	            
+	            mapa.setOnInfoWindowClickListener(listener);
 	            currentMarker.showInfoWindow();
 	        }	        
 	    }
 	}
+	
+	private OnInfoWindowClickListener listener = new OnInfoWindowClickListener(){		
+
+		@Override
+		public void onInfoWindowClick(Marker arg0) {
+			// TODO Auto-generated method stub
+			id_alojamiento = arg0.getTitle();
+			Intent intent = new Intent(getActivity(), Activity_verAlojamiento.class);
+			intent.putExtra("idAloj", id_alojamiento);
+			startActivity(intent);	
+			//Toast.makeText(getActivity().getApplicationContext(), id_alojamiento+"", Toast.LENGTH_SHORT).show();
+		}
+	};
 	
 	public class MarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter{
 	    public MarkerInfoWindowAdapter(){

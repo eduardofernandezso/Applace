@@ -111,6 +111,28 @@
                         android:layout_height="190dp" >
                     </android.support.v4.view.ViewPager>
 
+                    <Button
+                        android:id="@+id/vis_ruta"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ab_background_textured_applacegps"
+                        android:text="Ir a este alojamiento"
+                        android:layout_margin="10dp" 
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/vis_mensaje"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ab_background_textured_applacegps"
+                        android:text="Enviar un mensaje a propietario"
+                        android:layout_margin="10dp" 
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/textView3"
                         android:layout_width="wrap_content"
@@ -131,7 +153,7 @@
                         android:gravity="fill"
                         android:text="Arriendo departamento en Vina del Mar en unexcelente edificio frente al mar, en exclusiva ubicación, a pasos de la playa, del nuevo paseo al borde costero y del centro comercial Marina Arauco.Departamento se encuentra completamente amoblado y equipado"
                         android:textAppearance="?android:attr/textAppearanceSmall" />
-                    
+
                     <TextView
                         android:id="@+id/textView5"
                         android:layout_width="wrap_content"
@@ -144,21 +166,20 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" 
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center" >
-                        
+
                         <TextView
                             android:id="@+id/textView6"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Capacidad:" />
-                        
+
                         <TextView
                             android:id="@+id/textView06"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="4 personas" />
-                        
                     </LinearLayout>
 
                     <TextView
@@ -200,7 +221,6 @@
                                     android:layout_gravity="center"
                                     android:text="TV"
                                     android:textStyle="bold" />
-
                             </LinearLayout>
 
                             <LinearLayout
@@ -442,9 +462,7 @@
                                     android:text="Mascotas"
                                     android:textStyle="bold" />
                             </LinearLayout>
-
                         </LinearLayout>
-
                     </FrameLayout>
 
                     <TextView
@@ -485,29 +503,26 @@
                                     android:layout_gravity="center"
                                     android:text="@+string/vis_comentario"
                                     android:textSize="15sp" />
-
                             </LinearLayout>
-                            
-                            <TextView
-					            android:id="@+id/vis_date1"
-					            android:layout_width="wrap_content"
-					            android:layout_height="wrap_content"
-					            android:layout_gravity="right"
-					            android:layout_marginRight="20dp"
-					            android:text="Oct 10, 2014, 01:54" />
-                            
-                            <TextView
-					            android:id="@+id/vis_emisor1"
-					            android:layout_width="wrap_content"
-					            android:layout_height="wrap_content"
-					            android:layout_gravity="right"
-					            android:layout_marginRight="20dp"
-					            android:text="Juán Perez" />
 
+                            <TextView
+                                android:id="@+id/vis_date1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:layout_marginRight="20dp"
+                                android:text="Oct 10, 2014, 01:54" />
+
+                            <TextView
+                                android:id="@+id/vis_emisor1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:layout_marginRight="20dp"
+                                android:text="Juán Perez" />
                         </LinearLayout>
-
                     </FrameLayout>
-                    
+
                     <FrameLayout
                         android:id="@+id/vis_coment2"
                         android:layout_width="match_parent"
@@ -536,27 +551,24 @@
                                     android:layout_gravity="center"
                                     android:text="@+string/vis_comentario"
                                     android:textSize="15sp" />
-
                             </LinearLayout>
-                            
-                            <TextView
-					            android:id="@+id/vis_date2"
-					            android:layout_width="wrap_content"
-					            android:layout_height="wrap_content"
-					            android:layout_gravity="right"
-					            android:layout_marginRight="20dp"
-					            android:text="Oct 10, 2014, 01:54" />
-                            
-                            <TextView
-					            android:id="@+id/vis_emisor2"
-					            android:layout_width="wrap_content"
-					            android:layout_height="wrap_content"
-					            android:layout_gravity="right"
-					            android:layout_marginRight="20dp"
-					            android:text="Juán Perez" />
 
+                            <TextView
+                                android:id="@+id/vis_date2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:layout_marginRight="20dp"
+                                android:text="Oct 10, 2014, 01:54" />
+
+                            <TextView
+                                android:id="@+id/vis_emisor2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:layout_marginRight="20dp"
+                                android:text="Juán Perez" />
                         </LinearLayout>
-
                     </FrameLayout>
 
                     <TextView
@@ -566,8 +578,50 @@
                         android:layout_gravity="center"
                         android:text="Ver todos los comentarios"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
-                    
+
+                    <FrameLayout
+                        android:id="@+id/vis_rankear"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical" >
+
+                            <TextView
+                                android:id="@+id/textView19"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="10dp"
+                                android:text="Comentar"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textStyle="bold" />
+
+                            <EditText
+                                android:id="@+id/vis_guardar_comentario"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:inputType="textMultiLine" />
+
+                            <RatingBar
+                                android:id="@+id/vis_calificar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center" />
+
+                            <Button
+                                android:id="@+id/vis_enviar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Enviar" />
+                        </LinearLayout>
+                    </FrameLayout>
                 </LinearLayout>
+
             </ScrollView>
 
         </FrameLayout>
@@ -576,7 +630,7 @@
             android:id="@+id/list_down"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/ab_background_textured_applacegps"/>  
+            android:background="@drawable/ab_background_textured_applacegps"/>
 
     </LinearLayout>
 

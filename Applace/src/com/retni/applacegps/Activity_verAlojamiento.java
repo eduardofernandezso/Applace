@@ -2,11 +2,8 @@ package com.retni.applacegps;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
 import com.parse.DeleteCallback;
 import com.parse.GetDataCallback;
-import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -14,7 +11,6 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-import com.parse.SignUpCallback;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -28,9 +24,6 @@ import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -39,6 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,7 +40,6 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.RatingBar.OnRatingBarChangeListener;
 
 public class Activity_verAlojamiento extends ActionBarActivity{
 	
@@ -55,7 +48,7 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 	Button btnSubmit;
 	ViewPager viewPager;
     PagerAdapter adapter;
-    String id_aloj = "jaja";
+    String id_aloj = "jaja", id_user_receptor, name_receptor, mail_receptor;
     TextView vis_tit, vis_estado, vis_rating_count, vis_precio, vis_descrip;
     LinearLayout vis_tv, vis_wifi, vis_telefono, vis_piscina, vis_calefaccion, vis_cocina, vis_estacionamiento;
     LinearLayout vis_lavadora, vis_papel, vis_quincho, vis_aireacondicionado, vis_desayuno, vis_perro;
@@ -68,6 +61,17 @@ public class Activity_verAlojamiento extends ActionBarActivity{
     FrameLayout vis_coment1, vis_coment2;
     String texto = "";
     ProgressBar delete_bar;
+    
+    EditText vis_guardar_comentario;
+    FrameLayout vis_rankear;
+    RatingBar vis_calificar;
+    Button vis_enviar;
+    String u ;
+    String id_user_emisor;
+    String name_emisor;
+    ParseFile foto_emisor;
+    
+    Button vis_ruta, vis_mensaje;
     
     List<Boolean> services = new ArrayList<Boolean>();
 	
@@ -83,6 +87,11 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		
 		delete_bar = (ProgressBar) findViewById(R.id.delete_bar);
 		vis_verlist = (TextView) findViewById(R.id.vis_verlist);
+		vis_ruta = (Button) findViewById(R.id.vis_ruta);
+		vis_mensaje = (Button) findViewById(R.id.vis_mensaje);
+		
+		vis_ruta.setOnClickListener(listener);
+		vis_mensaje.setOnClickListener(listener);
 		
 		//comentarios
 		vis_comentario1 = (TextView) findViewById(R.id.vis_comentario1);
@@ -95,6 +104,12 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		vis_coment2 = (FrameLayout) findViewById(R.id.vis_coment2);
 		vis_img1 = (ImageView) findViewById(R.id.vis_img1);
 		vis_img2 = (ImageView) findViewById(R.id.vis_img2);
+		
+		//calificar
+		vis_enviar = (Button) findViewById(R.id.vis_enviar);
+		vis_guardar_comentario = (EditText) findViewById(R.id.vis_guardar_comentario);
+		vis_calificar = (RatingBar) findViewById(R.id.vis_calificar);
+		vis_rankear = (FrameLayout) findViewById(R.id.vis_rankear);
 		
 		vis_tit = (TextView) findViewById(R.id.vis_tit);
 		vis_estado = (TextView) findViewById(R.id.vis_estado);
@@ -141,7 +156,24 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 			} else if(caract.getBoolean("estado")==false){
 				vis_estado.setText("No disponible");
 			}
+			u = caract.getString("User");
+			ParseQuery<ParseObject> query7 = new ParseQuery<ParseObject>("User");
+			query7.whereEqualTo("email", u);
 			
+			
+			List<ParseObject> cari = null;
+			try {
+				cari = query7.find();
+			} catch (ParseException e) {
+
+			}
+			if(cari.size()!=0){
+			ParseObject iduser = cari.get(0);
+			id_user_receptor = iduser.getObjectId();
+			name_receptor = iduser.getString("NombreCompleto");
+			mail_receptor = iduser.getString("email");	
+			Toast.makeText(getApplicationContext(),mail_receptor, Toast.LENGTH_LONG).show();
+			}
 			vis_rating.setRating((float) caract.getDouble("calificacion"));
 			vis_rating_count.setText(""+caract.getInt("count_calificacion"));
 			vis_precio.setText("$"+caract.getInt("precio"));
@@ -194,11 +226,12 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 			viewPager = (ViewPager) findViewById(R.id.pager_fotos);
 	        adapter = new ViewPagerAdapter(Activity_verAlojamiento.this, fotos);
 	        viewPager.setAdapter(adapter);
-		}			
+		}
+		
 		
 		ParseQuery<ParseObject> query2 = new ParseQuery<ParseObject>("Comentarios");
-		query2.whereEqualTo("id_alojamiento", id_aloj);
 		
+		query2.whereEqualTo("id_alojamiento", id_aloj);
 		List<ParseObject> com = null;
 		try {
 			com = query2.find();
@@ -245,7 +278,7 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 					vis_verlist.setVisibility(View.GONE);
 				}
 				else if(a==1){
-					Toast.makeText(getApplicationContext(), "2 comentarios", Toast.LENGTH_SHORT).show();
+					//Toast.makeText(getApplicationContext(), "2 comentarios", Toast.LENGTH_SHORT).show();
 					//Se muestra solo 1 comentario en la actividad principal
 					vis_coment2.setVisibility(View.VISIBLE);
 					vis_comentario2.setText(comentario.getString("comentario"));
@@ -346,6 +379,35 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		if(vis_verlist.getVisibility()==View.VISIBLE){
 			vis_verlist.setOnClickListener(listener);
 		}
+		
+		ParseQuery<ParseObject> query3 = new ParseQuery<ParseObject>("Comentarios");
+		ParseUser user = new ParseUser();
+        user = ParseUser.getCurrentUser();
+        
+        id_user_emisor = user.getObjectId();
+        name_emisor = user.getString("NombreCompleto");
+        foto_emisor = user.getParseFile("Foto");
+        
+		query3.whereEqualTo("id_user_emisor", user.getObjectId());
+		query3.whereEqualTo("id_alojamiento", id_aloj);
+		
+		List<ParseObject> cal = null;
+		try {
+			cal = query3.find();
+		} catch (ParseException e) {
+
+		}
+		
+		if(cal.size()==0){ //Si no ha comentado nunca ese alojamiento
+			
+			
+					vis_enviar.setOnClickListener(listener);
+				
+			
+		}
+		else{ //si comentó ese alojamiento entonces no le muestra la opción
+			vis_rankear.setVisibility(View.GONE);
+		}	
 	}
 	
 	private OnClickListener listener = new OnClickListener(){
@@ -353,16 +415,78 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			int id = v.getId();
-			if (id == R.id.vis_verlist) {			
+			if (id == R.id.vis_verlist) {
 				Intent intent = new Intent(Activity_verAlojamiento.this, Activity_listaComentarios.class);
 				intent.putExtra("id_aloj", id_aloj); //se envía el id del alojamiento
-				startActivity(intent);							
-			}			
+				startActivity(intent);
+			}
+			else if(id == R.id.vis_enviar){
+				
+				if(vis_guardar_comentario.getText().toString() == null || vis_calificar.getRating()==0){
+					Toast.makeText( getApplicationContext(),"Por favor completar todos los datos!",Toast.LENGTH_SHORT ).show();
+				}
+				else{
+					ParseObject calif = new ParseObject("Comentarios");
+					calif.put("comentario", vis_guardar_comentario.getText().toString());
+					calif.put("calificacion", vis_calificar.getRating());
+					calif.put("id_alojamiento", id_aloj);
+					calif.put("id_user_emisor", id_user_emisor);
+					calif.put("foto_user_emisor", foto_emisor);
+					calif.put("nombre_user_emisor", name_emisor);
+					
+					calif.saveInBackground(new SaveCallback() {
+						public void done(ParseException e) {
+						    if (e == null) {								
+								ranking();
+								Toast.makeText( getApplicationContext(),"Calificación ingresada con éxito!",Toast.LENGTH_SHORT ).show();
+								Intent intent = new Intent(Activity_verAlojamiento.this, Logueado.class);
+								startActivity(intent);
+						    } else{
+						    	Toast.makeText(getApplicationContext(), "Error al ingresar el alojamiento, por favor intente nuevamente.", Toast.LENGTH_SHORT).show();
+						    }
+						}
+				    });
+				}
+			}
+			else if(id == R.id.vis_ruta){
+				//Se muestra la ruta para llegar a este alojamiento
+			}
+			else if(id == R.id.vis_mensaje){
+				//Se muestran opciones de enviar un mensaje al propietario
+
+				/*ParseQuery<ParseObject> query7 = new ParseQuery<ParseObject>("User");
+				query7.whereEqualTo("email", u);
+				
+				
+				List<ParseObject> cari = null;
+				try {
+					cari = query7.find();
+				} catch (ParseException e) {
+
+				}
+				
+				//if(cari.size() != 0){
+					ParseObject iduser = cari.get(0);
+					id_user_receptor = iduser.getObjectId();
+					name_receptor = iduser.getString("NombreCompleto");
+					mail_receptor = iduser.getString("email");	
+					Toast.makeText(getApplicationContext(),mail_receptor, Toast.LENGTH_LONG).show();
+				//}
+				*//*
+				
+				Intent i = new Intent(Activity_verAlojamiento.this,Activity_crearMen.class);
+				ParseUser uuu = new ParseUser();
+				uuu = ParseUser.getCurrentUser();
+				i.putExtra("mail_emisor", uuu.getEmail());
+				i.putExtra("mail_receptor", u);
+				
+				startActivity(i);*/
+			}
 		}
 	};
 	
 	public void loadBitmap(Bitmap b) {
-		vis_temp.setImageBitmap(circle(b));
+		vis_temp.setImageBitmap(circle(Bitmap.createScaledBitmap(b, 120, 120, false)));
 	}
 	
 	public void unloadBitmap() {
@@ -403,8 +527,64 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		menu.findItem(R.id.action_update).setVisible(false);
 		menu.findItem(R.id.action_camara).setVisible(false);
 		menu.findItem(R.id.action_delete).setVisible(true);
+		menu.findItem(R.id.action_new).setVisible(false);
 		return true;
 	}
+	
+	public void ranking(){
+		ParseQuery<ParseObject> query3 = new ParseQuery<ParseObject>("Comentarios");
+        
+		query3.whereEqualTo("id_alojamiento", id_aloj);
+		
+		List<ParseObject> cal = null;
+		try {
+			cal = query3.find();
+		} catch (ParseException e) {
+
+		}
+		
+		if(cal.size()==0){
+			vis_enviar.setOnClickListener(listener);
+		}
+		else{
+			ParseObject califi = null;
+			Float aux = (float) 0;
+			for(int h=0; h < cal.size() ; h++){
+				califi = cal.get(h);
+				aux = aux + (float) califi.getDouble("calificacion");
+			}
+			aux = aux/cal.size();
+			
+			//Luego se cambia el total en la tabla del alojamiento
+			ParseQuery<ParseObject> query5 = new ParseQuery<ParseObject>("Alojamiento");
+			query5.whereEqualTo("objectId", id_aloj);
+			
+			List<ParseObject> aloj = null;
+			try {
+				aloj = query5.find();
+			} catch (ParseException e) {
+
+			}
+			ParseObject aloji=null;
+			if(aloj.size()!=0){ 
+				aloji = aloj.get(0);
+				aloji.put("calificacion", aux);
+				aloji.put("count_calificacion", cal.size());
+			}
+			
+			aloji.saveInBackground(new SaveCallback() {
+				public void done(ParseException e) {
+				    if (e == null) {
+						//Toast.makeText( getApplicationContext(),"Alojamiento ingresado con éxito!",Toast.LENGTH_SHORT ).show();
+				    } else{
+				    	Toast.makeText(getApplicationContext(), "Error al ingresar el alojamiento, por favor intente nuevamente.", Toast.LENGTH_SHORT).show();
+				    }
+				}
+		    });
+			
+		}	
+	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId())

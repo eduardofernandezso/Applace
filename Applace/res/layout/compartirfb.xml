@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_weight="0.00"
+        android:background="@drawable/ab_background_textured_applacegps" >
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:textColor="@color/blanco"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.33"
+        android:orientation="vertical" >
+
+        <com.facebook.widget.LoginButton
+            android:id="@+id/fb_login_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            facebook:confirm_logout="false"
+            facebook:fetch_user_info="true" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="257dp"
+            android:layout_height="186dp"
+            android:layout_gravity="center"
+            android:src="@drawable/shareapplace" />
+
+        <Button
+            android:id="@+id/post_image"
+            style="@style/ToggleApplace"
+            android:layout_width="175dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:background="@drawable/buttonazul"
+            android:text="Compartir imagen en Facebook"
+            android:textColor="@color/blanco"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.00"
+        android:background="@drawable/ab_background_textured_applacegps" >
+
+        <Button
+            android:id="@+id/irmapa"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.57"
+            android:background="@drawable/ab_background_textured_applacegps"
+            android:gravity="center"
+            android:text="Ir al mapa"
+            android:textColor="@color/blanco"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+    </FrameLayout>
+
+</LinearLayout>
