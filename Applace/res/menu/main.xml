@@ -73,5 +73,12 @@
         sgoliver:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_content_discard"
         android:title="@string/action_delete" />
+    
+    <item
+        android:id="@+id/action_new"
+        android:orderInCategory="100"
+        sgoliver:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_new"
+        android:title="@string/action_new" />
 
 </menu>

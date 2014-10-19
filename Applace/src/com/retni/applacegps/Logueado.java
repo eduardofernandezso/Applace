@@ -78,7 +78,7 @@ public class Logueado extends ActionBarActivity{
 	    	mailUser = user.getEmail();
 		    nameUser = (String) user.getString("NombreCompleto");
 	    }
-	    
+
 		opcionesMenu = new String[] {"Mi perfil, "+ nameUser2, "Mapa", "Publicar Alojamiento","Mis Alojamientos", "Ruta", "Cerrar Sesión"};
         drawerLayout = (DrawerLayout) findViewById(R.id.container);
         drawerList = (ListView) findViewById(R.id.left_drawer);
@@ -157,7 +157,7 @@ public class Logueado extends ActionBarActivity{
                     	break;                    
                     case 4:
                     	//Pregunta por ruta
-                    	fragment = new Fragment_mapaRuta();
+                    	fragment = new Fragment_googlemaps_ruta();
                     	break;
                     case 5:
                     	AlertDialog.Builder dialog = new AlertDialog.Builder(Logueado.this);  
@@ -224,6 +224,7 @@ public class Logueado extends ActionBarActivity{
 		menu.findItem(R.id.action_update).setVisible(false);
 		menu.findItem(R.id.action_camara).setVisible(false);
 		menu.findItem(R.id.action_delete).setVisible(false);
+		menu.findItem(R.id.action_new).setVisible(false);
 		
 		boolean menuAbierto = drawerLayout.isDrawerOpen(drawerList);
 		 
@@ -251,7 +252,7 @@ public class Logueado extends ActionBarActivity{
 	        	Intent intent = new Intent(this, Activity_filtro.class );
 				startActivity(intent);
 	            break;
-	            
+
 	        case R.id.action_share:
 	        	Intent intent2 = new Intent(this, Compartir.class );
 				startActivity(intent2);

@@ -70,7 +70,10 @@
         <activity
             android:name="com.retni.applacegps.LoginActivity"
             android:label="@string/app_name">
-        </activity>        
+        </activity>       
+        <activity
+            android:name="com.retni.applacegps.Activity_listaComentarios">
+        </activity> 
         
 		<activity android:name="com.facebook.LoginActivity"
                   android:label="@string/app_name" />
@@ -83,8 +86,26 @@
             android:name="com.retni.applacegps.Activity_verAlojamiento">
         </activity>
         <activity
+            android:name="com.retni.applacegps.Activity_tabmensajes">
+        </activity>
+        <activity
+            android:name="com.retni.applacegps.Enviados">
+        </activity>
+        <activity
+            android:name="com.retni.applacegps.Recibidos">
+        </activity>
+        <activity
+            android:name="com.retni.applacegps.Activity_verMensaje">
+        </activity>
+        <activity
             android:name="com.retni.applacegps.Compartir">
         </activity>
+        <activity
+            android:name="com.retni.applacegps.Activity_crearMen">
+        </activity>
+        <activity
+            android:name="com.retni.applacegps.transicion">
+        </activity>        
         <activity
             android:name="com.retni.applacegps.Activity_googlemaps">
         </activity>

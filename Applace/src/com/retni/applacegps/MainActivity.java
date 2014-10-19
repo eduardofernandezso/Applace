@@ -51,6 +51,7 @@ public class MainActivity extends ActionBarActivity {
 		menu.findItem(R.id.action_share).setVisible(false);
 		menu.findItem(R.id.action_update).setVisible(false);
 		menu.findItem(R.id.action_camara).setVisible(false);
+		menu.findItem(R.id.action_delete).setVisible(false);
 		return true;
 	}
 
@@ -80,7 +81,6 @@ public class MainActivity extends ActionBarActivity {
 		}
 		ft.commit();
 	}
-	
 	/*****************Salir*******************************/
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) { 
@@ -106,8 +106,5 @@ public class MainActivity extends ActionBarActivity {
 	  return super.onKeyDown(keyCode, event);
 	}
 	
-	
 	/*****************Salir*******************************/
-	
-	
 }

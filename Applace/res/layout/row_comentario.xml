@@ -6,23 +6,48 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp" >
-        
-        <ImageView
-            android:id="@+id/vis_img"
-            android:layout_width="82dp"
-            android:layout_height="76dp"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:src="@drawable/img_defecto" />
+        android:layout_margin="5dp"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp" >
+
+            <ImageView
+                android:id="@+id/com_img"
+                android:layout_width="82dp"
+                android:layout_height="76dp"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:src="@drawable/img_defecto" />
+
+            <TextView
+                android:id="@+id/com_comentario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@+string/vis_comentario"
+                android:textSize="13sp" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/vis_comentario"
+            android:id="@+id/com_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@+string/vis_comentario"
-            android:textSize="15sp" />
+            android:layout_gravity="right"
+            android:layout_marginRight="20dp"
+            android:text="Oct 10, 2014, 01:54"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/com_emisor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="20dp"
+            android:text="Juán Perez"
+            android:textSize="10sp" />
     </LinearLayout>
 
 </FrameLayout>

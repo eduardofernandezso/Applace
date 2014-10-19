@@ -636,6 +636,7 @@ public class Activity_perfil extends ActionBarActivity{
 		menu.findItem(R.id.action_share).setVisible(false);
 		menu.findItem(R.id.action_update).setVisible(false);
 		menu.findItem(R.id.action_camara).setVisible(false);
+		menu.findItem(R.id.action_delete).setVisible(false);
 		
 		getSupportActionBar().setTitle("Perfil");
 		return true;

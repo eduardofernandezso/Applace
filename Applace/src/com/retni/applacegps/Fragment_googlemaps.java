@@ -1,42 +1,42 @@
 package com.retni.applacegps;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import org.json.JSONObject;
 import org.osmdroid.util.GeoPoint;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
+
 import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Fragment_googlemaps extends Fragment{
@@ -45,10 +45,138 @@ public class Fragment_googlemaps extends Fragment{
 	List<ParseObject> alojamientos;
 	MarkerOptions markerOptions;
     LatLng latLng;
+    
+    String id_alojamiento;
+    
+    String titulo, id_aloj;
+	Integer precio, count_ratings;
+	Boolean estado;
+	double latit, longi;
+	Float ratings;
+    Bitmap foto=null;
+    GeoPoint punto = null;
+    Marker marker;
+    
+    List<Bitmap> fotosi = new ArrayList<Bitmap>();
+    List<ParseFile> fotos = new ArrayList<ParseFile>();
+    
+    private HashMap<Marker, MyMarker> mMarkersHashMap;
+    private ArrayList<MyMarker> mMyMarkersArray = new ArrayList<MyMarker>();
 	
 	public Fragment_googlemaps() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	public class MyMarker
+	{
+	    private String mLabel;
+	    private ParseFile mIcon;
+	    private Double mLatitude;
+	    private Double mLongitude;
+	    private Boolean mEstado;
+	    private Integer mPrecio, mCount_rating;
+	    private Float mRating;
+	    private String id_aloja;
+
+	    public MyMarker(String label, ParseFile icon, Double latitude, Double longitude, Boolean estado, Integer precio, Float rating, Integer count_rating, String id_aloja)
+	    {
+	        this.mLabel = label;
+	        this.mLatitude = latitude;
+	        this.mLongitude = longitude;
+	        this.mIcon = icon;
+	        this.mEstado = estado;
+	        this.mPrecio = precio;
+	        this.mCount_rating = count_rating;
+	        this.mRating = rating;
+	        this.id_aloja = id_aloja;
+	    }
+
+	    public String getmLabel()
+	    {
+	        return mLabel;
+	    }
+
+	    public void setmLabel(String mLabel)
+	    {
+	        this.mLabel = mLabel;
+	    }
+
+	    public ParseFile getmIcon()
+	    {
+	        return mIcon;
+	    }
+
+	    public void setmIcon(ParseFile icon)
+	    {
+	        this.mIcon = icon;
+	    }
+
+	    public Double getmLatitude()
+	    {
+	        return mLatitude;
+	    }
+
+	    public void setmLatitude(Double mLatitude)
+	    {
+	        this.mLatitude = mLatitude;
+	    }
+
+	    public Double getmLongitude()
+	    {
+	        return mLongitude;
+	    }
+
+	    public void setmLongitude(Double mLongitude)
+	    {
+	        this.mLongitude = mLongitude;
+	    }
+	    
+	    public void setmEstado(Boolean b){
+	    	this.mEstado = b;
+	    }
+	    
+	    public Boolean getmEstado()
+	    {
+	        return mEstado;
+	    }
+	    
+	    public void setmPrecio(Integer precio){
+	    	this.mPrecio = precio;
+	    }
+	    
+	    public Integer getmPrecio()
+	    {
+	        return mPrecio;
+	    }
+	    
+	    public void setmCount_rating(Integer count_rating){
+	    	this.mCount_rating = count_rating;
+	    }
+	    
+	    public Integer getmCount_rating()
+	    {
+	        return mCount_rating;
+	    }
+	    
+	    public void setmRating(Float rating){
+	    	this.mRating = rating;
+	    }
+	    
+	    public Float getmRating()
+	    {
+	        return mRating;
+	    }
+	    
+	    public String getmId()
+	    {
+	        return id_aloja;
+	    }
+
+	    public void setmId(String id_aloja)
+	    {
+	        this.id_aloja = id_aloja;
+	    }
+	}	
 	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,18 +194,9 @@ public class Fragment_googlemaps extends Fragment{
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState); 
         
-      //Se verifica si el fragmento es cargado para Fragment_ubicacion
-        Bundle bundle = getArguments();
-        int valor = 0;
-        int valor2 = 0;
-        if(bundle != null){
-        	valor = bundle.getInt("ubicacion");
-        	valor2 = bundle.getInt("valor2");
-        }
-        
         mapa = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
         //mapa.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        
+
         Location loc = getMyLocation();
         if (loc == null){
         	Toast.makeText( getActivity().getApplicationContext(),"Gps Desactivado",Toast.LENGTH_SHORT ).show();
@@ -89,131 +208,50 @@ public class Fragment_googlemaps extends Fragment{
         	CameraUpdate camUpd1 = CameraUpdateFactory.newLatLngZoom(new LatLng(lat,lon), 15);
             mapa.moveCamera(camUpd1);
         }
-        
-        if(valor != 1){
   	       
-	        Parse.initialize(getActivity(), "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");        
-	        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Alojamiento");
-	
-			try {
-				alojamientos = query.find();
-			} catch (ParseException e) {
-				Toast.makeText( getActivity().getApplicationContext(),"Error.",Toast.LENGTH_SHORT ).show();
-			}
+        Parse.initialize(getActivity(), "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");        
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Alojamiento");
+        query.orderByDescending("_created_at");
+
+		try {
+			alojamientos = query.find();
+		} catch (ParseException e) {
+			Toast.makeText( getActivity().getApplicationContext(),"Error.",Toast.LENGTH_SHORT ).show();
+		}
+		
+		int size_aloj = 0;
+		size_aloj = alojamientos.size();
+		
+		if (size_aloj == 0){
+			Toast.makeText( getActivity().getApplicationContext(),"No hay datos para cargar.",Toast.LENGTH_SHORT ).show();
+		} else{			
+			ParseObject aloj = null;
+			ParseFile img = null;
+			mMarkersHashMap = new HashMap<Marker, MyMarker>();
 			
-			int size_aloj = 0;
-			size_aloj = alojamientos.size();
-			
-			if (size_aloj == 0){
-				Toast.makeText( getActivity().getApplicationContext(),"No hay datos para cargar.",Toast.LENGTH_SHORT ).show();
+			for(int i=0 ; i < size_aloj ; i++){
+				aloj = alojamientos.get(i);
+				titulo = aloj.getString("titulo");
+				precio = aloj.getInt("precio");
+				latit = aloj.getDouble("dir_latitud");
+				longi = aloj.getDouble("dir_longitud");
+				estado = aloj.getBoolean("estado");
+				id_aloj = aloj.getObjectId();
+				ratings = (float) aloj.getDouble("calificacion");
+				count_ratings = aloj.getInt("count_calificacion");		
+				punto = new GeoPoint(latit, longi);
+				
+				if(aloj.getParseFile("foto")!=null)
+					img = aloj.getParseFile("foto");	
+						
+				mMyMarkersArray.add(new MyMarker(titulo, img, punto.getLatitude(), punto.getLongitude(), estado, precio, ratings, count_ratings, id_aloj));				
 			}
-			else{
-				String titulo, id_aloj;
-				int precio;
-				Boolean estado;
-				double latit, longi;
-				ParseObject aloj = null;
-				for(int i=0 ; i < size_aloj ; i++){
-					aloj = alojamientos.get(i);
-					titulo = aloj.getString("titulo");
-					precio = aloj.getInt("precio");
-					latit = aloj.getDouble("dir_latitud");
-					longi = aloj.getDouble("dir_longitud");
-					estado = aloj.getBoolean("estado");
-					id_aloj = aloj.getObjectId();
-					
-					GeoPoint punto = new GeoPoint(latit, longi);
-					//MarkerOptions op;
-					
-					if(estado==true){
-						mapa.addMarker(new MarkerOptions().position(new LatLng(punto.getLatitude(), punto.getLongitude()))
-								.title(titulo)
-								.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-					}
-					else {
-						mapa.addMarker(new MarkerOptions().position(new LatLng(punto.getLatitude(), punto.getLongitude()))
-								.title(titulo)
-								.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-					}
-					
-					
-					
-					//agregar_punto(titulo, id_aloj, punto);
-				}
-			} 
-        }
-        if(valor==1){
-        	// Setting a click event handler for the map
-            mapa.setOnMapClickListener(new OnMapClickListener() {
-     
-                @Override
-                public void onMapClick(LatLng arg0) {
-     
-                    // Getting the Latitude and Longitude of the touched location
-                    latLng = arg0;
-     
-                    // Clears the previously touched position
-                    mapa.clear();
-     
-                    // Animating to the touched position
-                    mapa.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-     
-                    // Creating a marker
-                    markerOptions = new MarkerOptions();
-     
-                    // Setting the position for the marker
-                    markerOptions.position(latLng);
-                    //markerOptions.title(latLng.toString());
-     
-                    // Placing a marker on the touched position
-                    mapa.addMarker(markerOptions);
-     
-                    // Adding Marker on the touched location with address
-                    new ReverseGeocodingTask(getActivity().getBaseContext()).execute(latLng);
-     
-                }
-            });
-            
-            if(valor2==1){
-            	String location=null;
-            	Bundle bundle2 = getArguments();
-                if(bundle != null){
-                	location = bundle2.getString("location");
-                }
-              
-            	 
-                if(location==null || location.equals("")){
-                    Toast.makeText(getActivity().getBaseContext(), "No Place is entered", Toast.LENGTH_SHORT).show();
-                    return;
-                }
- 
-                String url = "https://maps.googleapis.com/maps/api/geocode/json?";
- 
-                try {
-                    // encoding special characters like space in the user input place
-                    location = URLEncoder.encode(location, "utf-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
- 
-                String address = "address=" + location;
- 
-                String sensor = "sensor=false";
- 
-                // url , from where the geocoding data is fetched
-                url = url + address + "&" + sensor;
- 
-                // Instantiating DownloadTask to get places from Google Geocoding service
-                // in a non-ui thread
-                DownloadTask downloadTask = new DownloadTask();
- 
-                // Start downloading the geocoding places
-                downloadTask.execute(url);
-            }
-        }
+			//Toast.makeText(getActivity().getApplicationContext(), fotos.size()+"", Toast.LENGTH_SHORT).show();
+			plotMarkers(mMyMarkersArray);
+		}
+		
+		
 	}
-	
-	
 	
 	private String downloadUrl(String strUrl) throws IOException{
         String data = "";
@@ -347,53 +385,70 @@ public class Fragment_googlemaps extends Fragment{
         }
     }
 	
-	private class ReverseGeocodingTask extends AsyncTask<LatLng, Void, String>{
-        Context mContext;
- 
-        public ReverseGeocodingTask(Context context){
-            super();
-            mContext = context;
-        }
- 
-        // Finding address using reverse geocoding
-        @Override
-        protected String doInBackground(LatLng... params) {
-            Geocoder geocoder = new Geocoder(mContext);
-            double latitude = params[0].latitude;
-            double longitude = params[0].longitude;
- 
-            List<Address> addresses = null;
-            String addressText="";
- 
-            try {
-                addresses = geocoder.getFromLocation(latitude, longitude,1);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
- 
-            if(addresses != null && addresses.size() > 0 ){
-                Address address = addresses.get(0);
- 
-                addressText = String.format("%s, %s, %s",
-                address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
-                address.getLocality(),
-                address.getCountryName());
-            }
- 
-            return addressText;
-        }
- 
-        @Override
-        protected void onPostExecute(String addressText) {
-            // Setting the title for the marker.
-            // This will be displayed on taping the marker
-            markerOptions.title(addressText);
- 
-            // Placing a marker on the touched position
-            mapa.addMarker(markerOptions);
- 
-        }
-    }
+	private OnInfoWindowClickListener listener = new OnInfoWindowClickListener(){		
+
+		@Override
+		public void onInfoWindowClick(Marker arg0) {
+			// TODO Auto-generated method stub
+			id_alojamiento = arg0.getTitle();
+			Intent intent = new Intent(getActivity(), Activity_verAlojamiento.class);
+			intent.putExtra("idAloj", id_alojamiento);
+			startActivity(intent);	
+			//Toast.makeText(getActivity().getApplicationContext(), id_alojamiento+"", Toast.LENGTH_SHORT).show();
+		}
+	};
+	
+	public class MarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter{
+	    public MarkerInfoWindowAdapter(){
+	    	
+	    }
+	    
+	    @Override
+	    public View getInfoContents(Marker marker) {
+	        
+	        View v  = getActivity().getLayoutInflater().inflate(R.layout.fragment_list_aloj_row, null);
+	        MyMarker myMarker = mMarkersHashMap.get(marker);
+	        
+	        final TextView titulo = (TextView)v.findViewById(R.id.row_titulo);
+		    final TextView precio = (TextView)v.findViewById(R.id.row_precio);
+		    final ImageView imgh = (ImageView)v.findViewById(R.id.row_img);
+		    final RatingBar star = (RatingBar)v.findViewById(R.id.row_star);	
+		    final TextView count = (TextView)v.findViewById(R.id.row_count);
+	           	
+		    ParseFile img = null;
+		    if(myMarker.getmIcon()!=null){
+		    	img = myMarker.getmIcon();
+		    	img.getDataInBackground(new GetDataCallback() {
+			    	Bitmap bmp = null;
+			        public void done(byte[] data, com.parse.ParseException e) {
+			            if (e == null){
+			                bmp = BitmapFactory.decodeByteArray(data, 0, data.length);	
+			                imgh.setImageBitmap(bmp);
+			                
+			                
+			            }
+			            else{
+			            	Toast.makeText(getActivity().getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+			            }	
+			        }	
+			        
+			    });
+		    }		    	
+		    	
+	        titulo.setText(myMarker.getmLabel());
+	        precio.setText("$"+myMarker.getmPrecio());
+	        star.setRating(myMarker.getmRating());
+	        count.setText(myMarker.getmCount_rating().toString());  	        
+
+	        return v;
+	    }
+
+	    @Override
+	    public View getInfoWindow(Marker marker){
+	    	
+	    	return null;
+	    }	    
+	}
 	
 	public void refresh(){
 		GeoPoint startPoint = new GeoPoint(getMyLocation());
