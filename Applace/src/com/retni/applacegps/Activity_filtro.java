@@ -134,12 +134,19 @@ public class Activity_filtro extends ActionBarActivity{
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
+		
+		menu.findItem(R.id.como_funciona).setVisible(false);
+		menu.findItem(R.id.codiciones).setVisible(false);
+		menu.findItem(R.id.politica).setVisible(false);
+		menu.findItem(R.id.ayuda).setVisible(false);
+		
 		menu.findItem(R.id.action_search).setVisible(false);
 		menu.findItem(R.id.action_edit).setVisible(false);
 		menu.findItem(R.id.action_config).setVisible(false);
 		menu.findItem(R.id.action_share).setVisible(false);
 		menu.findItem(R.id.action_update).setVisible(false);
 		menu.findItem(R.id.action_camara).setVisible(false);
+		menu.findItem(R.id.action_delete).setVisible(false);
 		return true;
 	}
 

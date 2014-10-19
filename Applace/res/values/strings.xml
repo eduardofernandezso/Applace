@@ -26,6 +26,11 @@
     <string name="action_update">Actualizar</string>
     <string name="action_share">Compartir</string>
     <string name="action_camara">Cámara</string>
+    <string name="action_delete">Borrar</string>
+    <string name="action_new">Nuevo mensaje</string>
+    <string name="vis_comentario">Casa muy linda. 
+        Queda a pasos de la playa y es muy comoda para una familia numerosa. 
+        Tiene todas las características que se describen y mucho más.</string>
     
     <string name="find">Find</string>
     <string name="hint">Enter Place</string>

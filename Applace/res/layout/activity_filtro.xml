@@ -2,21 +2,16 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-	
-    <ScrollView
-        android:id="@+id/scrollView1"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-        
-        <LinearLayout
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-            
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:background="@drawable/ab_background_textured_applacegps" >
+            android:layout_height="120dp"
+            android:background="@drawable/ab_background_textured_applacegps" >
 
             <TextView
                 android:id="@+id/pregunta_aloj"
@@ -31,16 +26,22 @@
                 android:textStyle="bold" />
         </FrameLayout>
 
-            <FrameLayout
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" >
+
+            <ScrollView
+                android:id="@+id/scrollView1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_margin="10dp" >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical" >
-                    
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" >
@@ -169,18 +170,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Cocina" />
-
-                    <Button
-                        android:id="@+id/but_filtrar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Filtrar" />
                 </LinearLayout>
 
-            </FrameLayout>
+            </ScrollView>
 
-        </LinearLayout>
+        </FrameLayout>
 
-    </ScrollView>
+        <Button
+            android:id="@+id/but_filtrar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ab_background_textured_applacegps"
+            android:text="Buscar"
+            android:textColor="@color/blanco"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 </FrameLayout>
