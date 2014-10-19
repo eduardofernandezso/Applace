@@ -21,6 +21,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -73,7 +74,7 @@ public class Logueado extends ActionBarActivity{
 		    nameUser = (String) user.getString("NombreCompleto");
 	    }
 	    
-		opcionesMenu = new String[] {"Mi perfil, "+ nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Buscar Alojamiento", "Ruta", "Cerrar Sesión"};
+		opcionesMenu = new String[] {"Mi perfil, "+ nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Buscar Alojamiento", "Ruta", "Mis Mensajes","Cerrar Sesión"};
         drawerLayout = (DrawerLayout) findViewById(R.id.container);
         drawerList = (ListView) findViewById(R.id.left_drawer);
  
@@ -139,7 +140,7 @@ public class Logueado extends ActionBarActivity{
                         break;
                     case 1:
                     	//Carga el mapa
-                        fragment = new Fragment_googlemaps();                    	
+                        fragment = new transitiva();                    	
                         break;
                     case 2:
                     	//Publica un anuncio
@@ -155,9 +156,13 @@ public class Logueado extends ActionBarActivity{
                     	break;
                     case 5:
                     	//Pregunta por ruta
-                    	fragment = new Fragment_mapaRuta();
+                    	fragment = new Fragment_googlemaps_ruta();
                     	break;
                     case 6:
+                    	Intent i2 = new Intent(Logueado.this,Activity_tabmensajes.class);
+                    	startActivity(i2);
+                    	break;
+                    case 7:
                     	AlertDialog.Builder dialog = new AlertDialog.Builder(Logueado.this);  
             	        dialog.setTitle("Cerrar Sesión");		
             	        dialog.setIcon(R.drawable.ic_launcher);	
@@ -216,9 +221,11 @@ public class Logueado extends ActionBarActivity{
 		
 		menu.findItem(R.id.action_edit).setVisible(false);
 		menu.findItem(R.id.action_config).setVisible(false);
-		menu.findItem(R.id.action_share).setVisible(false);
+		menu.findItem(R.id.action_share).setVisible(true);
 		menu.findItem(R.id.action_update).setVisible(false);
 		menu.findItem(R.id.action_camara).setVisible(false);
+		menu.findItem(R.id.action_delete).setVisible(false);
+		menu.findItem(R.id.action_new).setVisible(false);
 		
 		boolean menuAbierto = drawerLayout.isDrawerOpen(drawerList);
 		 
@@ -243,7 +250,12 @@ public class Logueado extends ActionBarActivity{
 		switch(item.getItemId())
 	    {
 	        case R.id.action_search:
-	            Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show();
+	        	Intent intent = new Intent(this, Activity_filtro.class );
+				startActivity(intent);
+	            break;
+	        case R.id.action_share:
+	        	Intent intent2 = new Intent(this, Compartir.class );
+				startActivity(intent2);
 	            break;
 	        default:
 	            return super.onOptionsItemSelected(item);
@@ -261,5 +273,38 @@ public class Logueado extends ActionBarActivity{
 	public void onConfigurationChanged(Configuration newConfig) {
 	    super.onConfigurationChanged(newConfig);
 	    drawerToggle.onConfigurationChanged(newConfig);
-    }
+	}		
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) { 
+	  if (keyCode == KeyEvent.KEYCODE_BACK) {AlertDialog.Builder dialog = new AlertDialog.Builder(Logueado.this);  
+      dialog.setTitle("Salir");		
+      dialog.setIcon(R.drawable.ic_launcher);	
+      
+      View v = getLayoutInflater().inflate( R.layout.dialog2, null );
+		      
+      dialog.setView(v);
+      dialog.setNegativeButton("Cancelar", null);  
+      dialog.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {  
+          public void onClick(DialogInterface dialogo1, int id) {
+        	  Intent startMain = new Intent(Intent.ACTION_MAIN);
+        	  startMain.addCategory(Intent.CATEGORY_HOME);
+        	  startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        	  startActivity(startMain);
+          }  
+      });  
+      
+      dialog.show();           	   }
+	//para las demas cosas, se reenvia el evento al listener habitual
+	  return super.onKeyDown(keyCode, event);
+	}
+
+	
+	@Override
+	protected void onDestroy() {
+	    super.onDestroy();
+	    finish();
+
+	}
+
 }
