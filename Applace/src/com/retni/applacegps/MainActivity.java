@@ -81,6 +81,7 @@ public class MainActivity extends ActionBarActivity {
 		}
 		ft.commit();
 	}
+	/*****************Salir*******************************/
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) { 
 	  if (keyCode == KeyEvent.KEYCODE_BACK) {AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);  
@@ -104,4 +105,6 @@ public class MainActivity extends ActionBarActivity {
 	//para las demas cosas, se reenvia el evento al listener habitual
 	  return super.onKeyDown(keyCode, event);
 	}
+	
+	/*****************Salir*******************************/
 }

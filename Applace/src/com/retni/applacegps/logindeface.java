@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 
+import com.facebook.Session;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -67,6 +68,7 @@ public class logindeface extends Activity {
 	private void onLoginButtonClicked() {
 		logindeface.this.progressDialog = ProgressDialog.show(
 				logindeface.this, "", "Logging in...", true);
+		//checkPermissions();
 		List<String> permissions = Arrays.asList("public_profile","email","user_likes");
 		ParseFacebookUtils.logIn(permissions, this, new LogInCallback() {
 			@Override
@@ -88,6 +90,7 @@ public class logindeface extends Activity {
 		});
 	}
 
+	
 	private void showUserDetailsActivity() {
 		//ParseUser user = ParseUser.getCurrentUser();
 		//user.setUsername();

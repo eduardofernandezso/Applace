@@ -9,9 +9,6 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -110,7 +107,6 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		vis_guardar_comentario = (EditText) findViewById(R.id.vis_guardar_comentario);
 		vis_calificar = (RatingBar) findViewById(R.id.vis_calificar);
 		vis_rankear = (FrameLayout) findViewById(R.id.vis_rankear);
-		
 		vis_tit = (TextView) findViewById(R.id.vis_tit);
 		vis_estado = (TextView) findViewById(R.id.vis_estado);
 		vis_rating = (RatingBar) findViewById(R.id.vis_rating);
@@ -236,7 +232,6 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		try {
 			com = query2.find();
 		} catch (ParseException e) {
-
 		}
 		
 		ParseObject comentario = null;
@@ -584,7 +579,6 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 			
 		}	
 	}
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId())

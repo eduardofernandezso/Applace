@@ -111,7 +111,7 @@
         </activity>
         
         <meta-data android:name="com.google.android.maps.v2.API_KEY"
-			android:value="AIzaSyAXu2eBIfc_-L6qMd7e8YNFozLNVvOLDVo"/>
+			android:value="AIzaSyDPTwgK75vjmQAFYeju8fHIPw19X9tBncs"/>
         <meta-data android:name="com.google.android.gms.version" 
             android:value="@integer/google_play_services_version" />
         
