@@ -57,19 +57,11 @@ public class Fragment_googlemaps extends Fragment{
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_googlemaps, container, false);
+		View v = inflater.inflate(R.layout.fragment_googlemaps, container, false);	
 		return v;
 	}
 	
-	@Override
-	public void onDestroyView() {
-	    super.onDestroyView();
-	    SupportMapFragment f = (SupportMapFragment) getFragmentManager()
-	                                         .findFragmentById(R.id.map);
-	    if (f != null) 
-	        getFragmentManager().beginTransaction().remove(f).commit();
-	}
-	
+
 	@Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState); 
@@ -220,6 +212,8 @@ public class Fragment_googlemaps extends Fragment{
             }
         }
 	}
+	
+	
 	
 	private String downloadUrl(String strUrl) throws IOException{
         String data = "";
@@ -440,6 +434,22 @@ public class Fragment_googlemaps extends Fragment{
 			
 		}
 	}	
+	
+	@Override
+	public void onDestroyView() {
+	    super.onDestroyView();
+	    SupportMapFragment f = (SupportMapFragment) getFragmentManager()
+	                                         .findFragmentById(R.id.map);
+	    if (f != null) 
+	        getFragmentManager().beginTransaction().remove(f).commit();
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		mapa.setMyLocationEnabled(false);
+	}
+
 	
 	@Override
 	public void onResume() {

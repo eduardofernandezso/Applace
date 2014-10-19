@@ -82,7 +82,9 @@
         <activity
             android:name="com.retni.applacegps.Activity_verAlojamiento">
         </activity>
-        
+        <activity
+            android:name="com.retni.applacegps.Compartir">
+        </activity>
         <activity
             android:name="com.retni.applacegps.Activity_googlemaps">
         </activity>

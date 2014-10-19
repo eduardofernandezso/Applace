@@ -6,6 +6,8 @@ tiempo.
 package com.retni.applacegps;
 
 import java.util.ArrayList;
+
+import com.google.android.gms.maps.SupportMapFragment;
 import com.parse.Parse;
 import com.parse.ParseUser;
 import android.annotation.SuppressLint;
@@ -21,12 +23,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -41,7 +46,7 @@ public class Logueado extends ActionBarActivity{
     ActionBarDrawerToggle drawerToggle;
     CharSequence tituloSeccion;
     
-    String passUser, mailUser, nameUser = "Mi Cuenta";
+    String passUser, mailUser, nameUser = "Mi Cuenta",nameUser2;
 			
 	@SuppressWarnings("unchecked")
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +74,12 @@ public class Logueado extends ActionBarActivity{
         user = ParseUser.getCurrentUser();
 	    
 	    if(user!=null){
+	    	//nameUser2 = user.getName();
 	    	mailUser = user.getEmail();
 		    nameUser = (String) user.getString("NombreCompleto");
 	    }
 	    
-		opcionesMenu = new String[] {"Mi perfil, "+ nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Buscar Alojamiento", "Ruta", "Cerrar Sesión"};
+		opcionesMenu = new String[] {"Mi perfil, "+ nameUser2, "Mapa", "Publicar Alojamiento","Mis Alojamientos", "Ruta", "Cerrar Sesión"};
         drawerLayout = (DrawerLayout) findViewById(R.id.container);
         drawerList = (ListView) findViewById(R.id.left_drawer);
  
@@ -139,7 +145,7 @@ public class Logueado extends ActionBarActivity{
                         break;
                     case 1:
                     	//Carga el mapa
-                        fragment = new Fragment_googlemaps();                    	
+                        fragment = new transitiva();                    	
                         break;
                     case 2:
                     	//Publica un anuncio
@@ -150,15 +156,10 @@ public class Logueado extends ActionBarActivity{
                     	fragment = new Fragment_listaAloj();
                     	break;                    
                     case 4:
-
-                    	Intent i = new Intent(Logueado.this, Activity_filtro.class );
-						startActivity(i);
-                       	break;
-                    case 5:
                     	//Pregunta por ruta
-                    	fragment = new Fragment_googlemaps_ruta();
+                    	fragment = new Fragment_mapaRuta();
                     	break;
-                    case 6:
+                    case 5:
                     	AlertDialog.Builder dialog = new AlertDialog.Builder(Logueado.this);  
             	        dialog.setTitle("Cerrar Sesión");		
             	        dialog.setIcon(R.drawable.ic_launcher);	
@@ -175,8 +176,7 @@ public class Logueado extends ActionBarActivity{
             	            }  
             	        });  
             	        
-            	        dialog.show();
-
+            	        dialog.show();           	        
                     	break;
                     
                 }
@@ -202,7 +202,9 @@ public class Logueado extends ActionBarActivity{
         });
         
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);       
+        getSupportActionBar().setHomeButtonEnabled(true);   
+        
+        
 	}
 	
 	@Override
@@ -218,7 +220,7 @@ public class Logueado extends ActionBarActivity{
 		
 		menu.findItem(R.id.action_edit).setVisible(false);
 		menu.findItem(R.id.action_config).setVisible(false);
-		menu.findItem(R.id.action_share).setVisible(false);
+		menu.findItem(R.id.action_share).setVisible(true);
 		menu.findItem(R.id.action_update).setVisible(false);
 		menu.findItem(R.id.action_camara).setVisible(false);
 		menu.findItem(R.id.action_delete).setVisible(false);
@@ -249,6 +251,11 @@ public class Logueado extends ActionBarActivity{
 	        	Intent intent = new Intent(this, Activity_filtro.class );
 				startActivity(intent);
 	            break;
+	            
+	        case R.id.action_share:
+	        	Intent intent2 = new Intent(this, Compartir.class );
+				startActivity(intent2);
+	            break;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }		
@@ -266,4 +273,61 @@ public class Logueado extends ActionBarActivity{
 	    super.onConfigurationChanged(newConfig);
 	    drawerToggle.onConfigurationChanged(newConfig);
     }
+/*****************Salir*******************************/
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) { 
+	  if (keyCode == KeyEvent.KEYCODE_BACK) {AlertDialog.Builder dialog = new AlertDialog.Builder(Logueado.this);  
+      dialog.setTitle("Salir");		
+      dialog.setIcon(R.drawable.ic_launcher);	
+      
+      View v = getLayoutInflater().inflate( R.layout.dialog2, null );
+		      
+      dialog.setView(v);
+      dialog.setNegativeButton("Cancelar", null);  
+      dialog.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {  
+          public void onClick(DialogInterface dialogo1, int id) {
+        	  Intent startMain = new Intent(Intent.ACTION_MAIN);
+        	  startMain.addCategory(Intent.CATEGORY_HOME);
+        	  startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        	  startActivity(startMain);
+          }  
+      });  
+      
+      dialog.show();           	   }
+	//para las demas cosas, se reenvia el evento al listener habitual
+	  return super.onKeyDown(keyCode, event);
+	}
+
+	/*****************Salir*******************************/	
+	@Override
+	protected void onDestroy() {
+	    super.onDestroy();
+	    finish();
+
+	}
+
+	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		//refresh();
+		//myLocationOverlay.enableMyLocation();
+	//	myLocationOverlay.enableCompass();
+		
+	}
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		//myLocationOverlay.disableMyLocation();
+	//	myLocationOverlay.disableCompass();
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putString("WORKAROUND_FOR_BUG_19917_KEY", "WORKAROUND_FOR_BUG_19917_VALUE");
+	    super.onSaveInstanceState(outState);
+	}
 }
