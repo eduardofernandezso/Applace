@@ -4,12 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <EditText
-        android:id="@+id/destino"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10" />
-
     <RelativeLayout
         android:id="@+id/layout_mapa"
         android:layout_width="match_parent"
@@ -23,17 +17,6 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
-
-        <Button
-            android:id="@+id/crearRuta"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:background="@drawable/ab_background_textured_applacegps"
-            android:text="Generar Ruta"
-            android:textColor="@color/blanco"
-            android:textStyle="bold" />
 
     </RelativeLayout>
 

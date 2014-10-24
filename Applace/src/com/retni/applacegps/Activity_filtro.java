@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -216,22 +217,21 @@ public class Activity_filtro extends ActionBarActivity{
         	
         }
         
-       // query.findInBackground(new FindCallback <ParseObject>() {
-         // @Override
-         // public void done(List<ParseObject> objects, ParseException e) {
-           if (objects == null) Toast.makeText(getApplicationContext(),
-        		   "No Existen Alojamientos Cercanos con las especificaciones dadas" , Toast.LENGTH_SHORT).show();
-           else {
-            	int i=0;
-            	int size = objects.size();
-            	ParseObject filtrados = null;
-            	for(i=0;i<size;i++){
-            		filtrados = objects.get(i);
-            		la.add(filtrados.getDouble("dir_latitud"));
-            		lo.add(filtrados.getDouble("dir_longitud"));
-            	}
-           }
-
+        // query.findInBackground(new FindCallback <ParseObject>() {
+        // @Override
+        // public void done(List<ParseObject> objects, ParseException e) {
+        if (objects == null) Toast.makeText(getApplicationContext(),
+    		   "No Existen Alojamientos Cercanos con las especificaciones dadas" , Toast.LENGTH_SHORT).show();
+        else {
+        	int i=0;
+        	int size = objects.size();
+        	ParseObject filtrados = null;
+        	for(i=0;i<size;i++){
+        		filtrados = objects.get(i);
+        		la.add(filtrados.getDouble("dir_latitud"));
+        		lo.add(filtrados.getDouble("dir_longitud"));
+        	}
+        }
 	}
 	
 	private OnClickListener listener = new OnClickListener(){
@@ -242,8 +242,7 @@ public class Activity_filtro extends ActionBarActivity{
 			if (id == R.id.but_filtrar) {
 				saveNewAlojamiento();
 				
-				irse();
-				
+				irse();				
 			}
 		}
 	};
@@ -252,8 +251,16 @@ public class Activity_filtro extends ActionBarActivity{
 		Intent intent = new Intent(Activity_filtro.this, Logueado.class );
 		intent.putExtra("latis", la);
 		intent.putExtra("longis", lo);
-		intent.putExtra("flag",1);
-		
+		intent.putExtra("flag",1);		
 		startActivity(intent);
+		overridePendingTransition(R.anim.right_in, R.anim.right_out);
+	}
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch(keyCode){
+			case KeyEvent.KEYCODE_BACK:
+				startActivity(new Intent(this, Logueado.class));
+				overridePendingTransition(R.anim.right_in, R.anim.right_out);
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }

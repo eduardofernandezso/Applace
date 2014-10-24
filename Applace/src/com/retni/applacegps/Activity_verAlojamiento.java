@@ -11,7 +11,6 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,6 +23,9 @@ import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -48,7 +50,7 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 	Button btnSubmit;
 	ViewPager viewPager;
     PagerAdapter adapter;
-    String id_aloj = "jaja", id_user_receptor, name_receptor, mail_receptor;
+    String id_aloj = "jaja", id_user_receptor, name_receptor, mail_receptor, vis_direccion;
     TextView vis_tit, vis_estado, vis_rating_count, vis_precio, vis_descrip;
     LinearLayout vis_tv, vis_wifi, vis_telefono, vis_piscina, vis_calefaccion, vis_cocina, vis_estacionamiento;
     LinearLayout vis_lavadora, vis_papel, vis_quincho, vis_aireacondicionado, vis_desayuno, vis_perro;
@@ -178,6 +180,7 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 			vis_rating_count.setText(""+caract.getInt("count_calificacion"));
 			vis_precio.setText("$"+caract.getInt("precio"));
 			vis_descrip.setText(caract.getString("descripcion"));
+			vis_direccion=caract.getString("dir_escrita");
 			
 			if(caract.getBoolean("articulos_higiene")==false)
 				vis_papel.setVisibility(View.GONE);
@@ -226,6 +229,7 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 			viewPager = (ViewPager) findViewById(R.id.pager_fotos);
 	        adapter = new ViewPagerAdapter(Activity_verAlojamiento.this, fotos);
 	        viewPager.setAdapter(adapter);
+	        
 		}
 		
 		
@@ -450,6 +454,18 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 			}
 			else if(id == R.id.vis_ruta){
 				//Se muestra la ruta para llegar a este alojamiento
+				FragmentManager fm = Activity_verAlojamiento.this.getSupportFragmentManager();
+		        FragmentTransaction ft = fm.beginTransaction();
+		        
+		        Fragment fragment = new Fragment_googlemaps_ruta();
+		        String tag = fragment.getTag();
+		        Bundle j = new Bundle();
+		        j.putString("direccion", vis_direccion);
+		        fragment.setArguments(j);
+		        
+		        ft.replace(R.id.vis_frame_content, fragment,tag);
+		        ft.addToBackStack(tag);
+		        ft.commit(); 
 			}
 			else if(id == R.id.vis_mensaje){
 				//Se muestran opciones de enviar un mensaje al propietario

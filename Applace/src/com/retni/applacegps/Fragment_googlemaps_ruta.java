@@ -8,11 +8,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.osmdroid.util.GeoPoint;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -28,15 +26,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -47,10 +45,10 @@ public class Fragment_googlemaps_ruta extends Fragment{
 	
     String startLoc;
     String endLoc;
+    String direccion;
     LatLng start;
     LatLng end;
 	RelativeLayout rutaLayout;
-	EditText endRoute;
 	Button createRouteButton;
 	
 	public Fragment_googlemaps_ruta() {
@@ -81,11 +79,13 @@ public class Fragment_googlemaps_ruta extends Fragment{
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState); 
         
-        rutaLayout = (RelativeLayout)getActivity().findViewById(R.id.mapLayout);
-        endRoute = (EditText)getActivity().findViewById(R.id.destino);
-        createRouteButton = (Button)getActivity().findViewById(R.id.crearRuta);
+        Bundle args = getArguments();
+        direccion = args.getString("direccion", "Chile");
         
-        createRouteButton.setOnClickListener(listener_ruta);
+        rutaLayout = (RelativeLayout)getActivity().findViewById(R.id.mapLayout);
+        //createRouteButton = (Button)getActivity().findViewById(R.id.crearRuta);
+        
+        //createRouteButton.setOnClickListener(listener_ruta);
         
         mapa = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.google_map)).getMap();
         Location loc = getMyLocation();
@@ -99,6 +99,32 @@ public class Fragment_googlemaps_ruta extends Fragment{
         	CameraUpdate camUpd1 = CameraUpdateFactory.newLatLngZoom(new LatLng(lat,lon), 15);
             mapa.moveCamera(camUpd1);
         }
+        
+        endLoc = direccion;
+		
+		//Parseo de String destino a GeoPoint.
+		Geocoder geoCoder = new Geocoder(getActivity().getApplicationContext() , Locale.getDefault());     
+        List<Address> address;
+        double latitude = 0;
+        double longitude = 0;
+		try {
+			address = geoCoder.getFromLocationName(endLoc, 1);
+			latitude = address.get(0).getLatitude();
+	        longitude = address.get(0).getLongitude();  
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		GeoPoint startPoint = new GeoPoint(getMyLocation());
+		
+		start = new LatLng(startPoint.getLatitude(), startPoint.getLongitude());
+		end = new LatLng(latitude, longitude);
+		mapa.addMarker(new MarkerOptions()
+		.position(new LatLng(end.latitude,end.longitude))
+		.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+		.title("Destino"));
+		new GetDirection().execute();
 	}
 	
 	public void refresh(){
@@ -161,35 +187,7 @@ public class Fragment_googlemaps_ruta extends Fragment{
 	//	myLocationOverlay.disableCompass();
 	}
 	
-	private android.view.View.OnClickListener listener_ruta = new View.OnClickListener() {
-
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			endLoc = endRoute.getText().toString();
-			
-			//Parseo de String destino a GeoPoint.
-			Geocoder geoCoder = new Geocoder(getActivity().getApplicationContext() , Locale.getDefault());     
-	        List<Address> address;
-	        double latitude = 0;
-	        double longitude = 0;
-			try {
-				address = geoCoder.getFromLocationName(endLoc, 1);
-				latitude = address.get(0).getLatitude();
-		        longitude = address.get(0).getLongitude();  
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			GeoPoint startPoint = new GeoPoint(getMyLocation());
-			
-			start = new LatLng(startPoint.getLatitude(), startPoint.getLongitude());
-			end = new LatLng(latitude, longitude);
-			new GetDirection().execute();
-		}
-		
-	};
+	
 	
 	class GetDirection extends AsyncTask<String, String, String> {
 
@@ -248,7 +246,7 @@ public class Fragment_googlemaps_ruta extends Fragment{
             for (int i = 0; i < polyz.size() - 1; i++) {
                 LatLng src = polyz.get(i);
                 LatLng dest = polyz.get(i + 1);
-                Polyline line = mapa.addPolyline(new PolylineOptions()
+				Polyline line = mapa.addPolyline(new PolylineOptions()
                         .add(new LatLng(src.latitude, src.longitude),
                                 new LatLng(dest.latitude, dest.longitude))
                         .width(5).color(Color.CYAN).geodesic(true));
