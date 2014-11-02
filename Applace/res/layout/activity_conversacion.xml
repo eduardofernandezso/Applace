@@ -4,10 +4,11 @@
     android:layout_height="match_parent" >
     
     <ProgressBar
-        android:id="@+id/delete_bar1"
+        android:id="@+id/bar_send"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:visibility="invisible" />
     
     <LinearLayout
@@ -92,7 +93,7 @@
             android:layout_margin="10dp" >
 
             <EditText
-                android:id="@+id/editText1"
+                android:id="@+id/msje_new"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -100,7 +101,7 @@
                 android:inputType="textMultiLine" />
 
             <ImageButton
-                android:id="@+id/imageButton1"
+                android:id="@+id/msje_send"
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:background="@color/blanco"

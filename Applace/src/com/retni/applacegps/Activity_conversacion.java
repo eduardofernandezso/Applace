@@ -4,28 +4,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.Shader.TileMode;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Vibrator;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.LayoutParams;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -33,6 +49,7 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.parse.DeleteCallback;
 import com.parse.GetDataCallback;
@@ -42,42 +59,51 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
+import com.retni.applacegps.R.color;
 
 public class Activity_conversacion extends ActionBarActivity{
 	
 	TextView user,mensaje,fecha,texto;
 	ImageView foto;
-	String id;
+	String idConv;
 	Bitmap fo;
 	Bitmap b;
 	String ide;
-	ProgressBar delete_bar1;
+	ProgressBar bar_send;
 	ImageView vis_img1, vis_img2, vis_temp;
 	List<ParseObject> convers, convers4, date;
 	LinearLayout conv_text;
-	
-	Bitmap imgMia, imgOtro;
-	String nomMio="yo", nomOtro="otro";
+	EditText msje_new;
+	ImageButton msje_send;
+
+	String nomMio="yo", nomOtro="otro", idMia, idOtro;
+	String idMsje, fechaMsje;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_conversacion);
 		
-		delete_bar1 = (ProgressBar) findViewById(R.id.delete_bar1);
+		bar_send = (ProgressBar) findViewById(R.id.bar_send);
 		foto = (ImageView) findViewById(R.id.lafoto);
 		user = (TextView) findViewById(R.id.elnombre);
 		mensaje = (TextView) findViewById(R.id.elmensaje);
 		fecha = (TextView) findViewById(R.id.lafecha);
-		//texto = (TextView) findViewById(R.id.eltexto);
 		conv_text = (LinearLayout) findViewById(R.id.conv_text);
+		msje_new = (EditText) findViewById(R.id.msje_new);
+		msje_send = (ImageButton) findViewById(R.id.msje_send);
 		
-		Intent in = getIntent();
+		msje_send.setOnClickListener(listener);
 		
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+		
+		Intent in = getIntent();		
 		nomOtro = in.getStringExtra("nomOtro");
 		user.setText(nomOtro);
 		fecha.setText(in.getStringExtra("fecha"));
 		fo = (Bitmap) in.getParcelableExtra("fotOtro");
-		id = in.getStringExtra("idConv");
+		idConv = in.getStringExtra("idConv");
+		idOtro = in.getStringExtra("idOtros");
 		
 		BitmapFactory.Options options=new BitmapFactory.Options();// Create object of bitmapfactory's option method for further option use
         options.inPurgeable = true; // inPurgeable is used to free up memory while required
@@ -87,29 +113,12 @@ public class Activity_conversacion extends ActionBarActivity{
 		Parse.initialize(this, "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");
 		ParseUser user = new ParseUser();
         user = ParseUser.getCurrentUser();
+        idMia = user.getObjectId();
         
-        nomMio = user.getString("NombreCompleto");
-        
-        ParseFile img = user.getParseFile("Foto");	
-		if(img != null){
-			img.getDataInBackground(new GetDataCallback() {
-		    	Bitmap bmp = null;
-		        public void done(byte[] data, com.parse.ParseException e) {
-		            if (e == null){
-		                bmp = BitmapFactory.decodeByteArray(data, 0, data.length);	
-		                imgMia = bmp;
-		            }
-		            else{
-		            	Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-		            }
-		        }
-		    }); 
-		} else{
-			Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-		}		
+        nomMio = user.getString("NombreCompleto");        
 		        	
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Mensaje");
-        query.whereEqualTo("id_conversacion", id);
+        query.whereEqualTo("id_conversacion", idConv);
 		query.orderByAscending("_created_at");
 
 		try {
@@ -119,29 +128,172 @@ public class Activity_conversacion extends ActionBarActivity{
         if(convers.size() != 0){
         	ParseObject conv = null;
 			for(int i=0 ; i<convers.size() ; i++){	
-				conv = convers.get(i);				
+				conv = convers.get(i);		
+				idMsje = conv.getObjectId();
+				fechaMsje = conv.getUpdatedAt().toLocaleString();
 				
-				TextView tv=new TextView(this);
+				final TextView tv=new TextView(this);
 				TextView nom=new TextView(this);
+				final TextView fe = new TextView(this);
+				fe.setText(fechaMsje);
+				fe.setTextSize(10);
+				fe.setTextColor(Color.GRAY);
 				tv.setText(conv.getString("Mensaje"));
 				nom.setTextSize(18);
 				tv.setTextSize(18);
 				nom.setPadding(0, 10, 0, 0);
-				tv.setPadding(0, 0, 0, 10);
+				//tv.setPadding(0, 0, 0, 10);	
+				fe.setPadding(0, 0, 0, 10);
 				nom.setTypeface(null, Typeface.BOLD);
 				
 				if(conv.getString("id_envia").matches(user.getObjectId())){	
 					nom.setText(nomMio+":");
 					nom.setGravity(Gravity.RIGHT);
-					tv.setGravity(Gravity.RIGHT);		
+					tv.setGravity(Gravity.RIGHT);
+					fe.setGravity(Gravity.RIGHT);
 				} else{
 					nom.setText(nomOtro+":");
 				}
+				
 				conv_text.addView(nom);
-				conv_text.addView(tv);				
-			}
+				conv_text.addView(tv);		
+				conv_text.addView(fe);
+				
+				tv.setOnLongClickListener(new OnLongClickListener() {
+			        @Override
+			        public boolean onLongClick(View vi) {
+			            // TODO Auto-generated method stub
+			        	Vibrator h = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+			        	h.vibrate(25);
+			        	
+			        	AlertDialog.Builder dialog = new AlertDialog.Builder(Activity_conversacion.this);  
+		    	        dialog.setTitle("Mensaje");		
+		    	        dialog.setIcon(R.drawable.ic_launcher);	
+		    	        
+		    	        String[] opcionesMenu;
+		    	        opcionesMenu = new String[] {"Copiar texto", "Reenviar", "Eliminar"};		    	        
+		    	        
+		    	        View v = getLayoutInflater().inflate( R.layout.dialog_mensaje, null );
+		    	        ListView list = (ListView) v.findViewById(R.id.dialog_list);
+		    	        //TextView text = (TextView) v.findViewById(R.id.dialog_text);
+		    	        //text.setText("¿Desea borrar de forma permanente este mensaje?");
+		    	        list.setAdapter(new ArrayAdapter<String>(
+		    	                getSupportActionBar().getThemedContext(),
+		    	            android.R.layout.simple_list_item_activated_1, opcionesMenu));
+		    			
+		    	        dialog.setView(v);
+		    	        list.setOnItemClickListener(new OnItemClickListener() {
+		    	            @Override
+		    	            public void onItemClick(AdapterView<?> parent, View view,
+		    	                    int position, long id) {
+		    	     
+		    	                switch (position) {
+		    	                    case 0: //copiar texto
+		    	                    	ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE); 
+		    	                    	ClipData clip = ClipData.newPlainText("label", tv.getText().toString());
+		    	                    	clipboard.setPrimaryClip(clip);
+		    	                    	
+		    	                    	Toast.makeText( getApplicationContext(),"Copiado al portapapeles",Toast.LENGTH_SHORT ).show();
+		    	                    	break;
+		    	                    case 1: //reenviar
+		    	                    	Toast.makeText( getApplicationContext(),"reenviar",Toast.LENGTH_SHORT ).show();
+		    	                    	break;
+		    	                    case 2: //eliminar
+		    	                    	
+		    	                    	AlertDialog.Builder dialog2 = new AlertDialog.Builder(Activity_conversacion.this);  
+		    			    	        dialog2.setTitle("¿Eliminar mensaje?");		
+		    			    	        dialog2.setIcon(R.drawable.ic_launcher);	
+		    			    	        
+		    			    	        View v = getLayoutInflater().inflate( R.layout.dialog, null );
+		    			    	        TextView text = (TextView) v.findViewById(R.id.dialog_text);
+		    			    	        text.setText("Una vez eliminado el mensaje, no se puede volver a restaurar.");
+		    			    	        dialog2.setView(v);		    			    	        
+		    			    	        dialog2.setNegativeButton("Cancelar", null);  
+		    			    	        dialog2.setPositiveButton("Eliminar mensaje", new DialogInterface.OnClickListener() {  
+		    			    	            public void onClick(DialogInterface dialogo1, int id) {
+		    			    	            	bar_send.setVisibility(View.VISIBLE);
+		    			    	            	Toast.makeText( getApplicationContext(),"Eliminando mensaje...",Toast.LENGTH_SHORT ).show();
+		    			    	            	ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Mensaje");
+		    			    	        		query.whereEqualTo("objectId", idMsje);
+		    			    	        		
+		    			    	        		List<ParseObject> obj = null;
+		    			    	        		try {
+		    			    	        			obj = query.find();
+		    			    	        		} catch (ParseException e) {
+		    			    	        		}
+		    			    	        		if(obj.size()!=0){
+		    			    	        			obj.get(0).deleteInBackground(new DeleteCallback() {
+		    			    	        				public void done(ParseException e) {
+		    			    	        				    if (e == null) {	
+		    			    	        				    	bar_send.setVisibility(View.INVISIBLE);
+		    			    	        				    	Toast.makeText( getApplicationContext(),"Mensaje eliminado correctamente!",Toast.LENGTH_SHORT ).show();
+		    			    	        				    	Intent intent = getIntent();
+		    			    	        				    	finish();
+		    			    	        				    	startActivity(intent);
+		    			    	        				    } else{
+		    			    	        				    	Toast.makeText(getApplicationContext(), "Error al borrar el mensaje, por favor intente nuevamente.", Toast.LENGTH_SHORT).show();
+		    			    	        				    }
+		    			    	        				}
+		    			    	        		    });
+		    			    	        		}                    	
+		    			    	            }  
+		    			    	        });  
+		    			    	        
+		    			    	        dialog2.show();
+		    	                    	
+		    	                    	break;
+		    	                }
+		    	            }
+		    	        });	    	        
+		    	        
+		    	        dialog.show();
+			        	return false;
+			        }
+			    });
+			}			
         }
-	}	
+	}
+	
+	private OnClickListener listener = new OnClickListener(){
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			int id = v.getId();
+			if (id == R.id.msje_send) {				
+				bar_send.setVisibility(View.VISIBLE);
+				ParseObject msje = new ParseObject("Mensaje");
+				msje.put("Mensaje", msje_new.getText().toString());
+				msje.put("id_conversacion", idConv);
+				msje.put("id_envia", idMia);
+				msje.put("id_recibe", idOtro);
+				
+				msje.saveInBackground(new SaveCallback() {
+					public void done(ParseException e) {
+					    if (e == null) {	
+					    	bar_send.setVisibility(View.INVISIBLE);
+					    	TextView tv2=new TextView(Activity_conversacion.this);
+							TextView nom2=new TextView(Activity_conversacion.this);
+							tv2.setText(msje_new.getText().toString());
+							nom2.setTextSize(18);
+							tv2.setTextSize(18);
+							nom2.setPadding(0, 10, 0, 0);
+							tv2.setPadding(0, 0, 0, 10);				
+							nom2.setTypeface(null, Typeface.BOLD);		
+							nom2.setText(nomMio+":");
+							nom2.setGravity(Gravity.RIGHT);
+							tv2.setGravity(Gravity.RIGHT);		
+							conv_text.addView(nom2);
+							conv_text.addView(tv2);
+							msje_new.setText("");
+							Toast.makeText( getApplicationContext(),"Mensaje enviado con éxito!",Toast.LENGTH_SHORT ).show();
+					    } else{
+					    	Toast.makeText(getApplicationContext(), "Error al ingresar el alojamiento, por favor intente nuevamente.", Toast.LENGTH_SHORT).show();
+					    }
+					}
+			    });			
+			}			
+		}
+	};
 	
 	public void loadBitmap(Bitmap b) {
 		vis_temp.setImageBitmap(circle(b));
@@ -206,7 +358,7 @@ public class Activity_conversacion extends ActionBarActivity{
     	        dialog.setNegativeButton("Cancelar", null);  
     	        dialog.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {  
     	            public void onClick(DialogInterface dialogo1, int id) {
-    	            	delete_bar1.setVisibility(View.VISIBLE);
+    	            	bar_send.setVisibility(View.VISIBLE);
     	            	Toast.makeText( getApplicationContext(),"Eliminando mensaje...",Toast.LENGTH_SHORT ).show();
     	            	ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Mensajes");
     	        		query.whereEqualTo("objectId", ide);
@@ -220,7 +372,7 @@ public class Activity_conversacion extends ActionBarActivity{
     	        			obj.get(0).deleteInBackground(new DeleteCallback() {
     	        				public void done(ParseException e) {
     	        				    if (e == null) {	
-    	        				    	delete_bar1.setVisibility(View.INVISIBLE);
+    	        				    	bar_send.setVisibility(View.INVISIBLE);
     	        				    	Toast.makeText( getApplicationContext(),"Mensaje eliminado correctamente!",Toast.LENGTH_SHORT ).show();
     	        				    	Intent i = new Intent(Activity_conversacion.this,Activity_tabmensajes.class);
     	        				    	startActivity(i);
