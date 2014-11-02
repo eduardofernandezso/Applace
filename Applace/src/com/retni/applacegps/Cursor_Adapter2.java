@@ -1,6 +1,5 @@
 package com.retni.applacegps;
 
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 import android.content.Context;
 import android.content.Intent;
@@ -10,8 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 public class Cursor_Adapter2 extends BaseAdapter{
@@ -24,11 +23,12 @@ public class Cursor_Adapter2 extends BaseAdapter{
     int id;
     List<String> id_aloj;
     int pos = 0;
+    Integer delete;
     
     @SuppressWarnings("unused")
 	private static LayoutInflater inflater = null;
 
-    public Cursor_Adapter2(Context context, List<String> titulos, List<String> mensajes, List<Bitmap> fotos,List<String> fechas,int id, List<String> id_aloj) {
+    public Cursor_Adapter2(Context context, List<String> titulos, List<String> mensajes, List<Bitmap> fotos,List<String> fechas,int id, List<String> id_aloj, Integer delete) {
         // TODO Auto-generated constructor stub
         this.context = context;
         this.titulos = titulos;
@@ -37,6 +37,7 @@ public class Cursor_Adapter2 extends BaseAdapter{
         this.fechas = fechas;
         this.id_aloj = id_aloj;
         this.id = id;
+        this.delete = delete;
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -68,10 +69,14 @@ public class Cursor_Adapter2 extends BaseAdapter{
 	    	convertView = inflater.inflate(R.layout.fragment_mensajes_row, null); 
 	    }
     	
-	    final TextView titulo = (TextView)convertView.findViewById(R.id.row_titulo1);
+    	final CheckBox borrar = (CheckBox)convertView.findViewById(R.id.msje_delete);
+    	final TextView titulo = (TextView)convertView.findViewById(R.id.row_titulo1);
 	    final TextView precio = (TextView)convertView.findViewById(R.id.row_precio1);
 	    final ImageView img = (ImageView)convertView.findViewById(R.id.row_img1);
 
+	    if(delete == 1){
+	    	borrar.setVisibility(View.VISIBLE);
+	    }
 	    
 	    if(fotos.size() != 0 ){	    	
 	    	img.setImageBitmap(fotos.get(position));
@@ -83,9 +88,6 @@ public class Cursor_Adapter2 extends BaseAdapter{
 	    if(mensajes.size()!=0){
 	    	precio.setText(mensajes.get(position));
 	    }
-	  
-	   
-	    
         convertView.setOnClickListener(new OnClickListener(){        	
 			public void onClick(View v) {
 				Integer pos = (Integer) v.getTag();
@@ -103,9 +105,6 @@ public class Cursor_Adapter2 extends BaseAdapter{
 				else if(id==2)intent.putExtra("id", 2);
 				//intent.putExtra("byteArray", bs.toByteArray());
 				context.startActivity(intent);
-
-				
-	
 			}		
 		});        
         return convertView;

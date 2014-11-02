@@ -63,7 +63,7 @@ public class Fragment_listaAloj extends Fragment{
         user = ParseUser.getCurrentUser();
         
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Alojamiento");
-		query.whereEqualTo("User", user.getEmail());
+		query.whereEqualTo("User", user.getObjectId());
 		query.orderByDescending("_created_at");
 
 		try {

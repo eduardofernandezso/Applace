@@ -57,11 +57,15 @@ public class Fragment_mensajes2 extends Fragment{
 	@Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);   
+        
+        Bundle bundle = getArguments();
+        Integer delete = bundle.getInt("delete",0);
 
         list_bar = (ProgressBar) getActivity().findViewById(R.id.list_bar1);
         msje = (TextView) getActivity().findViewById(R.id.list_mens);
         
-        list_bar.setVisibility(View.VISIBLE);        Parse.initialize(getActivity(), "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");
+        list_bar.setVisibility(View.VISIBLE);        
+        Parse.initialize(getActivity(), "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");
         ParseUser user = new ParseUser();
         user = ParseUser.getCurrentUser();
         
@@ -115,7 +119,7 @@ public class Fragment_mensajes2 extends Fragment{
 			}		
 			     
 			list_mens = (ListView) getActivity().findViewById(R.id.list_men);
-	        list_mens.setAdapter(new Cursor_Adapter2(getActivity(), titulos, mensaje, fotos,fechas,2,id_aloj));        
+	        list_mens.setAdapter(new Cursor_Adapter2(getActivity(), titulos, mensaje, fotos,fechas,2,id_aloj,delete));        
 	        list_bar.setVisibility(View.INVISIBLE);        
 		}
 	}

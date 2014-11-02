@@ -23,7 +23,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Exampleapplace" >
+        android:theme="@style/Theme.Applace_tab" >
 
         <activity
             android:name="com.retni.applacegps.SplashScreenActivity"
@@ -86,7 +86,13 @@
             android:name="com.retni.applacegps.Activity_verAlojamiento">
         </activity>
         <activity
+            android:name="com.retni.applacegps.Activity_conversacion">
+        </activity>
+        <activity
             android:name="com.retni.applacegps.Activity_tabmensajes">
+        </activity>
+        <activity
+            android:name="com.retni.applacegps.Activity_mensajes">
         </activity>
         <activity
             android:name="com.retni.applacegps.Enviados">

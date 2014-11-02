@@ -163,7 +163,7 @@ public class Logueado extends ActionBarActivity{
                     	fragment = new Fragment_googlemaps_ruta();
                     	break;
                     case 6:
-                    	Intent i2 = new Intent(Logueado.this,Activity_tabmensajes.class);
+                    	Intent i2 = new Intent(Logueado.this,Activity_mensajes.class);
                     	startActivity(i2);
                     	overridePendingTransition(R.anim.left_in, R.anim.left_out);
                     	break;
@@ -192,11 +192,12 @@ public class Logueado extends ActionBarActivity{
                 if (fragment != null){
                 	FragmentManager fragmentManager =
                             getSupportFragmentManager();
+                	String tag = fragment.getTag();
              
-                        fragmentManager.beginTransaction()
-                            .replace(R.id.content_frame, fragment)
-                            .addToBackStack(null)
-                            .commit();
+                    fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, fragment,tag)
+                        .addToBackStack(tag)
+                        .commit();
                 	
                 }               
      
@@ -231,6 +232,8 @@ public class Logueado extends ActionBarActivity{
 		menu.findItem(R.id.action_camara).setVisible(false);
 		menu.findItem(R.id.action_delete).setVisible(false);
 		menu.findItem(R.id.action_new).setVisible(false);
+		
+		getSupportActionBar().setTitle("Applace");
 		
 		boolean menuAbierto = drawerLayout.isDrawerOpen(drawerList);
 		 

@@ -8,6 +8,13 @@
         android:layout_height="76dp"
         android:layout_margin="5dp">
 
+        <CheckBox
+            android:id="@+id/msje_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
         <ImageView
             android:id="@+id/row_img1"
             android:layout_width="100dp"

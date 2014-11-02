@@ -502,7 +502,7 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 	};
 	
 	public void loadBitmap(Bitmap b) {
-		vis_temp.setImageBitmap(circle(Bitmap.createScaledBitmap(b, 120, 120, false)));
+		vis_temp.setImageBitmap(circle(Bitmap.createScaledBitmap(b, 150, 150, false)));
 	}
 	
 	public void unloadBitmap() {

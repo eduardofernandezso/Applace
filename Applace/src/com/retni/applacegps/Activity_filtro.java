@@ -13,13 +13,19 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.ViewTreeObserver.OnScrollChangedListener;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -48,7 +54,6 @@ public class Activity_filtro extends ActionBarActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_filtro);  		
 		
-
 		ch_cocina = (CheckBox) findViewById(R.id.ch_cocina);
 		ch_internet = (CheckBox) findViewById(R.id.ch_internet);
 		ch_tv = (CheckBox) findViewById(R.id.ch_tv);
@@ -263,4 +268,28 @@ public class Activity_filtro extends ActionBarActivity{
 		}
 		return super.onKeyDown(keyCode, event);
 	}
+	
+	public boolean onTouchEvent(MotionEvent event) {
+	    int eventaction = event.getAction();
+
+	    switch (eventaction) {
+	        case MotionEvent.ACTION_DOWN: 
+	            // finger touches the screen
+	            break;
+
+	        case MotionEvent.ACTION_MOVE:
+	        	filtrar.setVisibility(View.GONE);
+	        	//Toast.makeText(this, "Desplaza", Toast.LENGTH_SHORT).show();
+	            // finger moves on the screen
+	            break;
+
+	        case MotionEvent.ACTION_UP:   
+	            // finger leaves the screen
+	            break;
+	    }
+
+	    // tell the system that we handled the event and no further processing is required
+	    return true; 
+	}
+	
 }

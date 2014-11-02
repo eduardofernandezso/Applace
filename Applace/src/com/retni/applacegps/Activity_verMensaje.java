@@ -1,18 +1,19 @@
 package com.retni.applacegps;
 
-import java.io.ByteArrayOutputStream;
 import java.util.List;
-
 import com.parse.DeleteCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Shader.TileMode;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -32,6 +33,8 @@ public class Activity_verMensaje extends ActionBarActivity{
 	Bitmap b;
 	String ide;
 	ProgressBar delete_bar1;
+	ImageView vis_img1, vis_img2, vis_temp;
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_vermensajes);
@@ -42,6 +45,7 @@ public class Activity_verMensaje extends ActionBarActivity{
 		mensaje = (TextView) findViewById(R.id.elmensaje);
 		fecha = (TextView) findViewById(R.id.lafecha);
 		texto = (TextView) findViewById(R.id.eltexto);
+		
 		Intent in = getIntent();
 		user.setText(in.getStringExtra("usuario"));
 		mensaje.setText(in.getStringExtra("mensaje"));
@@ -49,10 +53,42 @@ public class Activity_verMensaje extends ActionBarActivity{
 		fo = (Bitmap) in.getParcelableExtra("imagen");
 		id = in.getIntExtra("id", 0);
 		ide = in.getStringExtra("ide");
-		foto.setImageBitmap(fo);
+		
+		BitmapFactory.Options options=new BitmapFactory.Options();// Create object of bitmapfactory's option method for further option use
+        options.inPurgeable = true; // inPurgeable is used to free up memory while required
+	    
+        setImage(foto, fo);	
 		if(id==1) texto.setText("Le Escribiste: ");
 		else if (id==2) texto.setText("Te Escribió: ");
 	}
+	
+	public void loadBitmap(Bitmap b) {
+		vis_temp.setImageBitmap(circle(Bitmap.createScaledBitmap(b, 200, 200, false)));
+	}
+	
+	public void unloadBitmap() {
+	   if (vis_temp != null)
+		   vis_temp.setImageBitmap(null);
+	}
+	
+	public void setImage(ImageView i, Bitmap sourceid) {
+		vis_temp = i;
+		unloadBitmap();	   
+		loadBitmap(sourceid);
+	}
+	
+	public Bitmap circle(Bitmap bit){
+		Bitmap circleBitmap = Bitmap.createBitmap(bit.getWidth(), bit.getHeight(), Bitmap.Config.ARGB_8888);
+	    BitmapShader shader = new BitmapShader (bit,  TileMode.CLAMP, TileMode.CLAMP);
+	    Paint paint = new Paint();
+	    paint.setShader(shader);
+	    
+	    Canvas c = new Canvas(circleBitmap);
+	    c.drawCircle(bit.getWidth()/2, bit.getHeight()/2, bit.getWidth()/2, paint);
+		
+		return circleBitmap;
+	}
+	
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);		
 		
@@ -91,7 +127,6 @@ public class Activity_verMensaje extends ActionBarActivity{
     	            public void onClick(DialogInterface dialogo1, int id) {
     	            	delete_bar1.setVisibility(View.VISIBLE);
     	            	Toast.makeText( getApplicationContext(),"Eliminando mensaje...",Toast.LENGTH_SHORT ).show();
-    	            	//Acá se elimina el alojamiento de la base de datos
     	            	ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Mensajes");
     	        		query.whereEqualTo("objectId", ide);
     	        		
