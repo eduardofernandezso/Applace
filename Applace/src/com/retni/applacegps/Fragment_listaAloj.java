@@ -11,6 +11,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.retni.applacegps.Fragment_conversaciones.Cursor_AdapterConv;
 
+import android.app.ActionBar.LayoutParams;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -22,12 +24,18 @@ import android.graphics.Shader.TileMode;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
@@ -50,7 +58,8 @@ public class Fragment_listaAloj extends Fragment{
 	List<ParseObject> alojamientos2;
 	
 	ProgressBar list_bar;
-
+	
+	TransparentProgressDialog pd;
 	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,8 +77,42 @@ public class Fragment_listaAloj extends Fragment{
         super.onActivityCreated(savedInstanceState);   
 
         msje = (TextView) getActivity().findViewById(R.id.list_mensaje);
+        pd = new TransparentProgressDialog(getActivity(), R.drawable.prog_applace);
         
         updateList();
+	}
+	
+	private class TransparentProgressDialog extends Dialog {
+		
+		private ImageView iv;
+			
+		public TransparentProgressDialog(Context context, int resourceIdOfImage) {
+			super(context, R.style.TransparentProgressDialog);
+	        	WindowManager.LayoutParams wlmp = getWindow().getAttributes();
+	        	wlmp.gravity = Gravity.CENTER_HORIZONTAL;
+	        	getWindow().setAttributes(wlmp);
+			setTitle(null);
+			setCancelable(false);
+			setOnCancelListener(null);
+			LinearLayout layout = new LinearLayout(context);
+			layout.setOrientation(LinearLayout.VERTICAL);
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+			iv = new ImageView(context);
+			iv.setImageResource(resourceIdOfImage);
+			layout.addView(iv, params);
+			addContentView(layout, params);
+		}
+			
+		@Override
+		public void show() {
+			super.show();
+			RotateAnimation anim = new RotateAnimation(0.0f, 360.0f , Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f);
+			anim.setInterpolator(new LinearInterpolator());
+			anim.setRepeatCount(Animation.INFINITE);
+			anim.setDuration(3000);					
+			iv.setAnimation(anim);
+			iv.startAnimation(anim);
+		}
 	}
 	
 	private void updateList() {
@@ -82,7 +125,8 @@ public class Fragment_listaAloj extends Fragment{
             protected void onPreExecute() {
                 // TODO Auto-generated method stub
                 super.onPreExecute();
-                list_bar.setVisibility(View.VISIBLE);                
+                //list_bar.setVisibility(View.VISIBLE);        
+                pd.show();
             }
             
             protected Void doInBackground(Void... params) {
@@ -141,7 +185,11 @@ public class Fragment_listaAloj extends Fragment{
             }
 
             protected void onPostExecute(Void result) {
-            	list_bar.setVisibility(View.GONE); 
+            	//list_bar.setVisibility(View.GONE); 
+            	
+            	if (pd.isShowing() ) {
+        			pd.dismiss();
+        		}
 
                 //Custom Adapter for ListView
             	BaseAdapter listAdapter = new Cursor_AdapterList(getActivity(), titulos, precios, fotos, rating, count_rating, id_aloj);
