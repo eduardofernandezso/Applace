@@ -10,15 +10,22 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.ViewTreeObserver.OnScrollChangedListener;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -47,7 +54,6 @@ public class Activity_filtro extends ActionBarActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_filtro);  		
 		
-
 		ch_cocina = (CheckBox) findViewById(R.id.ch_cocina);
 		ch_internet = (CheckBox) findViewById(R.id.ch_internet);
 		ch_tv = (CheckBox) findViewById(R.id.ch_tv);
@@ -216,22 +222,21 @@ public class Activity_filtro extends ActionBarActivity{
         	
         }
         
-       // query.findInBackground(new FindCallback <ParseObject>() {
-         // @Override
-         // public void done(List<ParseObject> objects, ParseException e) {
-           if (objects == null) Toast.makeText(getApplicationContext(),
-        		   "No Existen Alojamientos Cercanos con las especificaciones dadas" , Toast.LENGTH_SHORT).show();
-           else {
-            	int i=0;
-            	int size = objects.size();
-            	ParseObject filtrados = null;
-            	for(i=0;i<size;i++){
-            		filtrados = objects.get(i);
-            		la.add(filtrados.getDouble("dir_latitud"));
-            		lo.add(filtrados.getDouble("dir_longitud"));
-            	}
-           }
-
+        // query.findInBackground(new FindCallback <ParseObject>() {
+        // @Override
+        // public void done(List<ParseObject> objects, ParseException e) {
+        if (objects == null) Toast.makeText(getApplicationContext(),
+    		   "No Existen Alojamientos Cercanos con las especificaciones dadas" , Toast.LENGTH_SHORT).show();
+        else {
+        	int i=0;
+        	int size = objects.size();
+        	ParseObject filtrados = null;
+        	for(i=0;i<size;i++){
+        		filtrados = objects.get(i);
+        		la.add(filtrados.getDouble("dir_latitud"));
+        		lo.add(filtrados.getDouble("dir_longitud"));
+        	}
+        }
 	}
 	
 	private OnClickListener listener = new OnClickListener(){
@@ -242,8 +247,7 @@ public class Activity_filtro extends ActionBarActivity{
 			if (id == R.id.but_filtrar) {
 				saveNewAlojamiento();
 				
-				irse();
-				
+				irse();				
 			}
 		}
 	};
@@ -252,8 +256,40 @@ public class Activity_filtro extends ActionBarActivity{
 		Intent intent = new Intent(Activity_filtro.this, Logueado.class );
 		intent.putExtra("latis", la);
 		intent.putExtra("longis", lo);
-		intent.putExtra("flag",1);
-		
+		intent.putExtra("flag",1);		
 		startActivity(intent);
+		overridePendingTransition(R.anim.right_in, R.anim.right_out);
 	}
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch(keyCode){
+			case KeyEvent.KEYCODE_BACK:
+				startActivity(new Intent(this, Logueado.class));
+				overridePendingTransition(R.anim.right_in, R.anim.right_out);
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+	
+	public boolean onTouchEvent(MotionEvent event) {
+	    int eventaction = event.getAction();
+
+	    switch (eventaction) {
+	        case MotionEvent.ACTION_DOWN: 
+	            // finger touches the screen
+	            break;
+
+	        case MotionEvent.ACTION_MOVE:
+	        	filtrar.setVisibility(View.GONE);
+	        	//Toast.makeText(this, "Desplaza", Toast.LENGTH_SHORT).show();
+	            // finger moves on the screen
+	            break;
+
+	        case MotionEvent.ACTION_UP:   
+	            // finger leaves the screen
+	            break;
+	    }
+
+	    // tell the system that we handled the event and no further processing is required
+	    return true; 
+	}
+	
 }
