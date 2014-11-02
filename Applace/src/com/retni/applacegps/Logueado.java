@@ -117,6 +117,7 @@ public class Logueado extends ActionBarActivity{
         
         //Fragment fragment = new Fragment_mapa();
         Fragment fragment = new Fragment_googlemaps();
+        String tag = fragment.getTag();
 
         /*
         Bundle j = new Bundle();
@@ -125,7 +126,8 @@ public class Logueado extends ActionBarActivity{
         j.putInt("flag", 0);
         fragment.setArguments(j);*/
         
-        ft.replace(R.id.content_frame, fragment);
+        ft.replace(R.id.content_frame, fragment, tag);
+        ft.addToBackStack(tag);
         ft.commit(); 
         
         drawerList.setOnItemClickListener(new OnItemClickListener() {
@@ -142,6 +144,7 @@ public class Logueado extends ActionBarActivity{
                         //fragment = new Fragment_inicio();
                     	intent = new Intent(Logueado.this, Activity_perfil.class );
 						startActivity(intent);
+						overridePendingTransition(R.anim.left_in, R.anim.left_out);
                         break;
                     case 1:
                     	//Carga el mapa
@@ -156,10 +159,20 @@ public class Logueado extends ActionBarActivity{
                     	fragment = new Fragment_listaAloj();
                     	break;                    
                     case 4:
+                    	Intent i = new Intent(Logueado.this, Activity_filtro.class );
+						startActivity(i);
+						overridePendingTransition(R.anim.left_in, R.anim.left_out);
+                    	break;
+                    case 5:
                     	//Pregunta por ruta
                     	fragment = new Fragment_googlemaps_ruta();
                     	break;
-                    case 5:
+                    case 6:
+                    	Intent i2 = new Intent(Logueado.this,Activity_mensajes.class);
+                    	startActivity(i2);
+                    	overridePendingTransition(R.anim.left_in, R.anim.left_out);
+                    	break;
+                    case 7:
                     	AlertDialog.Builder dialog = new AlertDialog.Builder(Logueado.this);  
             	        dialog.setTitle("Cerrar Sesión");		
             	        dialog.setIcon(R.drawable.ic_launcher);	
@@ -184,11 +197,12 @@ public class Logueado extends ActionBarActivity{
                 if (fragment != null){
                 	FragmentManager fragmentManager =
                             getSupportFragmentManager();
+                	String tag = fragment.getTag();
              
-                        fragmentManager.beginTransaction()
-                            .replace(R.id.content_frame, fragment)
-                            .addToBackStack(null)
-                            .commit();
+                    fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, fragment,tag)
+                        .addToBackStack(tag)
+                        .commit();
                 	
                 }               
      
@@ -226,6 +240,8 @@ public class Logueado extends ActionBarActivity{
 		menu.findItem(R.id.action_delete).setVisible(false);
 		menu.findItem(R.id.action_new).setVisible(false);
 		
+		getSupportActionBar().setTitle("Applace");
+		
 		boolean menuAbierto = drawerLayout.isDrawerOpen(drawerList);
 		 
 	    if(menuAbierto){
@@ -251,6 +267,7 @@ public class Logueado extends ActionBarActivity{
 	        case R.id.action_search:
 	        	Intent intent = new Intent(this, Activity_filtro.class );
 				startActivity(intent);
+				overridePendingTransition(R.anim.left_in, R.anim.left_out);
 	            break;
 
 	        case R.id.action_share:
@@ -273,8 +290,8 @@ public class Logueado extends ActionBarActivity{
 	public void onConfigurationChanged(Configuration newConfig) {
 	    super.onConfigurationChanged(newConfig);
 	    drawerToggle.onConfigurationChanged(newConfig);
-    }
-/*****************Salir*******************************/
+	}		
+	/*
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) { 
 	  if (keyCode == KeyEvent.KEYCODE_BACK) {AlertDialog.Builder dialog = new AlertDialog.Builder(Logueado.this);  
@@ -298,13 +315,23 @@ public class Logueado extends ActionBarActivity{
 	//para las demas cosas, se reenvia el evento al listener habitual
 	  return super.onKeyDown(keyCode, event);
 	}
+=======
+	*/
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch(keyCode){
+			case KeyEvent.KEYCODE_BACK:
+				Intent startMain = new Intent(Intent.ACTION_MAIN);
+	        	startMain.addCategory(Intent.CATEGORY_HOME);
+	        	startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	        	startActivity(startMain);
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 
-	/*****************Salir*******************************/	
 	@Override
 	protected void onDestroy() {
 	    super.onDestroy();
 	    finish();
-
 	}
 
 	@Override

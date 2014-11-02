@@ -40,8 +40,7 @@ public class Activity_tabmensajes extends TabActivity
 
                     Parse.initialize(this, "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");
                     ParseUser user = new ParseUser();
-                    user = ParseUser.getCurrentUser();
-                    
+                    user = ParseUser.getCurrentUser();                    
                     
                     ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Mensajes");
                     query.whereEqualTo("envia", user.getEmail());
@@ -103,8 +102,8 @@ public class Activity_tabmensajes extends TabActivity
         		menu.findItem(R.id.action_share).setVisible(false);
         		menu.findItem(R.id.action_update).setVisible(false);
         		menu.findItem(R.id.action_camara).setVisible(false);
-        		menu.findItem(R.id.action_delete).setVisible(false);
-        		menu.findItem(R.id.action_new).setVisible(true);
+        		menu.findItem(R.id.action_delete).setVisible(true);
+        		menu.findItem(R.id.action_new).setVisible(false);
         		
         		return true;
         	}
@@ -114,7 +113,8 @@ public class Activity_tabmensajes extends TabActivity
         		switch(item.getItemId())
         	    {
         	        case R.id.action_delete:
-        	        	Intent i = new Intent(Activity_tabmensajes.this,Activity_crearMen.class);
+        	        	Toast.makeText( getApplicationContext(),"Eliminando mensaje...",Toast.LENGTH_SHORT ).show();
+        	        	//Intent i = new Intent(Activity_tabmensajes.this,Logueado.class);
                     	break;
         	        default:
         	            return super.onOptionsItemSelected(item);
