@@ -19,6 +19,10 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.retni.applacegps.Fragment_listaAloj.Cursor_AdapterList;
+import android.app.Dialog;
+import android.app.ActionBar.LayoutParams;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,12 +30,21 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,18 +55,18 @@ public class Fragment_googlemaps extends Fragment{
 	List<ParseObject> alojamientos;
 	MarkerOptions markerOptions;
     LatLng latLng;
-    
+    ParseFile img = null;
     String id_alojamiento;
-    
+    int size_aloj = 0;
     String titulo, id_aloj;
 	Integer precio, count_ratings;
 	Boolean estado;
 	double latit, longi;
 	Float ratings;
-    Bitmap foto=null;
+	Bitmap foto;
     GeoPoint punto = null;
     Marker marker;
-    
+    TransparentProgressDialog pd;
     List<Bitmap> fotosi = new ArrayList<Bitmap>();
     List<ParseFile> fotos = new ArrayList<ParseFile>();
     
@@ -74,9 +87,11 @@ public class Fragment_googlemaps extends Fragment{
 	    private Integer mPrecio, mCount_rating;
 	    private Float mRating;
 	    private String id_aloja;
+	    private Bitmap mFoto;
 
-	    public MyMarker(String label, ParseFile icon, Double latitude, Double longitude, Boolean estado, Integer precio, Float rating, Integer count_rating, String id_aloja)
+	    public MyMarker(Bitmap foto, String label, ParseFile icon, Double latitude, Double longitude, Boolean estado, Integer precio, Float rating, Integer count_rating, String id_aloja)
 	    {
+	    	this.mFoto = foto;
 	        this.mLabel = label;
 	        this.mLatitude = latitude;
 	        this.mLongitude = longitude;
@@ -86,6 +101,15 @@ public class Fragment_googlemaps extends Fragment{
 	        this.mCount_rating = count_rating;
 	        this.mRating = rating;
 	        this.id_aloja = id_aloja;
+	    }
+	    public Bitmap getmFoto()
+	    {
+	        return mFoto;
+	    }
+
+	    public void setmFoto(Bitmap mFoto)
+	    {
+	        this.mFoto = mFoto;
 	    }
 
 	    public String getmLabel()
@@ -200,6 +224,7 @@ public class Fragment_googlemaps extends Fragment{
         super.onActivityCreated(savedInstanceState); 
         
         mapa = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+        pd = new TransparentProgressDialog(getActivity(), R.drawable.prog_applace);
         //mapa.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
 
         Location loc = getMyLocation();
@@ -224,43 +249,115 @@ public class Fragment_googlemaps extends Fragment{
 			Toast.makeText( getActivity().getApplicationContext(),"Error.",Toast.LENGTH_SHORT ).show();
 		}
 		
-		int size_aloj = 0;
+		
 		size_aloj = alojamientos.size();
 		
 		if (size_aloj == 0){
 			Toast.makeText( getActivity().getApplicationContext(),"No hay datos para cargar.",Toast.LENGTH_SHORT ).show();
 		} else{			
-			ParseObject aloj = null;
-			ParseFile img = null;
-			mMarkersHashMap = new HashMap<Marker, MyMarker>();
+			new AsyncTask<Void, Void, Void>() {
+
+	            protected void onPreExecute() {
+	                // TODO Auto-generated method stub
+	                super.onPreExecute();
+	                //list_bar.setVisibility(View.VISIBLE);        
+	                pd.show();
+	            }
+	            
+	            protected Void doInBackground(Void... params) {
+	            	ParseObject aloj = null;
+	    			
+	    			mMarkersHashMap = new HashMap<Marker, MyMarker>();
+	    			
+	    			for(int i=0 ; i < size_aloj ; i++){
+	    				aloj = alojamientos.get(i);
+	    				titulo = aloj.getString("titulo");
+	    				precio = aloj.getInt("precio");
+	    				latit = aloj.getDouble("dir_latitud");
+	    				longi = aloj.getDouble("dir_longitud");
+	    				estado = aloj.getBoolean("estado");
+	    				id_aloj = aloj.getObjectId();
+	    				ratings = (float) aloj.getDouble("calificacion");
+	    				count_ratings = aloj.getInt("count_calificacion");		
+	    				punto = new GeoPoint(latit, longi);
+	    				
+	    				img = aloj.getParseFile("foto");
+	    				if(img !=null){	    						
+		    		    	img.getDataInBackground(new GetDataCallback() {
+		    			    	Bitmap bmp = null;
+		    			        public void done(byte[] data, com.parse.ParseException e) {
+		    			            if (e == null){
+		    			                bmp = BitmapFactory.decodeByteArray(data, 0, data.length);	
+		    			                foto=bmp;
+		    			            }
+		    			            else{
+		    			            	Toast.makeText(getActivity().getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+		    			            }	
+		    			        }			        
+		    			    });
+		    		    
+	    				} else{
+        					Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+        				}
+	    				mMyMarkersArray.add(new MyMarker(foto, titulo, img, punto.getLatitude(), punto.getLongitude(), estado, precio, ratings, count_ratings, id_aloj));			
+	    			}
+	            	return null;
+	            }
+
+	            protected void onPostExecute(Void result) {
+	            	//list_bar.setVisibility(View.GONE); 
+	            	
+	            	if (pd.isShowing() ) {
+	        			pd.dismiss();
+	        		}
+	            	plotMarkers(mMyMarkersArray);
+	            }
+	        }.execute();
+							
 			
-			for(int i=0 ; i < size_aloj ; i++){
-				aloj = alojamientos.get(i);
-				titulo = aloj.getString("titulo");
-				precio = aloj.getInt("precio");
-				latit = aloj.getDouble("dir_latitud");
-				longi = aloj.getDouble("dir_longitud");
-				estado = aloj.getBoolean("estado");
-				id_aloj = aloj.getObjectId();
-				ratings = (float) aloj.getDouble("calificacion");
-				count_ratings = aloj.getInt("count_calificacion");		
-				punto = new GeoPoint(latit, longi);
-				
-				if(aloj.getParseFile("foto")!=null)
-					img = aloj.getParseFile("foto");	
-						
-				mMyMarkersArray.add(new MyMarker(titulo, img, punto.getLatitude(), punto.getLongitude(), estado, precio, ratings, count_ratings, id_aloj));				
-			}
 			//Toast.makeText(getActivity().getApplicationContext(), fotos.size()+"", Toast.LENGTH_SHORT).show();
-			plotMarkers(mMyMarkersArray);
+			
+		
 		}
-		
-		
+	
 	}
 	
-	private void plotMarkers(ArrayList<MyMarker> markers){
-	    if(markers.size() > 0){
-	        for (MyMarker myMarker : markers){
+private class TransparentProgressDialog extends Dialog {
+		
+		private ImageView iv;
+			
+		public TransparentProgressDialog(Context context, int resourceIdOfImage) {
+			super(context, R.style.TransparentProgressDialog);
+	        	WindowManager.LayoutParams wlmp = getWindow().getAttributes();
+	        	wlmp.gravity = Gravity.CENTER_HORIZONTAL;
+	        	getWindow().setAttributes(wlmp);
+			setTitle(null);
+			setCancelable(false);
+			setOnCancelListener(null);
+			LinearLayout layout = new LinearLayout(context);
+			layout.setOrientation(LinearLayout.VERTICAL);
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+			iv = new ImageView(context);
+			iv.setImageResource(resourceIdOfImage);
+			layout.addView(iv, params);
+			addContentView(layout, params);
+		}
+			
+		@Override
+		public void show() {
+			super.show();
+			RotateAnimation anim = new RotateAnimation(0.0f, 360.0f , Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f);
+			anim.setInterpolator(new LinearInterpolator());
+			anim.setRepeatCount(Animation.INFINITE);
+			anim.setDuration(3000);					
+			iv.setAnimation(anim);
+			iv.startAnimation(anim);
+		}
+	}
+	
+	private void plotMarkers(final ArrayList<MyMarker> markers){
+		if(markers.size() > 0){
+	        for (final MyMarker myMarker : markers){
 	        	MarkerOptions markerOption = new MarkerOptions().position(new LatLng(myMarker.getmLatitude(), myMarker.getmLongitude()));
 	        	
 	        	if(myMarker.getmEstado()==true)
@@ -272,11 +369,12 @@ public class Fragment_googlemaps extends Fragment{
 	            mMarkersHashMap.put(currentMarker, myMarker);
 	            //id_alojamiento = myMarker.getmId();
 	            currentMarker.setTitle(myMarker.getmId());
-	            mapa.setInfoWindowAdapter(new MarkerInfoWindowAdapter());	            
-	            mapa.setOnInfoWindowClickListener(listener);
-	            currentMarker.showInfoWindow();
-	        }	        
-	    }
+	            
+		        mapa.setInfoWindowAdapter(new MarkerInfoWindowAdapter());	            
+		        mapa.setOnInfoWindowClickListener(listener);
+			            //currentMarker.showInfoWindow();		            
+	        }
+		}
 	}
 	
 	private OnInfoWindowClickListener listener = new OnInfoWindowClickListener(){		
@@ -298,41 +396,23 @@ public class Fragment_googlemaps extends Fragment{
 	    }
 	    
 	    @Override
-	    public View getInfoContents(Marker marker) {
+	    public View getInfoContents(final Marker marker) {
 	        
 	        View v  = getActivity().getLayoutInflater().inflate(R.layout.fragment_list_aloj_row, null);
-	        MyMarker myMarker = mMarkersHashMap.get(marker);
+	        final MyMarker myMarker = mMarkersHashMap.get(marker);
 	        
 	        final TextView titulo = (TextView)v.findViewById(R.id.row_titulo);
 		    final TextView precio = (TextView)v.findViewById(R.id.row_precio);
 		    final ImageView imgh = (ImageView)v.findViewById(R.id.row_img);
 		    final RatingBar star = (RatingBar)v.findViewById(R.id.row_star);	
 		    final TextView count = (TextView)v.findViewById(R.id.row_count);
-	           	
-		    ParseFile img = null;
-		    if(myMarker.getmIcon()!=null){
-		    	img = myMarker.getmIcon();
-		    	img.getDataInBackground(new GetDataCallback() {
-			    	Bitmap bmp = null;
-			        public void done(byte[] data, com.parse.ParseException e) {
-			            if (e == null){
-			                bmp = BitmapFactory.decodeByteArray(data, 0, data.length);	
-			                imgh.setImageBitmap(bmp);
-			                
-			                
-			            }
-			            else{
-			            	Toast.makeText(getActivity().getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-			            }	
-			        }	
-			        
-			    });
-		    }		    	
-		    	
-	        titulo.setText(myMarker.getmLabel());
+		    
+		    
+		    titulo.setText(myMarker.getmLabel());
 	        precio.setText("$"+myMarker.getmPrecio());
 	        star.setRating(myMarker.getmRating());
-	        count.setText(myMarker.getmCount_rating().toString());  	        
+	        count.setText(myMarker.getmCount_rating().toString());  
+	        imgh.setImageBitmap(myMarker.getmFoto());
 
 	        return v;
 	    }
@@ -342,6 +422,8 @@ public class Fragment_googlemaps extends Fragment{
 	    	
 	    	return null;
 	    }	    
+	    
+	    
 	}
 	
 	public void refresh(){
@@ -389,9 +471,6 @@ public class Fragment_googlemaps extends Fragment{
 		// TODO Auto-generated method stub
 		super.onResume();
 		mapa.setMyLocationEnabled(true);
-		//refresh();
-		//myLocationOverlay.enableMyLocation();
-	//	myLocationOverlay.enableCompass();
 		
 	}
 
@@ -400,7 +479,5 @@ public class Fragment_googlemaps extends Fragment{
 		// TODO Auto-generated method stub
 		super.onPause();
 		mapa.setMyLocationEnabled(false);
-		//myLocationOverlay.disableMyLocation();
-	//	myLocationOverlay.disableCompass();
 	}
 }

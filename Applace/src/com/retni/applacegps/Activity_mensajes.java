@@ -110,7 +110,7 @@ public class Activity_mensajes extends ActionBarActivity{
 	    actionBar.addTab(tab);
 
 	    tab = actionBar.newTab()
-	                   .setText("recibidos ("+dos+")")
+	                   .setText("notificaciones ("+dos+")")
 	                   .setTabListener(new TabListener<Fragment_mensajes2>(
 	                           this, "recibidos", Fragment_mensajes2.class, args));
 	    actionBar.addTab(tab);

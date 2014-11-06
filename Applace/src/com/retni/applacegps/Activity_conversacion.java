@@ -76,7 +76,8 @@ public class Activity_conversacion extends ActionBarActivity{
 	LinearLayout conv_text;
 	EditText msje_new;
 	ImageButton msje_send;
-
+	String fechita;
+	int nueva=0;
 	String nomMio="yo", nomOtro="otro", idMia, idOtro;
 	String idMsje, fechaMsje;
 	
@@ -100,13 +101,19 @@ public class Activity_conversacion extends ActionBarActivity{
 		Intent in = getIntent();		
 		nomOtro = in.getStringExtra("nomOtro");
 		user.setText(nomOtro);
-		fecha.setText(in.getStringExtra("fecha"));
+		fechita = in.getStringExtra("fecha");		
 		fo = (Bitmap) in.getParcelableExtra("fotOtro");
 		idConv = in.getStringExtra("idConv");
 		idOtro = in.getStringExtra("idOtros");
 		
-		BitmapFactory.Options options=new BitmapFactory.Options();// Create object of bitmapfactory's option method for further option use
-        options.inPurgeable = true; // inPurgeable is used to free up memory while required
+		if(fechita.matches("hoy") && idConv.matches("new")){
+			nueva=1;	//Se enciende modo de nueva conversación
+		} else{
+			fecha.setText(in.getStringExtra("fecha"));
+		}
+		
+		BitmapFactory.Options options=new BitmapFactory.Options();
+        options.inPurgeable = true; 
 	    
         setImage(foto, fo);	
 		
@@ -141,8 +148,7 @@ public class Activity_conversacion extends ActionBarActivity{
 				tv.setText(conv.getString("Mensaje"));
 				nom.setTextSize(18);
 				tv.setTextSize(18);
-				nom.setPadding(0, 10, 0, 0);
-				//tv.setPadding(0, 0, 0, 10);	
+				nom.setPadding(0, 10, 0, 0);	
 				fe.setPadding(0, 0, 0, 10);
 				nom.setTypeface(null, Typeface.BOLD);
 				
@@ -175,8 +181,6 @@ public class Activity_conversacion extends ActionBarActivity{
 		    	        
 		    	        View v = getLayoutInflater().inflate( R.layout.dialog_mensaje, null );
 		    	        ListView list = (ListView) v.findViewById(R.id.dialog_list);
-		    	        //TextView text = (TextView) v.findViewById(R.id.dialog_text);
-		    	        //text.setText("¿Desea borrar de forma permanente este mensaje?");
 		    	        list.setAdapter(new ArrayAdapter<String>(
 		    	                getSupportActionBar().getThemedContext(),
 		    	            android.R.layout.simple_list_item_activated_1, opcionesMenu));
@@ -239,8 +243,7 @@ public class Activity_conversacion extends ActionBarActivity{
 		    			    	            }  
 		    			    	        });  
 		    			    	        
-		    			    	        dialog2.show();
-		    	                    	
+		    			    	        dialog2.show();		    	                    	
 		    	                    	break;
 		    	                }
 		    	            }
@@ -261,6 +264,40 @@ public class Activity_conversacion extends ActionBarActivity{
 			int id = v.getId();
 			if (id == R.id.msje_send) {				
 				bar_send.setVisibility(View.VISIBLE);
+				if(nueva==1){
+					nuevaConversa();
+					
+					ParseQuery<ParseObject> query3 = new ParseQuery<ParseObject>("Conversacion");
+			        query3.whereEqualTo("id_user1", idMia);
+			        query3.whereEqualTo("id_user2", idOtro);				
+
+					try {
+						convers = query3.find();
+					} catch (ParseException e) {}   	
+			        
+			        if(convers.size() != 0){
+			        	ParseObject conv = null;
+						conv = convers.get(0);
+						idConv = conv.getObjectId();
+						fecha.setText(conv.getUpdatedAt().toLocaleString());
+					} else{
+						ParseQuery<ParseObject> query4 = new ParseQuery<ParseObject>("Conversacion");
+				        query4.whereEqualTo("id_user1", idOtro);
+				        query4.whereEqualTo("id_user2", idMia);
+				        
+				        try {
+							convers = query3.find();
+						} catch (ParseException e) {}   	
+				        
+				        if(convers.size() != 0){
+				        	ParseObject conv = null;
+							conv = convers.get(0);
+							idConv = conv.getObjectId();
+							fecha.setText(conv.getUpdatedAt().toLocaleString());
+						} 
+					}
+				}
+				
 				ParseObject msje = new ParseObject("Mensaje");
 				msje.put("Mensaje", msje_new.getText().toString());
 				msje.put("id_conversacion", idConv);
@@ -287,13 +324,28 @@ public class Activity_conversacion extends ActionBarActivity{
 							msje_new.setText("");
 							Toast.makeText( getApplicationContext(),"Mensaje enviado con éxito!",Toast.LENGTH_SHORT ).show();
 					    } else{
-					    	Toast.makeText(getApplicationContext(), "Error al ingresar el alojamiento, por favor intente nuevamente.", Toast.LENGTH_SHORT).show();
+					    	Toast.makeText(getApplicationContext(), "Error al enviar el mensaje, por favor intente nuevamente.", Toast.LENGTH_SHORT).show();
 					    }
 					}
 			    });			
 			}			
 		}
 	};
+	
+	public void nuevaConversa(){
+		ParseObject conv = new ParseObject("Conversacion");
+		conv.put("id_user1", idMia);
+		conv.put("id_user2", idOtro);		
+		conv.saveInBackground(new SaveCallback() {
+			public void done(ParseException e) {
+			    if (e == null) {
+					Toast.makeText( getApplicationContext(),"Nueva conversación creada!",Toast.LENGTH_SHORT ).show();				
+			    } else{
+			    	Toast.makeText(getApplicationContext(), "Error al crear la conversación, por favor intente nuevamente.", Toast.LENGTH_SHORT).show();
+			    }
+			}
+	    });	
+	}
 	
 	public void loadBitmap(Bitmap b) {
 		vis_temp.setImageBitmap(circle(b));

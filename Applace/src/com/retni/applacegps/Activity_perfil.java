@@ -648,8 +648,6 @@ public class Activity_perfil extends ActionBarActivity{
 	    {
 	        case R.id.action_edit:
 	            Toast.makeText(this, "Editar", Toast.LENGTH_SHORT).show();
-	            Intent intent = new Intent(Activity_perfil.this, Activity_editarPerfil.class );
-				startActivity(intent);
 	            break;
 	        case R.id.action_config:
 	            Toast.makeText(this, "Configurar", Toast.LENGTH_SHORT).show();

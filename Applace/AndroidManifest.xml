@@ -50,9 +50,6 @@
             android:name="com.retni.applacegps.Activity_registro">
         </activity>
         <activity
-            android:name="com.retni.applacegps.Activity_editarPerfil">
-        </activity>
-        <activity
             android:name="com.retni.applacegps.Activity_filtro">
         </activity>
         <activity
@@ -113,9 +110,6 @@
         <activity
             android:name="com.retni.applacegps.transicion">
         </activity>        
-        <activity
-            android:name="com.retni.applacegps.Activity_googlemaps">
-        </activity>
         
         <meta-data android:name="com.google.android.maps.v2.API_KEY"
 			android:value="AIzaSyAXu2eBIfc_-L6qMd7e8YNFozLNVvOLDVo"/>
