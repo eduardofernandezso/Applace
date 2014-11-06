@@ -186,13 +186,13 @@ public class Activity_caracteristicas extends ActionBarActivity{
 		bk_precio = Integer.parseInt(car_precio.getText().toString());
 		bk_titulo = car_titulo.getText().toString();
 		bk_descripcion = car_descrip.getText().toString();
-		bk_fotografia = car_foto.getText().toString();
+		//bk_fotografia = car_foto.getText().toString();
 		
 		ParseObject alo = new ParseObject("Alojamiento");
 		ParseUser user = ParseUser.getCurrentUser();		
-		String username = user.getUsername();
+		String idUser = user.getObjectId();
 		
-		alo.put("User",username);
+		alo.put("User",idUser);
 		alo.put("dir_longitud",bk_dir_longitud);
 		alo.put("dir_latitud",bk_dir_latitud);
 		alo.put("dir_escrita", bk_dir_escrita);
@@ -293,7 +293,7 @@ public class Activity_caracteristicas extends ActionBarActivity{
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 	    bit.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 	    byte[] data1 = stream.toByteArray();
-		ParseFile file = new ParseFile(username+"_perfil.jpg", data1);
+		ParseFile file = new ParseFile(idUser+"_perfil.jpg", data1);
 		
 		alo.put("foto", file);
 	 	

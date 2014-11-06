@@ -15,7 +15,7 @@
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="¿Desea realmente cerrar su sesión dentro de Applace? Puede volver a ingresar en cualquier momento con sus datos."
+            android:text="¿Desea realmente cerrar su sesión de Applace?"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>

@@ -5,8 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.Date;
-
 import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -31,8 +29,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -152,16 +152,16 @@ public class Activity_perfil extends ActionBarActivity{
 	}
 	
 	public void loadBitmap(Bitmap b) {
-		perf_foto.setImageBitmap(circle(b));
+		perf_foto.setImageBitmap(circle(Bitmap.createScaledBitmap(b, 200, 200, false)));
 	}
 	
 	public void unloadBitmap() {
 	   if (perf_foto != null)
-		   perf_foto.setImageBitmap(null);
-	   if (foto!= null) {
-		   foto.recycle();
-	   }
-	   foto = null;
+		   perf_foto.setImageBitmap(null);/*
+	   if (foto!= null && !foto.isRecycled()) {
+		    foto.recycle();
+		    foto = null; 
+		}	   */
 	}
 	
 	public void setImage(ImageView i, Bitmap sourceid) {
@@ -568,8 +568,8 @@ public class Activity_perfil extends ActionBarActivity{
 					perf_bar.setVisibility(View.INVISIBLE);
 					Toast.makeText( getApplicationContext(),"Finalizado",Toast.LENGTH_SHORT ).show();
 					setImage(perf_foto, bito);
-					finish();
-					startActivity(getIntent());
+					//finish();
+					//startActivity(getIntent());
 			    } else {
 			    	Toast.makeText( getApplicationContext(),"Error en guardar la imágen.",Toast.LENGTH_SHORT ).show();
 			    }
@@ -636,6 +636,7 @@ public class Activity_perfil extends ActionBarActivity{
 		menu.findItem(R.id.action_share).setVisible(false);
 		menu.findItem(R.id.action_update).setVisible(false);
 		menu.findItem(R.id.action_camara).setVisible(false);
+		menu.findItem(R.id.action_delete).setVisible(false);
 		
 		getSupportActionBar().setTitle("Perfil");
 		return true;
@@ -658,5 +659,36 @@ public class Activity_perfil extends ActionBarActivity{
 	    }
 	 
 	    return true;
+	}
+	
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch(keyCode){
+			case KeyEvent.KEYCODE_BACK:
+				startActivity(new Intent(this, Logueado.class));
+				overridePendingTransition(R.anim.right_in, R.anim.right_out);
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+	
+	public boolean onTouchEvent(MotionEvent event) {
+	    int eventaction = event.getAction();
+
+	    switch (eventaction) {
+	        case MotionEvent.ACTION_DOWN: 
+	            // finger touches the screen
+	            break;
+
+	        case MotionEvent.ACTION_MOVE:
+	        	//Toast.makeText(this, "Desplaza", Toast.LENGTH_SHORT).show();
+	            // finger moves on the screen
+	            break;
+
+	        case MotionEvent.ACTION_UP:   
+	            // finger leaves the screen
+	            break;
+	    }
+
+	    // tell the system that we handled the event and no further processing is required
+	    return true; 
 	}
 }
