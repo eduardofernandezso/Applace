@@ -5,10 +5,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.List;
+
 import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import android.app.AlertDialog;
@@ -66,6 +70,7 @@ public class Activity_perfil extends ActionBarActivity{
 	String seNew="Yo";
 	String feNew="Yo";
 	String paNew="Yo";
+	String idDueno="hola";
 	//ParseUser user;
 	private static int TAKE_PICTURE = 1;
 	private static int SELECT_PICTURE = 2;
@@ -86,69 +91,131 @@ public class Activity_perfil extends ActionBarActivity{
 		TVtele = (TextView) findViewById(R.id.perf_tel);
 		TVpass = (TextView) findViewById(R.id.perf_pass);
 		
-		perf_bar = (ProgressBar) findViewById(R.id.perf_bar);
-
-		Parse.initialize(this, "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");
-        ParseUser user = new ParseUser();
-        user = ParseUser.getCurrentUser();
-	    
-	    if(user!=null){
-	    	mailUser = user.getEmail();
-	    	userNAME = user.getUsername();
-	    	
-		    nameUser = (String) user.getString("NombreCompleto");
-		    tele = (String) user.getString("telefono");
-		    desc = (String) user.getString("descripcion");
-		    birth = (String) user.getString("birth");
-		    sex = (String) user.getString("sexo");
+		Intent in = getIntent();		
+		idDueno = in.getStringExtra("idDueno");
+		if(idDueno.matches("soy yo")){
+			perf_bar = (ProgressBar) findViewById(R.id.perf_bar);
+	
+			Parse.initialize(this, "XyEh8xZwVO3Fq0hVXyalbQ0CF81zhcLqa0nOUDY3", "bK1hjOovj0GAmgIsH6DouyiWOHGzeVz9RxYc6vur");
+	        ParseUser user = new ParseUser();
+	        user = ParseUser.getCurrentUser();
 		    
-		    if(tele==null)tele="Agregar Teléfono";
-		    if(desc==null)desc="Agregar Descripción";
-		    if(sex==null)sex="Agregar Sexo";
-		    if(birth==null)birth="Agregar Fecha de Nacimiento";
-		    //String fecha = (String) birth.toString();
-		    //Toast.makeText(getApplicationContext(), sex + " "+  tele + " " + desc +" "+ nameUser, Toast.LENGTH_SHORT).show();
-		    ParseFile img = user.getParseFile("Foto");
-		    if(img != null){
-			    img.getDataInBackground(new GetDataCallback() {
-			    	Bitmap bmp = null;
-			        public void done(byte[] data, com.parse.ParseException e) {
-			            if (e == null){
-			            	BitmapFactory.Options options=new BitmapFactory.Options();// Create object of bitmapfactory's option method for further option use
-			                options.inPurgeable = true; // inPurgeable is used to free up memory while required
-			        	    
-			                bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
-			                setImage(perf_foto, bmp);			                
-			            }
-			            else{
-			            	Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-			            }
-			        }
-			    }); 
-		    }
-		    else{
-		    	Drawable myDrawable = getResources().getDrawable(R.drawable.fondo_verde);
-		    	Bitmap fo = ((BitmapDrawable) myDrawable).getBitmap();
+		    if(user!=null){
+		    	mailUser = user.getEmail();
+		    	userNAME = user.getUsername();
 		    	
-		    	setImage(perf_foto, fo);
-		    }
-	    }	    
-	    nombre.setText(nameUser);
-	    mail.setText(mailUser);
-	    nombre.setOnClickListener(listener);
-	    mail.setOnClickListener(listener);
-	    perf_foto.setOnClickListener(listener);
-	    
-	    TVsex.setText(sex);
-	    TVdesc.setText(desc);
-	    TVtele.setText(tele);
-	    TVbirth.setText(birth);
-	    TVpass.setText("Pass: xxxxxx");
-	    TVpass.setOnClickListener(listener);
-	    TVbirth.setOnClickListener(listener);
-	    TVdesc.setOnClickListener(listener);
-	    TVtele.setOnClickListener(listener);
-	    TVsex.setOnClickListener(listener);
+			    nameUser = (String) user.getString("NombreCompleto");
+			    tele = (String) user.getString("telefono");
+			    desc = (String) user.getString("descripcion");
+			    birth = (String) user.getString("birth");
+			    sex = (String) user.getString("sexo");
+			    
+			    if(tele==null)tele="Agregar Teléfono";
+			    if(desc==null)desc="Agregar Descripción";
+			    if(sex==null)sex="Agregar Sexo";
+			    if(birth==null)birth="Agregar Fecha de Nacimiento";
+			    //String fecha = (String) birth.toString();
+			    //Toast.makeText(getApplicationContext(), sex + " "+  tele + " " + desc +" "+ nameUser, Toast.LENGTH_SHORT).show();
+			    ParseFile img = user.getParseFile("Foto");
+			    if(img != null){
+				    img.getDataInBackground(new GetDataCallback() {
+				    	Bitmap bmp = null;
+				        public void done(byte[] data, com.parse.ParseException e) {
+				            if (e == null){
+				            	BitmapFactory.Options options=new BitmapFactory.Options();// Create object of bitmapfactory's option method for further option use
+				                options.inPurgeable = true; // inPurgeable is used to free up memory while required
+				        	    
+				                bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+				                setImage(perf_foto, bmp);			                
+				            }
+				            else{
+				            	Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+				            }
+				        }
+				    }); 
+			    }
+			    else{
+			    	Drawable myDrawable = getResources().getDrawable(R.drawable.fondo_verde);
+			    	Bitmap fo = ((BitmapDrawable) myDrawable).getBitmap();
+			    	
+			    	setImage(perf_foto, fo);
+			    }
+		    }	    
+		    nombre.setText(nameUser);
+		    mail.setText(mailUser);
+		    nombre.setOnClickListener(listener);
+		    mail.setOnClickListener(listener);
+		    perf_foto.setOnClickListener(listener);
+		    
+		    TVsex.setText(sex);
+		    TVdesc.setText(desc);
+		    TVtele.setText(tele);
+		    TVbirth.setText(birth);
+		    TVpass.setText("Pass: xxxxxx");
+		    TVpass.setOnClickListener(listener);
+		    TVbirth.setOnClickListener(listener);
+		    TVdesc.setOnClickListener(listener);
+		    TVtele.setOnClickListener(listener);
+		    TVsex.setOnClickListener(listener);
+		} else{
+			ParseQuery query7 = ParseUser.getQuery();
+			query7.whereEqualTo("objectId", idDueno);
+			
+			List<ParseUser> cari = null;
+			try {
+				cari = query7.find();
+			} catch (ParseException e) {
+
+			}
+			if(cari!= null){
+				ParseUser user = cari.get(0);
+				mailUser = user.getEmail();
+		    	userNAME = user.getUsername();
+		    	
+			    nameUser = (String) user.getString("NombreCompleto");
+			    tele = (String) user.getString("telefono");
+			    desc = (String) user.getString("descripcion");
+			    birth = (String) user.getString("birth");
+			    sex = (String) user.getString("sexo");
+			    
+			    
+			    //String fecha = (String) birth.toString();
+			    //Toast.makeText(getApplicationContext(), sex + " "+  tele + " " + desc +" "+ nameUser, Toast.LENGTH_SHORT).show();
+			    ParseFile img = user.getParseFile("Foto");
+			    if(img != null){
+				    img.getDataInBackground(new GetDataCallback() {
+				    	Bitmap bmp = null;
+				        public void done(byte[] data, com.parse.ParseException e) {
+				            if (e == null){
+				            	BitmapFactory.Options options=new BitmapFactory.Options();// Create object of bitmapfactory's option method for further option use
+				                options.inPurgeable = true; // inPurgeable is used to free up memory while required
+				        	    
+				                bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+				                setImage(perf_foto, bmp);			                
+				            }
+				            else{
+				            	Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+				            }
+				        }
+				    }); 
+			    }
+			    else{
+			    	Drawable myDrawable = getResources().getDrawable(R.drawable.fondo_verde);
+			    	Bitmap fo = ((BitmapDrawable) myDrawable).getBitmap();
+			    	
+			    	setImage(perf_foto, fo);
+			    }
+		    }	    
+		    nombre.setText(nameUser);
+		    mail.setText(mailUser);
+		    
+		    
+		    TVsex.setText(sex);
+		    TVdesc.setText(desc);
+		    TVtele.setText(tele);
+		    TVbirth.setText(birth);
+		    TVpass.setText("Pass: xxxxxx");			
+		}
 	}
 	
 	public void loadBitmap(Bitmap b) {

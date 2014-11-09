@@ -2,12 +2,17 @@ package com.retni.applacegps;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.json.JSONObject;
+
 import com.parse.DeleteCallback;
 import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -34,6 +39,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,15 +74,15 @@ public class Activity_verAlojamiento extends ActionBarActivity{
     List<Bitmap> fotitos = new ArrayList<Bitmap>();
     int[] fotos;
     ImageView vis_img1, vis_img2, vis_temp;
-    TextView vis_comentario1, vis_comentario2, vis_date1, vis_date2, vis_emisor1, vis_emisor2, vis_verlist;
-    FrameLayout vis_coment1, vis_coment2;
+    TextView vis_comentario1, vis_comentario2, vis_date1, vis_date2, vis_emisor1, vis_emisor2, vis_verlist, vis_verDisp;
+    FrameLayout vis_coment1, vis_coment2, vis_comentar;
     String texto = "";
     ProgressBar delete_bar;
     ParseObject caract, convers;
     EditText vis_guardar_comentario;
     FrameLayout vis_rankear;
     RatingBar vis_calificar;
-    Button vis_enviar;
+    Button vis_enviar, vis_dueno, vis_multiRuta;
     String id_user_dueno;
     Bitmap foto_dueno;
     String id_user_emisor;
@@ -85,8 +91,11 @@ public class Activity_verAlojamiento extends ActionBarActivity{
     TransparentProgressDialog pd;
     Button vis_ruta, vis_mensaje;
     List<ParseObject> emisor = null;
+    List<ParseObject> pushi = null;
     List<Boolean> services = new ArrayList<Boolean>();
     String idConv="new", fechaConv="hoy";
+    String titulo;
+    int not=0;
 	
 	@SuppressWarnings("deprecation")
 	protected void onCreate(Bundle savedInstanceState) {
@@ -102,9 +111,14 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		vis_verlist = (TextView) findViewById(R.id.vis_verlist);
 		vis_ruta = (Button) findViewById(R.id.vis_ruta);
 		vis_mensaje = (Button) findViewById(R.id.vis_mensaje);
-			
+		vis_dueno = (Button) findViewById(R.id.vis_dueno);
+		vis_verDisp = (TextView) findViewById(R.id.vis_verDisp);
+		vis_multiRuta = (Button) findViewById(R.id.vis_multiRuta);
+		vis_dueno.setOnClickListener(listener);
+		vis_verDisp.setOnClickListener(listener);
 		vis_ruta.setOnClickListener(listener);
 		vis_mensaje.setOnClickListener(listener);
+		vis_multiRuta.setOnClickListener(listener);
 		
 		//comentarios
 		vis_comentario1 = (TextView) findViewById(R.id.vis_comentario1);
@@ -117,6 +131,7 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		vis_coment2 = (FrameLayout) findViewById(R.id.vis_coment2);
 		vis_img1 = (ImageView) findViewById(R.id.vis_img1);
 		vis_img2 = (ImageView) findViewById(R.id.vis_img2);
+		vis_comentar = (FrameLayout) findViewById(R.id.vis_rankear);
 		
 		//calificar
 		vis_enviar = (Button) findViewById(R.id.vis_enviar);
@@ -165,6 +180,7 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		
 		if(car.size()!=0){
 			caract = car.get(0);
+			titulo = caract.getString("titulo");
 			vis_tit.setText(caract.getString("titulo"));
 			if(caract.getBoolean("estado")==true){
 				vis_estado.setText("Disponible");
@@ -514,6 +530,14 @@ public class Activity_verAlojamiento extends ActionBarActivity{
                 name_emisor = user.getString("NombreCompleto");
                 foto_emisor = user.getParseFile("Foto");
                 
+                if(id_user_dueno.matches(id_user_emisor)){
+                	vis_comentar.setVisibility(View.GONE);
+        			vis_ruta.setVisibility(View.GONE);
+        			vis_mensaje.setVisibility(View.GONE);
+        			vis_dueno.setVisibility(View.GONE);
+        			vis_multiRuta.setVisibility(View.GONE);
+        		}
+                
         		query3.whereEqualTo("id_user_emisor", id_user_emisor);
         		query3.whereEqualTo("id_alojamiento", id_aloj);
         		
@@ -565,6 +589,20 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 				    	pd.dismiss();
 						ranking();
 						Toast.makeText( getApplicationContext(),"Calificación ingresada con éxito!",Toast.LENGTH_SHORT ).show();
+						ParseObject notif = new ParseObject("Notificacion");
+						notif.put("notificacion", "Su alojamiento titulado '"+titulo+ "', ha sido comentado y calificado!");
+						notif.put("id_user", id_user_dueno);
+						notif.put("id_alojamiento", id_aloj);
+						
+						notif.saveInBackground(new SaveCallback() {
+							public void done(ParseException e) {
+							    if (e == null) {			
+									//Toast.makeText( getApplicationContext(),"Notificación enviada con éxito!",Toast.LENGTH_SHORT ).show();
+							    } else{
+							    	Toast.makeText(getApplicationContext(), "Error al ingresar el alojamiento, por favor intente nuevamente.", Toast.LENGTH_SHORT).show();
+							    }
+							}
+					    });
 						Intent intent = new Intent(Activity_verAlojamiento.this, Logueado.class);
 						startActivity(intent);
 				    } else{
@@ -574,7 +612,7 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		    });
 		}
 	}
-	
+
 	private OnClickListener listener = new OnClickListener(){
 		@Override
 		public void onClick(View v) {
@@ -582,6 +620,8 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 			int id = v.getId();
 			if (id == R.id.vis_verlist) {
 				//Muestra una lista con los demás comentarios************************************************************
+				Vibrator h = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+	        	h.vibrate(25);
 				Intent intent = new Intent(Activity_verAlojamiento.this, Activity_listaComentarios.class);
 				intent.putExtra("id_aloj", id_aloj); //se envía el id del alojamiento
 				startActivity(intent);
@@ -591,6 +631,23 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 			}
 			else if(id == R.id.vis_ruta){
 				//Se muestra la ruta para llegar a este alojamiento
+				Vibrator h = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+	        	h.vibrate(25);
+				ParseObject notif = new ParseObject("Notificacion");
+				notif.put("notificacion", "Es probable que un usuario de Applace vaya a visitar su alojamiento titulado '"+titulo+ "'.");
+				notif.put("id_user", id_user_dueno);
+				notif.put("id_alojamiento", id_aloj);
+				
+				notif.saveInBackground(new SaveCallback() {
+					public void done(ParseException e) {
+					    if (e == null) {	
+							Toast.makeText( getApplicationContext(),"Notificación enviada con éxito!",Toast.LENGTH_SHORT ).show();
+					    } else{
+					    	Toast.makeText(getApplicationContext(), "Error al ingresar el alojamiento, por favor intente nuevamente.", Toast.LENGTH_SHORT).show();
+					    }
+					}
+			    });
+				
 				FragmentManager fm = Activity_verAlojamiento.this.getSupportFragmentManager();
 		        FragmentTransaction ft = fm.beginTransaction();
 		        
@@ -650,6 +707,25 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 				intent.putExtra("idOtros", id_user_dueno);
 				intent.putExtra("fotOtro", Bitmap.createScaledBitmap(foto_dueno, 200, 200, false));
 				startActivity(intent);	
+			}
+			else if(id == R.id.vis_verDisp){
+				Vibrator h = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+	        	h.vibrate(25);
+				Intent intent = new Intent(Activity_verAlojamiento.this, Activity_disp.class);
+				intent.putExtra("idAloj", id_aloj);
+				startActivity(intent);	
+			}
+			else if(id == R.id.vis_dueno){
+				Vibrator h = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+	        	h.vibrate(25);
+				Intent intent = new Intent(Activity_verAlojamiento.this, Activity_perfil.class);
+				intent.putExtra("idDueno", id_user_dueno);
+				startActivity(intent);	
+			}
+			else if(id == R.id.vis_multiRuta){
+				Fragment_rutaMultiple.directions.add(vis_direccion);
+				Activity_verAlojamiento.this.finish();
+				Toast.makeText(getApplicationContext(), "Alojamiento añadido para la ruta múltiple.", Toast.LENGTH_SHORT).show();
 			}
 		}
 	};

@@ -2,13 +2,21 @@ package com.retni.applacegps;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -38,6 +46,14 @@ public class Activity_filtro extends ActionBarActivity{
 	
 	public ArrayList<Double> la = new ArrayList<Double>();
 	public ArrayList<Double> lo = new ArrayList<Double>();
+	public ArrayList<String> idAloj = new ArrayList<String>();
+	public ArrayList<String> titulo = new ArrayList<String>();
+	public ArrayList<Integer> precio = new ArrayList<Integer>();
+	public ArrayList<Double> ranking = new ArrayList<Double>();
+	public ArrayList<Integer> countRanking = new ArrayList<Integer>();
+	public ArrayList<Bitmap> foto = new ArrayList<Bitmap>();
+	public ArrayList<Boolean> estado = new ArrayList<Boolean>();
+	
 	int bk_capacidad, bk_num_piezas, bk_num_camas, bk_num_banos, bk_precio;
 	double bk_dir_latitud, bk_dir_longitud;
 	
@@ -235,6 +251,34 @@ public class Activity_filtro extends ActionBarActivity{
         		filtrados = objects.get(i);
         		la.add(filtrados.getDouble("dir_latitud"));
         		lo.add(filtrados.getDouble("dir_longitud"));
+        		idAloj.add(filtrados.getObjectId());
+        		titulo.add(filtrados.getString("titulo"));
+        		precio.add(filtrados.getInt("precio"));
+        		ranking.add(filtrados.getDouble("calificacion"));
+        		countRanking.add(filtrados.getInt("count_calificacion"));
+        		estado.add(filtrados.getBoolean("estado"));
+        		
+        		ParseFile img = filtrados.getParseFile("foto");	
+				if(img != null){
+					img.getDataInBackground(new GetDataCallback() {
+				    	Bitmap bmp = null;
+				        public void done(byte[] data, com.parse.ParseException e) {
+				            if (e == null){
+				                bmp = BitmapFactory.decodeByteArray(data, 0, data.length);	
+				                //Toast.makeText(getApplicationContext(), bmp.getByteCount()+" byte", Toast.LENGTH_SHORT).show();
+				                foto.add(Bitmap.createScaledBitmap(bmp, 50, 50, false));
+				                
+				            }
+				            else{
+				            	Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+				            }
+				        }
+				    }); 
+				} else{
+					Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+				}
+				
+				//Toast.makeText(getApplicationContext(), " fotooooos " + foto.size(), Toast.LENGTH_SHORT).show();
         	}
         }
 	}
@@ -253,12 +297,34 @@ public class Activity_filtro extends ActionBarActivity{
 	};
 	public void irse(){
 		
+		FragmentManager fm = Activity_filtro.this.getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        
+        Fragment fragment = new fragment_filtro();
+        String tag = fragment.getTag();
+        
+        Bundle j = new Bundle();
+        j.putSerializable("las",la);
+        j.putSerializable("los", lo);
+        j.putSerializable("idAloj", idAloj);
+        j.putSerializable("titulo",titulo);
+        j.putSerializable("precio", precio);
+        j.putSerializable("ranking", ranking);
+        j.putSerializable("countRanking",countRanking);
+        j.putSerializable("estado",estado);
+        j.putSerializable("foto", foto);
+        fragment.setArguments(j);
+        
+        ft.replace(R.id.frame_filtro, fragment, tag);
+        ft.addToBackStack(tag);
+        ft.commit(); 
+		/*
 		Intent intent = new Intent(Activity_filtro.this, Logueado.class );
 		intent.putExtra("latis", la);
 		intent.putExtra("longis", lo);
 		intent.putExtra("flag",1);		
 		startActivity(intent);
-		overridePendingTransition(R.anim.right_in, R.anim.right_out);
+		overridePendingTransition(R.anim.right_in, R.anim.right_out);*/
 	}
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch(keyCode){

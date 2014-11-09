@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/not_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="To solve this problem you will have to create a custom Item class which will represent your individual checkboxes on the list. The array of these items will then be used by the adapter class to display your check boxes."
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/not_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="20dp"
+            android:text="Oct 10, 2014, 01:54"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -83,8 +83,8 @@ public class Activity_mensajes extends ActionBarActivity{
         int a = men1.size();
         String uno = Integer.toString(a);
         
-        ParseQuery<ParseObject> query2 = new ParseQuery<ParseObject>("Mensajes");
-        query2.whereEqualTo("recibe", user.getEmail());
+        ParseQuery<ParseObject> query2 = new ParseQuery<ParseObject>("Notificacion");
+        query2.whereEqualTo("id_user", user.getObjectId());
         try {
 			men2 = query2.find();
 		} catch (ParseException e) {
@@ -106,13 +106,13 @@ public class Activity_mensajes extends ActionBarActivity{
 	    Tab tab = actionBar.newTab()
 	                       .setText("conversaciones ("+tres+")")
 	                       .setTabListener(new TabListener<Fragment_conversaciones>(
-	                               this, "enviados", Fragment_conversaciones.class, args));
+	                               this, "conversaciones", Fragment_conversaciones.class, args));
 	    actionBar.addTab(tab);
 
 	    tab = actionBar.newTab()
 	                   .setText("notificaciones ("+dos+")")
-	                   .setTabListener(new TabListener<Fragment_mensajes2>(
-	                           this, "recibidos", Fragment_mensajes2.class, args));
+	                   .setTabListener(new TabListener<Fragment_notificaciones>(
+	                           this, "notificaciones", Fragment_notificaciones.class, args));
 	    actionBar.addTab(tab);
 	    
 	    /*

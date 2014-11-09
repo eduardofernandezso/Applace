@@ -105,6 +105,14 @@
                         android:text="$10.000"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textStyle="bold" />
+                    
+                    <TextView
+                        android:id="@+id/vis_verDisp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Ver disponibilidad"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <android.support.v4.view.ViewPager
                         android:id="@+id/pager_fotos"
@@ -119,6 +127,28 @@
                         android:layout_gravity="center"
                         android:background="@drawable/ab_background_textured_applacegps"
                         android:text="Ir a este alojamiento"
+                        android:layout_margin="10dp" 
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+                    
+                    <Button
+                        android:id="@+id/vis_multiRuta"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ab_background_textured_applacegps"
+                        android:text="Agregar a la ruta múltiple"
+                        android:layout_margin="10dp" 
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+                    
+                    <Button
+                        android:id="@+id/vis_dueno"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ab_background_textured_applacegps"
+                        android:text="Ver datos de propietario"
                         android:layout_margin="10dp" 
                         android:textColor="#FFFFFF"
                         android:textStyle="bold" />

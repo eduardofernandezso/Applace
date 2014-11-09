@@ -23,6 +23,7 @@ import android.graphics.Paint;
 import android.graphics.Shader.TileMode;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -285,6 +286,8 @@ public class Fragment_listaAloj extends Fragment{
 	        convertView.setOnClickListener(new OnClickListener(){        	
 				public void onClick(View v) {
 					Integer pos = (Integer) v.getTag();
+					Vibrator h = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+		        	h.vibrate(25);
 					Intent intent = new Intent(context,Activity_verAlojamiento.class);
 					intent.putExtra("idAloj", id_aloj.get(pos));
 					context.startActivity(intent);				

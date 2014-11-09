@@ -9,11 +9,15 @@ package com.retni.applacegps;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
+import com.parse.ParsePush;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -101,7 +105,6 @@ public class Activity_registro extends ActionBarActivity {
 									    if (user != null) {
 									    	String nombre = user.getString("NombreCompleto");
 											Toast.makeText( getApplicationContext(),"Bienvenido a Applace, "+nombre,Toast.LENGTH_SHORT ).show();
-											
 											Intent intent = new Intent(Activity_registro.this, Logueado.class );
 											startActivity(intent);
 									    }

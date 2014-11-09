@@ -42,7 +42,7 @@ public class Logueado extends ActionBarActivity{
     ActionBarDrawerToggle drawerToggle;
     CharSequence tituloSeccion;
     
-    String passUser, mailUser, nameUser = "Mi Cuenta";
+    String passUser, mailUser, nameUser = "Mi Cuenta",idUser;
 			
 	@SuppressWarnings("unchecked")
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +72,10 @@ public class Logueado extends ActionBarActivity{
 	    if(user!=null){
 	    	mailUser = user.getEmail();
 		    nameUser = (String) user.getString("NombreCompleto");
+		    idUser = user.getObjectId();
 	    }
 	    
-		opcionesMenu = new String[] {"Mi perfil, "+ nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Buscar Alojamiento", "Ruta", "Mis Mensajes","Cerrar Sesión"};
+		opcionesMenu = new String[] {"Mi perfil, "+ nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Mis Estadísticas", "Ruta Multiple", "Mis Mensajes","Cerrar Sesión"};
         drawerLayout = (DrawerLayout) findViewById(R.id.container);
         drawerList = (ListView) findViewById(R.id.left_drawer);
  
@@ -138,6 +139,7 @@ public class Logueado extends ActionBarActivity{
                     	//Propiedades de la cuenta de usuario
                         //fragment = new Fragment_inicio();
                     	intent = new Intent(Logueado.this, Activity_perfil.class );
+                    	intent.putExtra("idDueno", "soy yo");
 						startActivity(intent);
 						overridePendingTransition(R.anim.left_in, R.anim.left_out);
                         break;
@@ -154,13 +156,11 @@ public class Logueado extends ActionBarActivity{
                     	fragment = new Fragment_listaAloj();
                     	break;                    
                     case 4:
-                    	Intent i = new Intent(Logueado.this, Activity_filtro.class );
-						startActivity(i);
-						overridePendingTransition(R.anim.left_in, R.anim.left_out);
+                    	fragment = new fragment_listAloj2();
                     	break;
                     case 5:
                     	//Pregunta por ruta
-                    	fragment = new Fragment_googlemaps_ruta();
+                    	fragment = new Fragment_rutaMultiple();
                     	break;
                     case 6:
                     	Intent i2 = new Intent(Logueado.this,Activity_mensajes.class);
