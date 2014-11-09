@@ -6,42 +6,63 @@ tiempo.
 package com.retni.applacegps;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import com.parse.Parse;
 import com.parse.ParseUser;
+import com.retni.applacegps.Fragment_listaAloj.Cursor_AdapterList;
+import com.retni.applacegps.R.drawable;
+
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Shader.TileMode;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 @SuppressLint("InlinedApi")
 public class Logueado extends ActionBarActivity{
 	
-	private DrawerLayout drawerLayout;
-    private ListView drawerList;
+	private static DrawerLayout drawerLayout;
+    private static ListView drawerList;
     private String[] opcionesMenu;
-    
+    private int[] fotos;
     CharSequence tituloApp;
     ActionBarDrawerToggle drawerToggle;
-    CharSequence tituloSeccion;
-    
+    static CharSequence tituloSeccion;
+    int SELECTED_POSITION=0;
     String passUser, mailUser, nameUser = "Mi Cuenta",idUser;
 			
 	@SuppressWarnings("unchecked")
@@ -75,13 +96,27 @@ public class Logueado extends ActionBarActivity{
 		    idUser = user.getObjectId();
 	    }
 	    
+	    fotos = new int[] { R.drawable.miperfil2,
+                R.drawable.mapa, R.drawable.publicar,
+                R.drawable.misalojamientos, R.drawable.mismensajes, R.drawable.rutamultiple,
+                R.drawable.mismensajes2, R.drawable.cerrarsesion};
+	    
 		opcionesMenu = new String[] {"Mi perfil, "+ nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Mis Estadísticas", "Ruta Multiple", "Mis Mensajes","Cerrar Sesión"};
         drawerLayout = (DrawerLayout) findViewById(R.id.container);
         drawerList = (ListView) findViewById(R.id.left_drawer);
+        //drawerList.setItemChecked(1, true);
+        
+        BaseAdapter listAdapter = new Cursor_AdapterSl(Logueado.this, opcionesMenu, fotos);
+    	drawerList.setAdapter(listAdapter);  
+        /*
+        drawerList.setAdapter(new ArrayAdapter<String>(
+                getSupportActionBar().getThemedContext(),
+            android.R.layout.simple_list_item_activated_1, opcionesMenu));
  
         drawerList.setAdapter(new ArrayAdapter<String>(
                 getSupportActionBar().getThemedContext(),
             android.R.layout.simple_list_item_activated_1, opcionesMenu));
+            */
         
         tituloApp = getSupportActionBar().getTitle();
         tituloSeccion = tituloApp;
@@ -125,7 +160,9 @@ public class Logueado extends ActionBarActivity{
         ft.replace(R.id.content_frame, fragment, tag);
         ft.addToBackStack(tag);
         ft.commit(); 
+
         
+        /*
         drawerList.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -209,9 +246,204 @@ public class Logueado extends ActionBarActivity{
                 drawerLayout.closeDrawer(drawerList);
             }
         });
+        */
         
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);       
+	}
+	
+public static class Cursor_AdapterSl extends BaseAdapter{
+		
+		ImageView vis_img1, vis_img2, vis_temp;
+		Context context;
+	    String [] textos;
+	    int [] iconos;
+	    int sel=1;
+	    int pos = 0;
+	    
+	    @SuppressWarnings("unused")
+		private static LayoutInflater inflater = null;
+
+	    public Cursor_AdapterSl(Context context, String [] textos, int[] iconos) {
+	        // TODO Auto-generated constructor stub
+	        this.context = context;
+	        this.textos = textos;
+	        this.iconos = iconos;
+	        inflater = (LayoutInflater) context
+	                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	    }
+
+	    @Override
+	    public int getCount() {
+	        // TODO Auto-generated method stub
+	        return textos.length;
+	    }
+
+	    @Override
+	    public Object getItem(int position) {
+	        // TODO Auto-generated method stub
+	        return textos[position];
+	    }
+
+	    @Override
+	    public long getItemId(int position) {
+	        // TODO Auto-generated method stub
+	        return position;
+	    }
+
+
+	    public View getView(int position, View convertView, final ViewGroup parent) {
+	        // TODO Auto-generated method stub
+	    	if(convertView==null){
+		    	@SuppressWarnings("static-access")
+				LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+		    	convertView = inflater.inflate(R.layout.sliding_row, null); 
+		    }
+	    	
+	    	if(position==1){
+	    		convertView.setBackgroundResource(drawable.applace_btn_default_disabled_focused_holo_light);
+	    	}
+	    	
+		    final TextView texto = (TextView)convertView.findViewById(R.id.sl_text);
+		    final ImageView ic = (ImageView)convertView.findViewById(R.id.sl_img);
+		    
+		    if(iconos.length != 0 ){
+		    	ic.setImageResource(iconos[position]);
+		    }
+		    if(textos.length!=0){
+		    	convertView.setTag(position);	    
+		    	texto.setText(textos[position]);
+		    }
+		    
+	        convertView.setOnClickListener(new OnClickListener(){        	
+				public void onClick(View v) {
+					Integer pos = (Integer) v.getTag();
+					
+					Vibrator h = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+		        	h.vibrate(25);
+		        	
+		        	v.setBackgroundResource(drawable.ab_background_textured_applacegps);
+					
+					Fragment fragment = null;
+	                Intent intent = null;
+	     
+	                switch (pos) {
+	                    case 0:
+	                    	//Propiedades de la cuenta de usuario
+	                        //fragment = new Fragment_inicio();
+	                    	intent = new Intent(context, Activity_perfil.class );
+	                    	intent.putExtra("idDueno", "soy yo");
+	                    	context.startActivity(intent);
+	                    	((Activity) context).overridePendingTransition(R.anim.left_in, R.anim.left_out);
+	                        break;
+	                    case 1:
+	                    	//Carga el mapa
+	                        fragment = new Fragment_googlemaps();                    	
+	                        break;
+	                    case 2:
+	                    	//Publica un anuncio
+	                        fragment = new Fragment_tipoAloj();
+	                        break;
+	                    case 3:
+	                    	//Lista de alojamientos
+	                    	fragment = new Fragment_listaAloj();
+	                    	break;                    
+	                    case 4:
+	                    	fragment = new fragment_listAloj2();
+	                    	break;
+	                    case 5:
+	                    	//Pregunta por ruta
+	                    	fragment = new Fragment_rutaMultiple();
+	                    	break;
+	                    case 6:
+	                    	Intent i2 = new Intent(context,Activity_mensajes.class);
+	                    	context.startActivity(i2);
+	                    	((Activity) context).overridePendingTransition(R.anim.left_in, R.anim.left_out);
+	                    	break;
+	                    case 7:
+	                    	AlertDialog.Builder dialog = new AlertDialog.Builder(context);  
+	            	        dialog.setTitle("Cerrar Sesión");		
+	            	        dialog.setIcon(R.drawable.ic_launcher);	
+	            	        
+	            	        View vi = ((Activity) context).getLayoutInflater().inflate( R.layout.dialog, null );
+	            			      
+	            	        dialog.setView(vi);
+	            	        dialog.setNegativeButton("Cancelar", null);  
+	            	        dialog.setPositiveButton("Cerrar Sesión", new DialogInterface.OnClickListener() {  
+	            	            public void onClick(DialogInterface dialogo1, int id) {
+	            	            	ParseUser.logOut();
+	                            	Intent i = new Intent(context, MainActivity.class );
+	                            	context.startActivity(i);
+	            	            }  
+	            	        });  
+	            	        
+	            	        dialog.show();
+	                    	break;
+	                    
+	                }
+	                
+	                if (fragment != null){
+	                	FragmentManager fragmentManager =
+	                			((FragmentActivity) context).getSupportFragmentManager();
+	                	String tag = fragment.getTag();
+	             
+	                    fragmentManager.beginTransaction()
+	                        .replace(R.id.content_frame, fragment,tag)
+	                        .addToBackStack(tag)
+	                        .commit();
+	                	
+	                }
+	                
+	                
+	                
+	                //drawerList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+	                drawerList.setItemChecked(pos, true);
+	                
+	                //tituloSeccion = textos[pos];
+	                ((ActionBarActivity) context).getSupportActionBar().setTitle(textos[pos]);
+	     
+	                drawerLayout.closeDrawer(drawerList);
+					
+					/*
+					Integer pos = (Integer) v.getTag();
+					Vibrator h = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+		        	h.vibrate(25);
+					Intent intent = new Intent(context,Activity_verAlojamiento.class);
+					intent.putExtra("idAloj", id_aloj.get(pos));
+					context.startActivity(intent);	
+					*/			
+				}		
+			});        
+	        
+	        
+	        return convertView;
+	    }	
+	    public void loadBitmap(Bitmap b) {
+			vis_temp.setImageBitmap(circle(Bitmap.createScaledBitmap(b, 200, 200, false)));
+		}
+		
+		public void unloadBitmap() {
+		   if (vis_temp != null)
+			   vis_temp.setImageBitmap(null);
+		}
+		
+		public void setImage(ImageView i, Bitmap sourceid) {
+			vis_temp = i;
+			unloadBitmap();	   
+			loadBitmap(sourceid);
+		}
+		
+		public Bitmap circle(Bitmap bit){
+			Bitmap circleBitmap = Bitmap.createBitmap(bit.getWidth(), bit.getHeight(), Bitmap.Config.ARGB_8888);
+		    BitmapShader shader = new BitmapShader (bit,  TileMode.CLAMP, TileMode.CLAMP);
+		    Paint paint = new Paint();
+		    paint.setShader(shader);
+		    
+		    Canvas c = new Canvas(circleBitmap);
+		    c.drawCircle(bit.getWidth()/2, bit.getHeight()/2, bit.getWidth()/2, paint);
+			
+			return circleBitmap;
+		}
 	}
 	
 	@Override

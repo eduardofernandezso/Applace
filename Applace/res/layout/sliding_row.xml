@@ -2,6 +2,27 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-    
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp" >
+
+        <ImageView
+            android:id="@+id/sl_img"
+            android:layout_width="21dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="608.78"
+            android:src="@drawable/mismensajes2" />
+
+        <TextView
+            android:id="@+id/sl_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Mi perfil"
+            android:textAppearance="?android:attr/textAppearanceMedium"  />
+    </LinearLayout>
 
 </FrameLayout>
