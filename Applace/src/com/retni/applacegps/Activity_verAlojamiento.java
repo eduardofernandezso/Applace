@@ -55,6 +55,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
@@ -111,7 +112,7 @@ public class Activity_verAlojamiento extends ActionBarActivity{
     String titulo;
     int not=0;
     ArrayList<Bitmap> imgs = new ArrayList<Bitmap>();
-    //ArrayList<Bitmap> com = new ArrayList<Bitmap>();
+    ArrayList<String> id_pic = new ArrayList<String>();
     
     private static int TAKE_PICTURE = 1;
 	private static int SELECT_PICTURE = 2;
@@ -304,7 +305,7 @@ public class Activity_verAlojamiento extends ActionBarActivity{
                 super.onPreExecute();
                 //list_bar.setVisibility(View.VISIBLE);        
                 pd.show();
-                adapter = new ViewPagerAdapter1(Activity_verAlojamiento.this, imgs);
+                adapter = new ViewPagerAdapter1(Activity_verAlojamiento.this, imgs, id_pic);
             }
             
             protected Void doInBackground(Void... params) {
@@ -326,7 +327,8 @@ public class Activity_verAlojamiento extends ActionBarActivity{
         			ParseFile ic = null;
         			for(int h=0;h<fot.size();h++){
         				im = fot.get(h);
-        				
+        				id_pic.add(im.getObjectId());
+        				adapter.notifyDataSetChanged();
         				ic = im.getParseFile("foto");
         				if(ic != null){
     	    			    ic.getDataInBackground(new GetDataCallback() {
@@ -391,11 +393,13 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 	public class ViewPagerAdapter1 extends PagerAdapter {
 	    Context context;
 	    ArrayList<Bitmap> imgs = new ArrayList<Bitmap>();
+	    ArrayList<String> id_pic = new ArrayList<String>();
 	    LayoutInflater inflater;
 	 
-	    public ViewPagerAdapter1(Context context, ArrayList<Bitmap> imgs ) {
+	    public ViewPagerAdapter1(Context context, ArrayList<Bitmap> imgs, ArrayList<String> id_pic) {
 	        this.context = context;
 	        this.imgs = imgs;
+	        this.id_pic = id_pic;
 	    }
 	 
 	    @Override
@@ -436,7 +440,60 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 					intent.putExtra("pos", pos);
 					context.startActivity(intent);			
 				}		
-			});        
+			});  
+	        
+	        itemView.setOnLongClickListener(new OnLongClickListener(){        	
+				public boolean onLongClick(View v) {
+					final Integer pos = (Integer) v.getTag();
+					Vibrator h = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+		        	h.vibrate(25);
+		        	//Toast.makeText(getApplicationContext(), "pos: " + pos, Toast.LENGTH_SHORT).show();
+		        	AlertDialog.Builder dialog;
+		        	dialog = new AlertDialog.Builder(Activity_verAlojamiento.this);  
+	    	        dialog.setTitle("Eliminar imágen");		
+	    	        dialog.setIcon(R.drawable.ic_launcher);	
+	    	        
+	    	        View vi = getLayoutInflater().inflate( R.layout.dialog, null );
+	    	        TextView text = (TextView) vi.findViewById(R.id.dialog_text);
+	    	        text.setText("¿Desea borrar de forma permanente esta imágen?");
+	    			
+	    	        dialog.setView(vi);
+	    	        dialog.setNegativeButton("Cancelar", null);  
+	    	        dialog.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {  
+	    	            public void onClick(DialogInterface dialogo1, int id) {
+	    	            	pd.show();
+	    	            	Toast.makeText( getApplicationContext(),"Eliminando imágen...",Toast.LENGTH_SHORT ).show();
+	    	            	//Acá se elimina la imágen de la base de datos
+	    	            	ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Fotos");
+	    	        		query.whereEqualTo("objectId", id_pic.get(pos));
+	    	        		
+	    	        		List<ParseObject> obj = null;
+	    	        		try {
+	    	        			obj = query.find();
+	    	        		} catch (ParseException e) {
+	    	        		}
+	    	        		if(obj.size()!=0){
+	    	        			obj.get(0).deleteInBackground(new DeleteCallback() {
+	    	        				public void done(ParseException e) {
+	    	        				    if (e == null) {	
+	    	        				    	pd.dismiss();
+	    	        				    	Toast.makeText( getApplicationContext(),"¡Imágen eliminada correctamente!",Toast.LENGTH_SHORT ).show();
+	    	        				    	finish();    
+	    	        				    	startActivity(getIntent());
+	    	        				    } else{
+	    	        				    	Toast.makeText(getApplicationContext(), "Error al borrar la imágen, por favor intente nuevamente.", Toast.LENGTH_SHORT).show();
+	    	        				    }
+	    	        				}
+	    	        		    });
+	    	        		}                    	
+	    	            }  
+	    	        });  
+	    	        
+	    	        dialog.show();
+					
+					return false;
+				}	
+			});   
 	 
 	        return itemView;
 	    }
