@@ -25,6 +25,7 @@ import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Shader.TileMode;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -62,7 +63,7 @@ public class Logueado extends ActionBarActivity{
     CharSequence tituloApp;
     ActionBarDrawerToggle drawerToggle;
     static CharSequence tituloSeccion;
-    int SELECTED_POSITION=0;
+    static int SELECTED_POSITION=1;
     String passUser, mailUser, nameUser = "Mi Cuenta",idUser;
 			
 	@SuppressWarnings("unchecked")
@@ -96,18 +97,27 @@ public class Logueado extends ActionBarActivity{
 		    idUser = user.getObjectId();
 	    }
 	    
-	    fotos = new int[] { R.drawable.miperfil2,
-                R.drawable.mapa, R.drawable.publicar,
-                R.drawable.misalojamientos, R.drawable.mismensajes, R.drawable.rutamultiple,
-                R.drawable.mismensajes2, R.drawable.cerrarsesion};
+	    fotos = new int[] { R.drawable.perf,
+                R.drawable.map, R.drawable.publish,
+                R.drawable.misaloj, R.drawable.msje, R.drawable.ruta,
+                R.drawable.msje, R.drawable.cs};
 	    
 		opcionesMenu = new String[] {"Mi perfil, "+ nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Mis Estadísticas", "Ruta Multiple", "Mis Mensajes","Cerrar Sesión"};
         drawerLayout = (DrawerLayout) findViewById(R.id.container);
         drawerList = (ListView) findViewById(R.id.left_drawer);
-        //drawerList.setItemChecked(1, true);
-        
-        BaseAdapter listAdapter = new Cursor_AdapterSl(Logueado.this, opcionesMenu, fotos);
+        //drawerList.setSelector(android.R.layout.simple_list_item_activated_1);
+        final BaseAdapter listAdapter = new Cursor_AdapterSl(Logueado.this, opcionesMenu, fotos);
     	drawerList.setAdapter(listAdapter);  
+    	
+    	drawerList.setOnItemClickListener( new OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View arg1, int position, long id) {
+                    SELECTED_POSITION = position;
+                    listAdapter.notifyDataSetChanged();
+            }
+        });
+    	
         /*
         drawerList.setAdapter(new ArrayAdapter<String>(
                 getSupportActionBar().getThemedContext(),
@@ -120,6 +130,8 @@ public class Logueado extends ActionBarActivity{
         
         tituloApp = getSupportActionBar().getTitle();
         tituloSeccion = tituloApp;
+        
+        
         
         drawerToggle = new ActionBarDrawerToggle(this,
             drawerLayout,
@@ -260,6 +272,7 @@ public static class Cursor_AdapterSl extends BaseAdapter{
 	    int [] iconos;
 	    int sel=1;
 	    int pos = 0;
+	    Drawable origin;
 	    
 	    @SuppressWarnings("unused")
 		private static LayoutInflater inflater = null;
@@ -300,10 +313,15 @@ public static class Cursor_AdapterSl extends BaseAdapter{
 		    	convertView = inflater.inflate(R.layout.sliding_row, null); 
 		    }
 	    	
-	    	if(position==1){
-	    		convertView.setBackgroundResource(drawable.applace_btn_default_disabled_focused_holo_light);
-	    	}
-	    	
+	    	if (position == SELECTED_POSITION) {
+	            // set your color
+	    		convertView.setBackgroundResource(drawable.ab_background_textured_applacegps);
+	        }
+	    	/*
+	    	origin = convertView.getBackground();
+	    	if(position==sel)
+	    		convertView.setBackgroundResource(drawable.ab_background_textured_applacegps);
+	    	*/
 		    final TextView texto = (TextView)convertView.findViewById(R.id.sl_text);
 		    final ImageView ic = (ImageView)convertView.findViewById(R.id.sl_img);
 		    
@@ -321,9 +339,9 @@ public static class Cursor_AdapterSl extends BaseAdapter{
 					
 					Vibrator h = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 		        	h.vibrate(25);
+		        	//sel=pos;
+		        	//v.setBackgroundResource(drawable.ab_background_textured_applacegps);
 		        	
-		        	v.setBackgroundResource(drawable.ab_background_textured_applacegps);
-					
 					Fragment fragment = null;
 	                Intent intent = null;
 	     
@@ -338,7 +356,7 @@ public static class Cursor_AdapterSl extends BaseAdapter{
 	                        break;
 	                    case 1:
 	                    	//Carga el mapa
-	                        fragment = new Fragment_googlemaps();                    	
+	                        fragment = new transitiva();                    	
 	                        break;
 	                    case 2:
 	                    	//Publica un anuncio
@@ -390,14 +408,13 @@ public static class Cursor_AdapterSl extends BaseAdapter{
 	                    fragmentManager.beginTransaction()
 	                        .replace(R.id.content_frame, fragment,tag)
 	                        .addToBackStack(tag)
-	                        .commit();
-	                	
+	                        .commit();            
 	                }
 	                
 	                
 	                
 	                //drawerList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-	                drawerList.setItemChecked(pos, true);
+	                //drawerList.setItemChecked(pos, true);
 	                
 	                //tituloSeccion = textos[pos];
 	                ((ActionBarActivity) context).getSupportActionBar().setTitle(textos[pos]);
@@ -413,11 +430,15 @@ public static class Cursor_AdapterSl extends BaseAdapter{
 					context.startActivity(intent);	
 					*/			
 				}		
-			});        
+			});     
+	        
+	        
 	        
 	        
 	        return convertView;
 	    }	
+	    
+	    
 	    public void loadBitmap(Bitmap b) {
 			vis_temp.setImageBitmap(circle(Bitmap.createScaledBitmap(b, 200, 200, false)));
 		}

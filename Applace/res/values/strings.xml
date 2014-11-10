@@ -35,6 +35,10 @@
     <string name="find">Find</string>
     <string name="hint">Enter Place</string>
     
+    <string name="picture">Picture</string>
+	<string name="select_intro">Long-press a thumbnail to add an image</string>
+	<string name="show_intro">Press a thumbnail to display at larger size</string>
+    
     <array name="icons">
         <item>@drawable/ic_slide</item>
         <item>@drawable/ic_action_search</item>

@@ -64,7 +64,7 @@
         android:id="@+id/action_camara"
         android:orderInCategory="100"
         sgoliver:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_device_access_camera"
+        android:icon="@drawable/ic_action_ic_action_device_access_camera"
         android:title="@string/action_camara" />
     
     <item

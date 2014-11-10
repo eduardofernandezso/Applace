@@ -40,6 +40,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:theme="@style/Theme.Applace_tab" >
 
         <activity
@@ -61,6 +62,9 @@
         </activity>
         <activity
             android:name="com.retni.applacegps.Activity_iniciarSesion">
+        </activity>
+        <activity
+            android:name="com.retni.applacegps.Activity_detalleFoto">
         </activity>
         <activity
             android:name="com.retni.applacegps.Activity_registro">

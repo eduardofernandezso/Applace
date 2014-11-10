@@ -14,7 +14,7 @@
             android:layout_height="35dp"
             android:layout_marginRight="5dp"
             android:layout_weight="608.78"
-            android:src="@drawable/mismensajes2" />
+            android:src="@drawable/mismensajes" />
 
         <TextView
             android:id="@+id/sl_text"
