@@ -5,8 +5,10 @@ anteriormente.
 
 package com.retni.applacegps;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,14 +53,23 @@ public class Fragment_inicio extends Fragment{
 			Intent intent;
 			int id = v.getId();
 			if (id == R.id.facebook) {
+				Vibrator h = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+	        	h.vibrate(25);
 				intent = new Intent(getActivity(), logindeface.class);
 				startActivity(intent);
+				getActivity().overridePendingTransition(R.anim.left_in, R.anim.left_out);
 			} else if (id == R.id.iniCorreo) {
+				Vibrator h = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+	        	h.vibrate(25);
 				intent = new Intent(getActivity(), Activity_iniciarSesion.class);
 				startActivity(intent);
+				getActivity().overridePendingTransition(R.anim.left_in, R.anim.left_out);
 			} else if (id == R.id.regCorreo) {
+				Vibrator h = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+	        	h.vibrate(25);
 				intent = new Intent(getActivity(), Activity_registro.class);
 				startActivity(intent);
+				getActivity().overridePendingTransition(R.anim.left_in, R.anim.left_out);
 			}
 		}
 	};

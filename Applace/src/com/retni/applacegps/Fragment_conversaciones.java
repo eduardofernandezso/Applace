@@ -3,6 +3,7 @@ package com.retni.applacegps;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
@@ -380,6 +381,7 @@ private class TransparentProgressDialog extends Dialog {
 					intent.putExtra("idOtros", idOtros.get(pos));
 					intent.putExtra("fotOtro", Bitmap.createScaledBitmap(fotOtros.get(pos), 200, 200, false));
 					context.startActivity(intent);	
+					((Activity) context).overridePendingTransition(R.anim.left_in, R.anim.left_out);
 				}		
 			});        
 	        return convertView;

@@ -9,15 +9,14 @@ package com.retni.applacegps;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseInstallation;
-import com.parse.ParsePush;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -60,9 +59,12 @@ public class Activity_registro extends ActionBarActivity {
 		menu.findItem(R.id.action_edit).setVisible(false);
 		menu.findItem(R.id.action_config).setVisible(false);
 		menu.findItem(R.id.action_share).setVisible(false);
-		menu.findItem(R.id.action_update).setVisible(false);
+		menu.findItem(R.id.action_update).setVisible(false);			
+		menu.findItem(R.id.action_new).setVisible(false);
 		menu.findItem(R.id.action_camara).setVisible(false);
 		menu.findItem(R.id.action_delete).setVisible(false);
+		menu.findItem(R.id.action_fav).setVisible(false);
+		menu.findItem(R.id.action_fav_no).setVisible(false);
 		return true;
 	}
 
@@ -86,6 +88,8 @@ public class Activity_registro extends ActionBarActivity {
 			// TODO Auto-generated method stub
 			int id = v.getId();
 			if (id == R.id.regis) {
+				Vibrator h = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+	        	h.vibrate(25);
 				username = mail.getText().toString();
 				if(nom.getText().toString().matches("") || pass.getText().toString().matches("") || ap.getText().toString().matches("") || mail.getText().toString().matches("")){
 					Toast.makeText( getApplicationContext(),"Por favor llene todos los campos",Toast.LENGTH_SHORT ).show();
@@ -107,6 +111,7 @@ public class Activity_registro extends ActionBarActivity {
 											Toast.makeText( getApplicationContext(),"Bienvenido a Applace, "+nombre,Toast.LENGTH_SHORT ).show();
 											Intent intent = new Intent(Activity_registro.this, Logueado.class );
 											startActivity(intent);
+											overridePendingTransition(R.anim.left_in, R.anim.left_out);
 									    }
 									}
 								});					    	
@@ -120,9 +125,21 @@ public class Activity_registro extends ActionBarActivity {
 				}				
 			}
 			else if(id == R.id.ini_link){
+				Vibrator h = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+	        	h.vibrate(25);
 				Intent intent = new Intent(Activity_registro.this, Activity_iniciarSesion.class );
 				startActivity(intent);
+				overridePendingTransition(R.anim.left_in, R.anim.left_out);
 			}
 		}
 	};
+	
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch(keyCode){
+			case KeyEvent.KEYCODE_BACK:
+				startActivity(new Intent(this, MainActivity.class));
+				overridePendingTransition(R.anim.right_in, R.anim.right_out);
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 }

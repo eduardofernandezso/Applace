@@ -28,10 +28,14 @@
     <string name="action_camara">Cámara</string>
     <string name="action_delete">Borrar</string>
     <string name="action_new">Nuevo mensaje</string>
+    <string name="action_fav">Favorito</string>
+    <string name="action_fav_no">No favorito</string>
     <string name="vis_comentario">Casa muy linda. 
         Queda a pasos de la playa y es muy comoda para una familia numerosa. 
         Tiene todas las características que se describen y mucho más.</string>
-    
+        
+    <string name="reportar_link"><u>Reportar este alojamiento</u></string>
+    <string name="ver_disp"><u>Ver disponibilidad</u></string>
     <string name="find">Find</string>
     <string name="hint">Enter Place</string>
     

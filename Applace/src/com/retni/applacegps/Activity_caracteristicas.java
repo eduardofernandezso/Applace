@@ -155,12 +155,21 @@ public class Activity_caracteristicas extends ActionBarActivity{
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
+		menu.findItem(R.id.como_funciona).setVisible(false);
+		menu.findItem(R.id.codiciones).setVisible(false);
+		menu.findItem(R.id.politica).setVisible(false);
+		menu.findItem(R.id.ayuda).setVisible(false);
+		
 		menu.findItem(R.id.action_search).setVisible(false);
 		menu.findItem(R.id.action_edit).setVisible(false);
 		menu.findItem(R.id.action_config).setVisible(false);
 		menu.findItem(R.id.action_share).setVisible(false);
-		menu.findItem(R.id.action_update).setVisible(false);
+		menu.findItem(R.id.action_update).setVisible(false);			
+		menu.findItem(R.id.action_new).setVisible(false);
 		menu.findItem(R.id.action_camara).setVisible(false);
+		menu.findItem(R.id.action_delete).setVisible(false);
+		menu.findItem(R.id.action_fav).setVisible(false);
+		menu.findItem(R.id.action_fav_no).setVisible(false);
 		return true;
 	}
 
@@ -318,6 +327,7 @@ public class Activity_caracteristicas extends ActionBarActivity{
 				saveNewAlojamiento();
 				Intent intent = new Intent(Activity_caracteristicas.this, Logueado.class );
 				startActivity(intent);
+				overridePendingTransition(R.anim.left_in, R.anim.left_out);
 			}
 		}
 	};

@@ -10,6 +10,7 @@ import android.content.Intent;
 //import android.app.Application;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -93,5 +94,14 @@ public class logindeface extends Activity {
 		//user.setUsername();
 		Intent intent = new Intent(logindeface.this, Logueado.class);
 		startActivity(intent);
+	}
+	
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch(keyCode){
+			case KeyEvent.KEYCODE_BACK:
+				startActivity(new Intent(this, MainActivity.class));
+				overridePendingTransition(R.anim.right_in, R.anim.right_out);
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }

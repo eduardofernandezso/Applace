@@ -8,6 +8,7 @@ package com.retni.applacegps;
 import com.parse.Parse;
 import com.parse.ParseUser;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,6 +35,7 @@ public class MainActivity extends ActionBarActivity {
         if (currentUser != null) {
         	Intent i = new Intent(MainActivity.this,Logueado.class);
         	startActivity(i);
+        	
           // do stuff with the user
         } else {
           // show the signup or login screen
@@ -44,14 +46,18 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);		
+		getMenuInflater().inflate(R.menu.main, menu);	
+		
 		menu.findItem(R.id.action_search).setVisible(false);
 		menu.findItem(R.id.action_edit).setVisible(false);
 		menu.findItem(R.id.action_config).setVisible(false);
 		menu.findItem(R.id.action_share).setVisible(false);
-		menu.findItem(R.id.action_update).setVisible(false);
+		menu.findItem(R.id.action_update).setVisible(false);			
+		menu.findItem(R.id.action_new).setVisible(false);
 		menu.findItem(R.id.action_camara).setVisible(false);
 		menu.findItem(R.id.action_delete).setVisible(false);
+		menu.findItem(R.id.action_fav).setVisible(false);
+		menu.findItem(R.id.action_fav_no).setVisible(false);
 		return true;
 	}
 

@@ -100,9 +100,10 @@ public class Logueado extends ActionBarActivity{
 	    fotos = new int[] { R.drawable.perf,
                 R.drawable.map, R.drawable.publish,
                 R.drawable.misaloj, R.drawable.msje, R.drawable.ruta,
+                R.drawable.estacionamiento, R.drawable.favorito,
                 R.drawable.msje, R.drawable.cs};
 	    
-		opcionesMenu = new String[] {"Mi perfil, "+ nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Mis Estadísticas", "Ruta Multiple", "Mis Mensajes","Cerrar Sesión"};
+		opcionesMenu = new String[] {"Mi perfil, "+ nameUser, "Mapa", "Publicar Alojamiento","Mis Alojamientos","Mis Estadísticas", "Ruta Multiple", "Mis Viajes","Favoritos", "Mis Mensajes","Cerrar Sesión"};
         drawerLayout = (DrawerLayout) findViewById(R.id.container);
         drawerList = (ListView) findViewById(R.id.left_drawer);
         //drawerList.setSelector(android.R.layout.simple_list_item_activated_1);
@@ -374,11 +375,19 @@ public static class Cursor_AdapterSl extends BaseAdapter{
 	                    	fragment = new Fragment_rutaMultiple();
 	                    	break;
 	                    case 6:
+	                    	//Lista de viajes relizados
+	                    	fragment = new Fragment_misViajes();
+	                    	break;
+	                    case 7:
+	                    	//Lista de favoritos
+	                    	fragment = new Fragment_misFavoritos();
+	                    	break;
+	                    case 8:
 	                    	Intent i2 = new Intent(context,Activity_mensajes.class);
 	                    	context.startActivity(i2);
 	                    	((Activity) context).overridePendingTransition(R.anim.left_in, R.anim.left_out);
 	                    	break;
-	                    case 7:
+	                    case 9:
 	                    	AlertDialog.Builder dialog = new AlertDialog.Builder(context);  
 	            	        dialog.setTitle("Cerrar Sesión");		
 	            	        dialog.setIcon(R.drawable.ic_launcher);	
@@ -406,6 +415,7 @@ public static class Cursor_AdapterSl extends BaseAdapter{
 	                	String tag = fragment.getTag();
 	             
 	                    fragmentManager.beginTransaction()
+	                    	.setCustomAnimations(R.anim.left_in, R.anim.left_out)
 	                        .replace(R.id.content_frame, fragment,tag)
 	                        .addToBackStack(tag)
 	                        .commit();            
@@ -467,6 +477,10 @@ public static class Cursor_AdapterSl extends BaseAdapter{
 		}
 	}
 	
+	public void setActionBarTitle(String title){
+		getSupportActionBar().setTitle(title);
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -481,10 +495,12 @@ public static class Cursor_AdapterSl extends BaseAdapter{
 		menu.findItem(R.id.action_edit).setVisible(false);
 		menu.findItem(R.id.action_config).setVisible(false);
 		menu.findItem(R.id.action_share).setVisible(true);
-		menu.findItem(R.id.action_update).setVisible(false);
+		menu.findItem(R.id.action_update).setVisible(false);			
+		menu.findItem(R.id.action_new).setVisible(false);
 		menu.findItem(R.id.action_camara).setVisible(false);
 		menu.findItem(R.id.action_delete).setVisible(false);
-		menu.findItem(R.id.action_new).setVisible(false);
+		menu.findItem(R.id.action_fav).setVisible(false);
+		menu.findItem(R.id.action_fav_no).setVisible(false);
 		
 		getSupportActionBar().setTitle("Applace");
 		

@@ -475,6 +475,7 @@ public class Fragment_ubicacion extends Fragment {
 					intent.putExtra("dir", dir_save);
 					intent.putExtra("tipo_aloj", tipoAlojamiento);
 					startActivity(intent);
+					getActivity().overridePendingTransition(R.anim.left_in, R.anim.left_out);
 			}
 		}
 	};

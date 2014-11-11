@@ -7,17 +7,12 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.json.JSONObject;
-
 import com.parse.DeleteCallback;
 import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseInstallation;
 import com.parse.ParseObject;
-import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -49,7 +44,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -113,6 +107,9 @@ public class Activity_verAlojamiento extends ActionBarActivity{
     int not=0;
     ArrayList<Bitmap> imgs = new ArrayList<Bitmap>();
     ArrayList<String> id_pic = new ArrayList<String>();
+    LinearLayout rep_lay;
+    TextView rep_link;
+    TextView tipo_text, cap_text, hab_text, cam_text, wc_text;
     
     private static int TAKE_PICTURE = 1;
 	private static int SELECT_PICTURE = 2;
@@ -123,7 +120,6 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 	String comentario;
 	EditText com_new;
 	
-	@SuppressWarnings("deprecation")
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_veralojamiento);
@@ -131,6 +127,15 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		name = Environment.getExternalStorageDirectory() + "/test.jpg";
 	
 		//fotos = new int[] { R.drawable.subir};
+		
+		rep_lay = (LinearLayout) findViewById(R.id.rep_lay);
+		rep_link = (TextView) findViewById(R.id.rep_link);
+		
+		tipo_text = (TextView) findViewById(R.id.tipo_text);
+		cap_text = (TextView) findViewById(R.id.cap_text);
+		hab_text = (TextView) findViewById(R.id.hab_text);
+		cam_text = (TextView) findViewById(R.id.cam_text);
+		wc_text = (TextView) findViewById(R.id.wc_text);
 		
 		delete_bar = (ProgressBar) findViewById(R.id.delete_bar);
 		vis_verlist = (TextView) findViewById(R.id.vis_verlist);
@@ -144,6 +149,7 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		vis_ruta.setOnClickListener(listener);
 		vis_mensaje.setOnClickListener(listener);
 		vis_multiRuta.setOnClickListener(listener);
+		rep_link.setOnClickListener(listener);
 		
 		//comentarios
 		vis_comentario1 = (TextView) findViewById(R.id.vis_comentario1);
@@ -162,7 +168,7 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		vis_enviar = (Button) findViewById(R.id.vis_enviar);
 		vis_guardar_comentario = (EditText) findViewById(R.id.vis_guardar_comentario);
 		vis_calificar = (RatingBar) findViewById(R.id.vis_calificar);
-		vis_rankear = (FrameLayout) findViewById(R.id.vis_rankear);
+		//vis_rankear = (FrameLayout) findViewById(R.id.vis_rankear);
 		
 		vis_tit = (TextView) findViewById(R.id.vis_tit);
 		vis_estado = (TextView) findViewById(R.id.vis_estado);
@@ -258,6 +264,12 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 				//Toast.makeText(getApplicationContext(),name_receptor, Toast.LENGTH_LONG).show();
 			}
 			
+			tipo_text.setText(caract.getString("tipo_aloj"));
+			cap_text.setText(caract.getInt("capacidad")+" personas");
+			hab_text.setText(caract.getInt("numeroPiezas")+ " piezas");
+			cam_text.setText(caract.getInt("numeroCamas")+ " camas");
+			wc_text.setText(caract.getInt("numeroBanos")+ " baños");
+			
 			vis_rating.setRating((float) caract.getDouble("calificacion"));
 			vis_rating_count.setText(""+caract.getInt("count_calificacion"));
 			vis_precio.setText("$"+caract.getInt("precio"));
@@ -295,6 +307,23 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		load_pic();		
 		mostrarComentarios();		
 		verificarComentario();
+		report();
+	}
+	
+	public void report(){
+		ParseQuery<ParseObject> query3 = new ParseQuery<ParseObject>("Viajes");
+        
+		query3.whereEqualTo("id_user", id_user_emisor);
+		query3.whereEqualTo("id_alojamiento", id_aloj);
+		List<ParseObject> cal = null;
+		try {
+			cal = query3.find();
+		} catch (ParseException e) {
+
+		}
+		if(cal.size()==0){
+			rep_lay.setVisibility(View.GONE);			
+		}
 	}
 	
 	public void load_pic(){
@@ -523,7 +552,8 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 			//Si el alojamiento no tiene comentarios
 			vis_coment1.setVisibility(View.GONE);
 			vis_coment2.setVisibility(View.GONE);
-			vis_verlist.setVisibility(View.GONE);
+			vis_verlist.setText("Este alojamiento no tiene comentarios");
+			//vis_verlist.setVisibility(View.GONE);
 		} else{
 			for(int a=0; a < com.size(); a++){
 				comentario = com.get(a);
@@ -698,7 +728,8 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 			}
 			
 			if(vis_verlist.getVisibility()==View.VISIBLE){
-				vis_verlist.setOnClickListener(listener);
+				if(!vis_verlist.getText().toString().matches("Este alojamiento no tiene comentarios"))
+					vis_verlist.setOnClickListener(listener);
 			}
 		}
 	}
@@ -753,7 +784,7 @@ public class Activity_verAlojamiento extends ActionBarActivity{
         	
         		}
         		else{ //si comentó ese alojamiento entonces no le muestra la opción
-        			vis_rankear.setVisibility(View.GONE);
+        			vis_comentar.setVisibility(View.GONE);
         		}	            	
             }
         }.execute();        
@@ -832,12 +863,38 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 				notif.saveInBackground(new SaveCallback() {
 					public void done(ParseException e) {
 					    if (e == null) {	
-							Toast.makeText( getApplicationContext(),"Notificación enviada con éxito!",Toast.LENGTH_SHORT ).show();
+							//Toast.makeText( getApplicationContext(),"Notificación enviada con éxito!",Toast.LENGTH_SHORT ).show();
 					    } else{
 					    	Toast.makeText(getApplicationContext(), "Error al ingresar el alojamiento, por favor intente nuevamente.", Toast.LENGTH_SHORT).show();
 					    }
 					}
 			    });
+				
+				ParseQuery<ParseObject> query3 = new ParseQuery<ParseObject>("Viajes");
+        		                
+        		query3.whereEqualTo("id_user", id_user_emisor);
+        		query3.whereEqualTo("id_alojamiento", id_aloj);
+        		List<ParseObject> cal = null;
+        		try {
+        			cal = query3.find();
+        		} catch (ParseException e) {
+
+        		}
+        		if(cal.size()==0){
+					ParseObject viaje = new ParseObject("Viajes");
+					viaje.put("id_user", id_user_emisor);
+					viaje.put("id_alojamiento", id_aloj);
+					
+					viaje.saveInBackground(new SaveCallback() {
+						public void done(ParseException e) {
+						    if (e == null) {	
+								//Toast.makeText( getApplicationContext(),"Notificación enviada con éxito!",Toast.LENGTH_SHORT ).show();
+						    } else{
+						    	Toast.makeText(getApplicationContext(), "Error al ingresar el alojamiento, por favor intente nuevamente.", Toast.LENGTH_SHORT).show();
+						    }
+						}
+				    });
+        		}
 				
 				FragmentManager fm = Activity_verAlojamiento.this.getSupportFragmentManager();
 		        FragmentTransaction ft = fm.beginTransaction();
@@ -847,7 +904,7 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 		        Bundle j = new Bundle();
 		        j.putString("direccion", vis_direccion);
 		        fragment.setArguments(j);
-		        
+		        ft.setCustomAnimations(R.anim.left_in, R.anim.left_out);
 		        ft.replace(R.id.vis_frame_content, fragment,tag);
 		        ft.addToBackStack(tag);
 		        ft.commit(); 
@@ -914,9 +971,31 @@ public class Activity_verAlojamiento extends ActionBarActivity{
 				startActivity(intent);	
 			}
 			else if(id == R.id.vis_multiRuta){
+				Vibrator h = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+	        	h.vibrate(25);
 				Fragment_rutaMultiple.directions.add(vis_direccion);
 				Activity_verAlojamiento.this.finish();
 				Toast.makeText(getApplicationContext(), "Alojamiento añadido para la ruta múltiple.", Toast.LENGTH_SHORT).show();
+			}
+			else if(id == R.id.rep_link){
+				Vibrator h = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+	        	h.vibrate(25);
+	        	pd.show();
+	        	ParseObject notif = new ParseObject("Notificacion");
+				notif.put("notificacion", "Su alojamiento titulado '"+titulo+"', ha sido reportado por disponibilidad incorrecta. Le recordamos que debe actualizar el estado de su propiedad constantemente.");
+				notif.put("id_user", id_user_dueno);
+				notif.put("id_alojamiento", id_aloj);
+				
+				notif.saveInBackground(new SaveCallback() {
+					public void done(ParseException e) {
+					    if (e == null) {	
+					    	pd.dismiss();					    	
+							Toast.makeText( getApplicationContext(),"¡Se ha reportado la disponibilidad de este alojamiento exitosamente!",Toast.LENGTH_SHORT ).show();
+					    } else{
+					    	Toast.makeText(getApplicationContext(), "Error al reportar el alojamiento.", Toast.LENGTH_SHORT).show();
+					    }
+					}
+			    });
 			}
 		}
 	};
@@ -980,6 +1059,22 @@ private class TransparentProgressDialog extends Dialog {
 		
 		return circleBitmap;
 	}
+	
+	public int favito(){
+		int val=0;
+		ParseQuery<ParseObject> query3 = new ParseQuery<ParseObject>("Favoritos");        
+		query3.whereEqualTo("id_user", id_user_emisor);
+		query3.whereEqualTo("id_alojamiento", id_aloj);
+		List<ParseObject> cal = null;
+		try {
+			cal = query3.find();
+		} catch (ParseException e) {}
+		
+		if(cal.size()==0){
+			val=1;
+		}
+		return val;
+	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);		
@@ -993,16 +1088,25 @@ private class TransparentProgressDialog extends Dialog {
 		menu.findItem(R.id.action_edit).setVisible(false);
 		menu.findItem(R.id.action_config).setVisible(false);
 		menu.findItem(R.id.action_share).setVisible(false);
-		menu.findItem(R.id.action_update).setVisible(false);
-			
+		menu.findItem(R.id.action_update).setVisible(false);			
 		menu.findItem(R.id.action_new).setVisible(false);
 		
 		if(id_user_dueno.matches(id_user_emisor)){
 			menu.findItem(R.id.action_delete).setVisible(true);
-			menu.findItem(R.id.action_camara).setVisible(true);	
-		} else{
+			menu.findItem(R.id.action_camara).setVisible(true);
+			menu.findItem(R.id.action_fav).setVisible(false);
+			menu.findItem(R.id.action_fav_no).setVisible(false);
+		} else{			
 			menu.findItem(R.id.action_camara).setVisible(false);	
-			menu.findItem(R.id.action_delete).setVisible(false);
+			menu.findItem(R.id.action_delete).setVisible(false);			
+			int i = favito();
+			if(i==1){
+				menu.findItem(R.id.action_fav_no).setVisible(true);
+				menu.findItem(R.id.action_fav).setVisible(false);
+			} else{
+				menu.findItem(R.id.action_fav).setVisible(true);
+				menu.findItem(R.id.action_fav_no).setVisible(false);
+			}
 		}
 		return true;
 	}
@@ -1107,8 +1211,7 @@ private class TransparentProgressDialog extends Dialog {
     	        
     	        dialog.show();
             	break;
-	        case R.id.action_camara:
-	        	
+	        case R.id.action_camara:	        	
 	        	dialog = new AlertDialog.Builder(Activity_verAlojamiento.this);  
     	        dialog.setTitle("Agregar una foto al alojamiento");		
     	        dialog.setIcon(R.drawable.ic_launcher);	
@@ -1135,6 +1238,87 @@ private class TransparentProgressDialog extends Dialog {
            		    	startActivityForResult(intent, code);	
     	            }  
     	        });          	        
+    	        dialog.show();
+	        	break;
+	        case R.id.action_fav_no:
+	        	dialog = new AlertDialog.Builder(Activity_verAlojamiento.this);  
+    	        dialog.setTitle("Agregar a favoritos");		
+    	        dialog.setIcon(R.drawable.ic_launcher);	
+    	        
+    	        View ve = getLayoutInflater().inflate( R.layout.dialog, null );
+    	        TextView tex = (TextView) ve.findViewById(R.id.dialog_text);
+    	        tex.setText("¿Deseas agregar este alojamiento a tu lista de favoritos?");
+    			
+    	        dialog.setView(ve);
+    	        dialog.setNegativeButton("Cancelar", null);  
+    	        dialog.setPositiveButton("Agregar", new DialogInterface.OnClickListener() {  
+    	            public void onClick(DialogInterface dialogo1, int id) {
+    	            	pd.show();
+    	            	Toast.makeText( getApplicationContext(),"Agregando a favoritos...",Toast.LENGTH_SHORT ).show();
+    	            	
+    	            	ParseObject favi = new ParseObject("Favoritos");
+    					favi.put("id_user", id_user_emisor);
+    					favi.put("id_alojamiento", id_aloj);
+    					
+    					favi.saveInBackground(new SaveCallback() {
+    						public void done(ParseException e) {
+    						    if (e == null) {	
+    						    	pd.dismiss();
+	        				    	Toast.makeText( getApplicationContext(),"¡Este alojamiento ha sido agregado a su lista de favoritos!",Toast.LENGTH_SHORT ).show();
+	        				    	finish();    
+	        				    	startActivity(getIntent());
+    						    } else{
+    						    	Toast.makeText(getApplicationContext(), "Error al ingresar el alojamiento, por favor intente nuevamente.", Toast.LENGTH_SHORT).show();
+    						    }
+    						}
+    				    });            	
+    	            }  
+    	        });  
+    	        
+    	        dialog.show();
+	        	break;
+	        case R.id.action_fav:
+	        	dialog = new AlertDialog.Builder(Activity_verAlojamiento.this);  
+    	        dialog.setTitle("Eliminar alojamiento de favoritos");		
+    	        dialog.setIcon(R.drawable.ic_launcher);	
+    	        
+    	        View vd = getLayoutInflater().inflate( R.layout.dialog, null );
+    	        TextView texta = (TextView) vd.findViewById(R.id.dialog_text);
+    	        texta.setText("¿Deseas borrar este alojamiento de tu lista de favoritos?");
+    			
+    	        dialog.setView(vd);
+    	        dialog.setNegativeButton("Cancelar", null);  
+    	        dialog.setPositiveButton("Borrar", new DialogInterface.OnClickListener() {  
+    	            public void onClick(DialogInterface dialogo1, int id) {
+    	            	pd.show();
+    	            	//Toast.makeText( getApplicationContext(),"Eliminando anuncio...",Toast.LENGTH_SHORT ).show();
+    	            	//Acá se elimina el alojamiento de la base de datos
+    	            	ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Favoritos");
+    	        		query.whereEqualTo("id_user", id_user_emisor);
+    	        		query.whereEqualTo("id_alojamiento", id_aloj);
+    	        		
+    	        		List<ParseObject> obj = null;
+    	        		try {
+    	        			obj = query.find();
+    	        		} catch (ParseException e) {
+    	        		}
+    	        		if(obj.size()!=0){
+    	        			obj.get(0).deleteInBackground(new DeleteCallback() {
+    	        				public void done(ParseException e) {
+    	        				    if (e == null) {	
+    	        				    	pd.dismiss();
+    	        				    	Toast.makeText( getApplicationContext(),"Alojamiento borrado de tu lista de favoritos!",Toast.LENGTH_SHORT ).show();
+    	        				    	finish();    
+    	        				    	startActivity(getIntent());
+    	        				    } else{
+    	        				    	Toast.makeText(getApplicationContext(), "Error al borrar el alojamiento, por favor intente nuevamente.", Toast.LENGTH_SHORT).show();
+    	        				    }
+    	        				}
+    	        		    });
+    	        		}                    	
+    	            }  
+    	        });  
+    	        
     	        dialog.show();
 	        	break;
 	        default:

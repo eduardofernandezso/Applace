@@ -1,10 +1,13 @@
 package com.retni.applacegps;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,10 +43,14 @@ public class Fragment_tipoAloj extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);    
         
+        
+        
         tiposList = (ListView) getActivity().findViewById(R.id.list_tipo);
         frame_aloj = (FrameLayout) getActivity().findViewById(R.id.frame_aloj);
         
         tipos = new String[] {"Casa", "Departamento", "Cabaña", "Hostal", "Camping"};
+        
+        getActivity().getActionBar().setTitle("Publicar Alojamiento");
         
         tiposList.setAdapter(new ArrayAdapter<String>(
                 getActivity().getActionBar().getThemedContext(),
@@ -77,12 +84,12 @@ public class Fragment_tipoAloj extends Fragment {
                 Bundle tipoSelected = new Bundle();
                 tipoSelected.putString("tipoAloj", tipoAloj);
                 fragment.setArguments(tipoSelected);
-                     
+                String tag = fragment.getTag();     
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-
-                ft.replace(R.id.content_frame, fragment);
-                ft.addToBackStack(null);
+                ft.setCustomAnimations(R.anim.left_in, R.anim.left_out);
+                ft.replace(R.id.content_frame, fragment, tag);
+                ft.addToBackStack(tag);
                 ft.commit(); 
             }
         });

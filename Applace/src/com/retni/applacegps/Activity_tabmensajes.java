@@ -100,10 +100,12 @@ public class Activity_tabmensajes extends TabActivity
         		menu.findItem(R.id.action_edit).setVisible(false);
         		menu.findItem(R.id.action_config).setVisible(false);
         		menu.findItem(R.id.action_share).setVisible(false);
-        		menu.findItem(R.id.action_update).setVisible(false);
+        		menu.findItem(R.id.action_update).setVisible(false);			
+        		menu.findItem(R.id.action_new).setVisible(false);
         		menu.findItem(R.id.action_camara).setVisible(false);
         		menu.findItem(R.id.action_delete).setVisible(true);
-        		menu.findItem(R.id.action_new).setVisible(false);
+        		menu.findItem(R.id.action_fav).setVisible(false);
+        		menu.findItem(R.id.action_fav_no).setVisible(false);
         		
         		return true;
         	}

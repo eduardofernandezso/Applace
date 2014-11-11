@@ -80,5 +80,19 @@
         sgoliver:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_new"
         android:title="@string/action_new" />
+    
+    <item
+        android:id="@+id/action_fav"
+        android:orderInCategory="100"
+        sgoliver:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_favorite"
+        android:title="@string/action_fav" />
+    
+    <item
+        android:id="@+id/action_fav_no"
+        android:orderInCategory="100"
+        sgoliver:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_action_favorite_outline"
+        android:title="@string/action_fav_no" />
 
 </menu>

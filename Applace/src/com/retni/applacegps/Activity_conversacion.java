@@ -386,10 +386,12 @@ public class Activity_conversacion extends ActionBarActivity{
 		menu.findItem(R.id.action_edit).setVisible(false);
 		menu.findItem(R.id.action_config).setVisible(false);
 		menu.findItem(R.id.action_share).setVisible(false);
-		menu.findItem(R.id.action_update).setVisible(false);
+		menu.findItem(R.id.action_update).setVisible(false);			
+		menu.findItem(R.id.action_new).setVisible(false);
 		menu.findItem(R.id.action_camara).setVisible(false);
 		menu.findItem(R.id.action_delete).setVisible(true);
-		menu.findItem(R.id.action_new).setVisible(false);
+		menu.findItem(R.id.action_fav).setVisible(false);
+		menu.findItem(R.id.action_fav_no).setVisible(false);
 		
 		return true;
 	}
@@ -444,5 +446,14 @@ public class Activity_conversacion extends ActionBarActivity{
 	    }
 	 
 	    return true;
+	}
+	
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch(keyCode){
+			case KeyEvent.KEYCODE_BACK:
+				startActivity(new Intent(this, Activity_mensajes.class));
+				overridePendingTransition(R.anim.right_in, R.anim.right_out);
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }

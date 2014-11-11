@@ -54,7 +54,7 @@ public class fragment_listAloj2 extends Fragment{
 	List<Float> rating = new ArrayList<Float>();
 	List<Integer> count_rating = new ArrayList<Integer>();
 	List<String> id_aloj = new ArrayList<String>();
-	
+	BaseAdapter listAdapter;
 	List<ParseObject> alojamientos;
 	List<ParseObject> alojamientos2;
 	
@@ -126,7 +126,9 @@ public class fragment_listAloj2 extends Fragment{
             protected void onPreExecute() {
                 // TODO Auto-generated method stub
                 super.onPreExecute();
-                //list_bar.setVisibility(View.VISIBLE);        
+                //list_bar.setVisibility(View.VISIBLE);  
+                listAdapter = new Cursor_AdapterList1(getActivity(), titulos, precios, fotos, rating, count_rating, id_aloj);
+            	
                 pd.show();
             }
             
@@ -160,7 +162,7 @@ public class fragment_listAloj2 extends Fragment{
         				rating.add((float) aloj.getDouble("calificacion"));
         				count_rating.add(aloj.getInt("count_calificacion"));
         				id_aloj.add(aloj.getObjectId());
-        				
+        				listAdapter.notifyDataSetChanged();
         				ParseFile img = aloj.getParseFile("foto");	
         				if(img != null){
         				    img.getDataInBackground(new GetDataCallback() {
@@ -169,6 +171,7 @@ public class fragment_listAloj2 extends Fragment{
         				            if (e == null){
         				                bmp = BitmapFactory.decodeByteArray(data, 0, data.length);	
         				                fotos.add(bmp);
+        				                listAdapter.notifyDataSetChanged();
         				            }
         				            else{
         				            	Toast.makeText(getActivity().getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -193,7 +196,6 @@ public class fragment_listAloj2 extends Fragment{
         		}
 
                 //Custom Adapter for ListView
-            	BaseAdapter listAdapter = new Cursor_AdapterList1(getActivity(), titulos, precios, fotos, rating, count_rating, id_aloj);
             	list_aloj.setAdapter(listAdapter);  
             }
         }.execute();
@@ -290,6 +292,7 @@ public class fragment_listAloj2 extends Fragment{
 		        	h.vibrate(25);
 					Intent intent = new Intent(context,Mostrar_Estadistica.class);
 					intent.putExtra("idAloj", id_aloj.get(pos));
+					intent.putExtra("precio", precios.get(pos));
 					context.startActivity(intent);				
 				}		
 			});        

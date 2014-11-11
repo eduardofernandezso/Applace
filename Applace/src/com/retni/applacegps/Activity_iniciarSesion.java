@@ -11,9 +11,12 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,7 +50,8 @@ public class Activity_iniciarSesion extends ActionBarActivity {
 			// TODO Auto-generated method stub
 			int id = v.getId();
 			if (id == R.id.iniSesion) {
-				
+				Vibrator h = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+	        	h.vibrate(25);
 				if(pass.getText().toString().matches("") || email.getText().toString().matches("")){
 					Toast.makeText( getApplicationContext(),"Por favor llene todos los campos",Toast.LENGTH_SHORT ).show();
 				}
@@ -64,6 +68,7 @@ public class Activity_iniciarSesion extends ActionBarActivity {
 							intent.putExtra("nameUser", nombre);
 							intent.putExtra("passUser", pass.getText().toString());
 							startActivity(intent);
+							overridePendingTransition(R.anim.left_in, R.anim.left_out);
 					    } else {
 					      // Signup failed. Look at the ParseException to see what happened.
 					    	Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -84,9 +89,21 @@ public class Activity_iniciarSesion extends ActionBarActivity {
 		menu.findItem(R.id.action_edit).setVisible(false);
 		menu.findItem(R.id.action_config).setVisible(false);
 		menu.findItem(R.id.action_share).setVisible(false);
-		menu.findItem(R.id.action_update).setVisible(false);
+		menu.findItem(R.id.action_update).setVisible(false);			
+		menu.findItem(R.id.action_new).setVisible(false);
 		menu.findItem(R.id.action_camara).setVisible(false);
 		menu.findItem(R.id.action_delete).setVisible(false);
+		menu.findItem(R.id.action_fav).setVisible(false);
+		menu.findItem(R.id.action_fav_no).setVisible(false);
 		return true;
+	}
+	
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch(keyCode){
+			case KeyEvent.KEYCODE_BACK:
+				startActivity(new Intent(this, MainActivity.class));
+				overridePendingTransition(R.anim.right_in, R.anim.right_out);
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }

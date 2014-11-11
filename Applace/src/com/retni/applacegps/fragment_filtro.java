@@ -13,27 +13,18 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.parse.GetDataCallback;
-import com.parse.Parse;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-import com.retni.applacegps.Fragment_googlemaps.MyMarker;
-import com.retni.applacegps.Fragment_listaAloj.Cursor_AdapterList;
 import android.app.Dialog;
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
@@ -44,10 +35,8 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,7 +67,7 @@ public class fragment_filtro extends Fragment{
 	public ArrayList<String> idAloj = new ArrayList<String>();
 	public ArrayList<String> tit = new ArrayList<String>();
 	public ArrayList<Integer> pre = new ArrayList<Integer>();
-	public ArrayList<Double> ranking = new ArrayList<Double>();
+	public ArrayList<Float> ranking = new ArrayList<Float>();
 	public ArrayList<Integer> countRanking = new ArrayList<Integer>();
 	public ArrayList<Bitmap> fot = new ArrayList<Bitmap>();
 	public ArrayList<Boolean> est = new ArrayList<Boolean>();
@@ -246,7 +235,7 @@ public class fragment_filtro extends Fragment{
         tit = (ArrayList<String>) bundle.getSerializable("titulo");
         idAloj = (ArrayList<String>) bundle.getSerializable("idAloj");
         pre = (ArrayList<Integer>) bundle.getSerializable("precio");
-        ranking = (ArrayList<Double>) bundle.getSerializable("ranking");
+        ranking = (ArrayList<Float>) bundle.getSerializable("ranking");
         countRanking = (ArrayList<Integer>) bundle.getSerializable("countRanking");
         est = (ArrayList<Boolean>) bundle.getSerializable("estado");
         //fot = (ArrayList<Bitmap>) bundle.getSerializable("foto");
@@ -271,7 +260,7 @@ public class fragment_filtro extends Fragment{
 	    	mMarkersHashMap = new HashMap<Marker, MyMarker>();
 			for(int h=0; h<idAloj.size() ;h++){				
 				//fot.add(fo);				
-        		mMyMarkersArray.add(new MyMarker(fo, tit.get(h), la.get(h), lo.get(h), est.get(h), pre.get(h), ranking.get(h).floatValue(), countRanking.get(h), idAloj.get(h)));
+        		mMyMarkersArray.add(new MyMarker(fo, tit.get(h), la.get(h), lo.get(h), est.get(h), pre.get(h), ranking.get(h), countRanking.get(h), idAloj.get(h)));
         	}
 			Toast.makeText(getActivity().getApplicationContext(), mMyMarkersArray.size()+": tamaño", Toast.LENGTH_SHORT).show();
 			plotMarkers(mMyMarkersArray);
@@ -341,7 +330,7 @@ private class TransparentProgressDialog extends Dialog {
 			// TODO Auto-generated method stub
 			id_alojamiento = arg0.getTitle();
 			Intent intent = new Intent(getActivity(), Activity_verAlojamiento.class);
-			intent.putExtra("idAloj", idAloj);
+			intent.putExtra("idAloj", id_alojamiento);
 			startActivity(intent);	
 			//Toast.makeText(getActivity().getApplicationContext(), id_alojamiento+"", Toast.LENGTH_SHORT).show();
 		}

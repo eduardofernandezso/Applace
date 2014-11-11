@@ -49,7 +49,7 @@ public class Activity_filtro extends ActionBarActivity{
 	public ArrayList<String> idAloj = new ArrayList<String>();
 	public ArrayList<String> titulo = new ArrayList<String>();
 	public ArrayList<Integer> precio = new ArrayList<Integer>();
-	public ArrayList<Double> ranking = new ArrayList<Double>();
+	public ArrayList<Float> ranking = new ArrayList<Float>();
 	public ArrayList<Integer> countRanking = new ArrayList<Integer>();
 	public ArrayList<Bitmap> foto = new ArrayList<Bitmap>();
 	public ArrayList<Boolean> estado = new ArrayList<Boolean>();
@@ -254,7 +254,7 @@ public class Activity_filtro extends ActionBarActivity{
         		idAloj.add(filtrados.getObjectId());
         		titulo.add(filtrados.getString("titulo"));
         		precio.add(filtrados.getInt("precio"));
-        		ranking.add(filtrados.getDouble("calificacion"));
+        		ranking.add((float) filtrados.getDouble("calificacion"));
         		countRanking.add(filtrados.getInt("count_calificacion"));
         		estado.add(filtrados.getBoolean("estado"));
         		
@@ -265,8 +265,18 @@ public class Activity_filtro extends ActionBarActivity{
 				        public void done(byte[] data, com.parse.ParseException e) {
 				            if (e == null){
 				                bmp = BitmapFactory.decodeByteArray(data, 0, data.length);	
-				                //Toast.makeText(getApplicationContext(), bmp.getByteCount()+" byte", Toast.LENGTH_SHORT).show();
-				                foto.add(Bitmap.createScaledBitmap(bmp, 50, 50, false));
+				                int outWidth;
+    			                int outHeight;
+    			                int inWidth = bmp.getWidth();
+    			                int inHeight = bmp.getHeight();
+    			                if(inWidth > inHeight){
+    			                    outWidth = 500;
+    			                    outHeight = (inHeight * 500) / inWidth; 
+    			                } else {
+    			                    outHeight = 500;
+    			                    outWidth = (inWidth * 500) / inHeight; 
+    			                }
+				                foto.add(Bitmap.createScaledBitmap(bmp, outWidth, outHeight, false));
 				                
 				            }
 				            else{
@@ -296,7 +306,7 @@ public class Activity_filtro extends ActionBarActivity{
 		}
 	};
 	public void irse(){
-		
+		/*
 		FragmentManager fm = Activity_filtro.this.getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         
@@ -317,14 +327,20 @@ public class Activity_filtro extends ActionBarActivity{
         
         ft.replace(R.id.frame_filtro, fragment, tag);
         ft.addToBackStack(tag);
-        ft.commit(); 
-		/*
-		Intent intent = new Intent(Activity_filtro.this, Logueado.class );
-		intent.putExtra("latis", la);
-		intent.putExtra("longis", lo);
-		intent.putExtra("flag",1);		
+        ft.commit(); */
+		
+		Intent intent = new Intent(Activity_filtro.this, Activity_tabFiltros.class );
+		intent.putExtra("las", la);
+		intent.putExtra("los", lo);
+		intent.putExtra("idAloj", idAloj);
+		intent.putExtra("titulo",titulo);
+		intent.putExtra("precio", precio);
+		intent.putExtra("ranking", ranking);
+		intent.putExtra("countRanking",countRanking);
+		intent.putExtra("estado",estado);
+		//intent.putExtra("foto", foto);	
 		startActivity(intent);
-		overridePendingTransition(R.anim.right_in, R.anim.right_out);*/
+		overridePendingTransition(R.anim.right_in, R.anim.right_out);
 	}
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch(keyCode){
